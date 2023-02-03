@@ -2,18 +2,17 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut as firebaseSignOut,
-  User,
+  User
 } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 import {
   createContext,
   ReactNode,
   useContext,
   useEffect,
-  useState,
+  useState
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, firestore } from "../services/firebase";
+import { auth } from "../services/firebase";
 
 interface AuthContextType {
   user: UserType | undefined;
@@ -49,23 +48,15 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
-    const { user: googleUser } = await signInWithPopup(auth, provider);
-    const firestoreUser = await getUserRecordOnFirestore(googleUser);
-    fillUserData({ ...googleUser, username: firestoreUser?.username });
+    const { user } = await signInWithPopup(auth, provider);
+    fillUserData(user);
     navigate("/home", { replace: true });
   }
 
-  async function getUserRecordOnFirestore(user: User) {
-    const userRef = doc(firestore, `users/${user.uid}`);
-    const userSnapshot = await getDoc<FirestoreUser>(userRef);
-    const userData = userSnapshot.data();
-    return userData;
-  }
-
-  function fillUserData(user: (User & { username?: string }) | null) {
+  function fillUserData(user: User | null) {
     if (!user) return;
 
-    const { displayName, photoURL, uid, username } = user;
+    const { displayName, photoURL, uid } = user;
 
     if (!displayName) {
       throw new Error("Missing information from Google Account");
@@ -74,8 +65,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     setUser({
       id: uid,
       name: displayName,
-      avatar: photoURL,
-      username,
+      avatar: photoURL
     });
   }
 

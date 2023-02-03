@@ -28,7 +28,6 @@ export function Home() {
 
         <Link to="/transaction/new">
           <Button
-            size="md"
             leftIcon={<RxPlus />}
           >
             Add Transaction
@@ -42,7 +41,7 @@ export function Home() {
         />
       </Flex>
 
-      <Tabs variant="soft-rounded" colorScheme="primary" mt="6">
+      <Tabs variant="soft-rounded" colorScheme="primary" mt="6" >
         <TabList gap="1">
           <Tab display="flex" alignItems="center" gap="2">
             <RxDashboard />
