@@ -9,3 +9,7 @@
 *:not(svg, path) {
   color: #1B2338;
 }
+
+[list]::-webkit-calendar-picker-indicator {
+  display: none !important;
+}

@@ -23,14 +23,14 @@ export function Home() {
           <Text color="primary.500" display="inline">
             Fin
           </Text>
-          Share
+          App
         </Heading>
 
         <Link to="/transaction/new">
           <Button
             leftIcon={<RxPlus />}
           >
-            Add Transaction
+            Adicionar transação
           </Button>
         </Link>
 
@@ -45,15 +45,15 @@ export function Home() {
         <TabList gap="1">
           <Tab display="flex" alignItems="center" gap="2">
             <RxDashboard />
-            Home
+            Dashboard
           </Tab>
           <Tab display="flex" alignItems="center" gap="2">
             <RxStack size="18" />
-            Transactions
+            Transações
           </Tab>
           <Tab display="flex" alignItems="center" gap="2">
             <RxAvatar size="18" />
-            Settings
+            Configurações
           </Tab>
         </TabList>
       </Tabs>

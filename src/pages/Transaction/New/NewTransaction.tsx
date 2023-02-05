@@ -1,57 +1,70 @@
-import { Box, Button, Flex, FormControl, FormLabel, Grid, GridItem, Heading, HStack, Input, Radio, RadioGroup, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, HStack, SimpleGrid, Text } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { addDoc, collection } from "firebase/firestore";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { RxArrowLeft } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { useToast } from "../../../hooks/useToast";
-import { firestore } from "../../../services/firebase";
+import { Input } from "../../../components/Form/Input";
+import { Radio } from "../../../components/Form/Radio/Radio";
+import { NewTransactionFormData } from "./NewTransaction.types";
+import { useNewTransaction } from "./useNewTransaction";
 
-type NewTransactionFormData = {
-  name: string
-  amount: number
-  type: string
-  status: string
-}
+const currentDate = new Date().toISOString().slice(0, 10)
 
 const newTransactionFormSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  amount: yup.number().typeError('Amount must be a number').min(0).required("Amount is required"),
-  type: yup.string().required("Type is required"),
-  status: yup.string().required("Status is required")
+  name: yup.string().required("Nome é obrigatório"),
+  amount: yup
+    .number()
+    .typeError("Valor deve ser um número")
+    .min(0, "Valor deve ser maior que zero")
+    .required("Valor é obrigatório"),
+  category: yup.string().required("Categoria é obrigatória"),
+  paymentMethod: yup.string().required("Forma de pagamento é obrigatória"),
+  type: yup.string().required("Tipo é obrigatório"),
+  status: yup.string().required("Situação é obrigatória"),
+  recurrence: yup.string().required("Recorrência é obrigatória"),
+  dueDate: yup
+    .date()
+    .typeError("Insira uma data válida")
+    .min(currentDate, "A data deve ser atual ou futura")
+    .required("Data de vencimento é obrigatória"),
+  installmentAmount: yup.number().when("recurrence", {
+    is: "PARCELADO",
+    then: yup
+      .number()
+      .typeError("Quantidade de parcelas deve ser um número")
+      .min(1, "Quantidade de parcelas deve ser maior que zero")
+      .required("Quantidade de parcelas é obrigatório"),
+    otherwise: yup.number().typeError("Quantidade de parcelas deve ser um número")
+  }),
 })
 
 export function NewTransaction() {
-  const { register, formState, handleSubmit } = useForm<NewTransactionFormData>({
+  const {
+    register,
+    formState,
+    handleSubmit,
+    watch,
+    setValue
+  } = useForm<NewTransactionFormData>({
     resolver: yupResolver(newTransactionFormSchema)
   })
+  const { categorySuggestions, paymentMethodSuggestions, handleSave } = useNewTransaction()
   const navigate = useNavigate()
-  const toast = useToast()
+
+  const recurrence = watch("recurrence")
+  const amount = watch("amount")
+  const installmentAmount = watch("installmentAmount")
+
+  useEffect(() => {
+    if (recurrence !== "UNICO") {
+      setValue("status", "PENDENTE")
+    }
+  }, [recurrence])
 
   function handleBack() {
     navigate(-1)
-  }
-
-  async function handleSave(data: NewTransactionFormData) {
-    try {
-      await addDoc(
-        collection(firestore, "transactions"),
-        data
-      )
-      toast({
-        title: "Success!",
-        description: "Your transaction was just created.",
-        status: "success"
-      })
-      navigate("/home")
-    } catch {
-      toast({
-        title: "Error creating transaction.",
-        description: "An error occurred while creating your transaction. Please try again.",
-        status: "error"
-      })
-    }
   }
 
   return (
@@ -76,71 +89,141 @@ export function NewTransaction() {
         fontWeight="semibold"
       >
         <RxArrowLeft cursor="pointer" onClick={handleBack} />
-        New Transaction
+        Nova transação
       </Heading>
 
-      <Grid
-        templateColumns="repeat(2, 1fr)"
+      <SimpleGrid
+        columns={2}
         gap="4"
         w="full"
         mt="10"
       >
-        <GridItem>
-          <FormControl>
-            <FormLabel fontSize="smaller" fontWeight="medium" m="1">
-              Name
-            </FormLabel>
-            <Input variant="filled" _focus={{ boxShadow: "none", borderColor: "primary.500" }} {...register("name")} />
-            {formState.errors.name && (
-              <Text fontSize="smaller" color="red.500" mt="2">
-                {formState.errors.name.message as any}
-              </Text>
-            )}
-          </FormControl>
-        </GridItem>
+        <Input
+          label="Nome"
+          error={formState.errors.name}
+          {...register("name")}
+        />
 
-        <GridItem>
-          <FormControl>
-            <FormLabel fontSize="smaller" fontWeight="medium" m="1">
-              Amount
-            </FormLabel>
-            <Input type="number" step="0.01" variant="filled" _focus={{ boxShadow: "none", borderColor: "primary.500" }} {...register("amount")} />
-            {formState.errors.amount && (
-              <Text fontSize="smaller" color="red.500" mt="2">
-                {formState.errors.amount.message as any}
-              </Text>
-            )}
-          </FormControl>
-        </GridItem>
+        <Input
+          type="number"
+          step="0.01"
+          isCurrency
+          label="Valor"
+          error={formState.errors.amount}
+          {...register("amount")}
+        />
 
-        <GridItem>
-          <SimpleGrid columns={2}>
+        <Input
+          list="categories"
+          label="Categoria"
+          error={formState.errors.category}
+          {...register("category")}
+        />
+        <datalist id="categories">
+          {categorySuggestions?.map(category => (
+            <option value={category} key={category} />
+          ))}
+        </datalist>
+
+        <Input
+          list="paymentMethods"
+          label="Forma de pagamento"
+          error={formState.errors.paymentMethod}
+          {...register("paymentMethod")}
+        />
+        <datalist id="paymentMethods">
+          {paymentMethodSuggestions?.map(paymentMethod => (
+            <option value={paymentMethod} key={paymentMethod} />
+          ))}
+        </datalist>
+        
+        <SimpleGrid columns={2} gap={4}>
+          <Radio
+            label="Recorrência"
+            defaultValue="UNICO"
+            options={[
+              { value: "UNICO", label: "Único" },
+              { value: "PARCELADO", label: "Parcelado" },
+              { value: "FIXO", label: "Fixo" }
+            ]}
+            {...register("recurrence")}
+          />
+
+          <Radio
+            label="Tipo"
+            defaultValue="DESPESA"
+            options={[
+              { value: "RECEITA", label: "Receita" },
+              { value: "DESPESA", label: "Despesa" }
+            ]}
+            {...register("type")}
+          />
+
+          {(!recurrence || recurrence === "UNICO") && (
+            <Radio
+              label="Situação"
+              defaultValue="PENDENTE"
+              options={[
+                { value: "PENDENTE", label: "Pendente" },
+                { value: "QUITADO", label: "Quitado" }
+              ]}
+              {...register("status")}
+            />
+          )}
+        </SimpleGrid>
+
+        <Input
+          type="date"
+          label="Vencimento"
+          min={currentDate}
+          defaultValue={currentDate}
+          error={formState.errors.dueDate}
+          {...register("dueDate")}
+        />
+      </SimpleGrid>
+
+      {recurrence === "PARCELADO" && (
+        <>
+          <Heading
+            mt="6"
+            fontSize="xl"
+            fontWeight="semibold"
+            w="full"
+          >
+            Parcelamento
+          </Heading>
+
+          <SimpleGrid
+            columns={2}
+            gap="4"
+            w="full"
+            mt="2"
+          >
             <Box>
-              <Text fontSize="smaller" fontWeight="medium" m="1">
-                Type
-              </Text>
-              <RadioGroup defaultValue="EXPENSE">
-                <VStack alignItems="start">
-                  <Radio colorScheme="primary" value="INCOME" {...register("type")}>Income</Radio>
-                  <Radio colorScheme="primary" value="EXPENSE" {...register("type")}>Expense</Radio>
-                </VStack>
-              </RadioGroup>
-            </Box>
+              <Input
+                type="number"
+                label="Quantidade de parcelas"
+                error={formState.errors.installmentAmount}
+                {...register("installmentAmount")}
+              />
 
-            <Box>
-              <Text fontSize="smaller" fontWeight="medium" m="1">
-                Status
-              </Text>
-              <RadioGroup defaultValue="PENDENT">
-                <VStack alignItems="start">
-                  <Radio colorScheme="primary" value="PENDENT" {...register("status")}>Pendent</Radio>
-                  <Radio colorScheme="primary" value="SETTLED" {...register("status")}>Settled</Radio>
-                </VStack>
-              </RadioGroup>
+              {amount && installmentAmount && (
+                <Text fontSize="small" mt="1" color="text.600">
+                  Valor das parcelas:
+                  {" "}
+                  {Intl
+                    .NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL"
+                    })
+                    .format(Number(amount) / Number(installmentAmount))
+                  }
+                </Text>
+              )}
             </Box>
           </SimpleGrid>
-        </GridItem>
-      </Grid>
+        </>
+      )}
 
       <HStack justifyContent="center" mt="10" w="full">
         <Button
@@ -150,7 +233,7 @@ export function NewTransaction() {
           fontWeight="medium"
           onClick={handleBack}
         >
-          Cancel
+          Cancelar
         </Button>
         <Button
           type="submit"
@@ -159,7 +242,7 @@ export function NewTransaction() {
           fontWeight="medium"
           colorScheme="primary"
         >
-          Save
+          Salvar
         </Button>
       </HStack>
     </Flex>
