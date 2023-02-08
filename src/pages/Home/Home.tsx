@@ -1,7 +1,14 @@
-import { Avatar, Box, Button, Flex, Heading, Tab, TabList, Tabs, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 import { RxAvatar, RxDashboard, RxPlus, RxStack } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { Dashboard } from "./Tabs/Dashboard";
+
+const tabStyles = {
+  display: "flex",
+  alignItems: "center",
+  gap: "2",
+}
 
 export function Home() {
   const { user } = useAuth()
@@ -43,19 +50,25 @@ export function Home() {
 
       <Tabs variant="soft-rounded" colorScheme="primary" mt="6" >
         <TabList gap="1">
-          <Tab display="flex" alignItems="center" gap="2">
+          <Tab {...tabStyles}>
             <RxDashboard />
             Dashboard
           </Tab>
-          <Tab display="flex" alignItems="center" gap="2">
+          <Tab {...tabStyles}>
             <RxStack size="18" />
             Transações
           </Tab>
-          <Tab display="flex" alignItems="center" gap="2">
+          <Tab {...tabStyles}>
             <RxAvatar size="18" />
             Configurações
           </Tab>
         </TabList>
+
+        <TabPanels mt="1">
+          <TabPanel px="0">
+            <Dashboard />
+          </TabPanel>
+        </TabPanels>
       </Tabs>
     </Box>
   );

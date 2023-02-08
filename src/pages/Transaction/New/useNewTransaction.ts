@@ -18,7 +18,8 @@ export function useNewTransaction() {
       q.Paginate(
         q.Distinct(
           q.Match(
-            q.Index("category_of_transactions"),
+            q.Index("categories_of_transactions_by_user_id"),
+            user!.id
           )
         )
       )
@@ -31,7 +32,8 @@ export function useNewTransaction() {
       q.Paginate(
         q.Distinct(
           q.Match(
-            q.Index("payment_method_of_transactions"),
+            q.Index("payment_methods_of_transactions_by_user_id"),
+            user!.id
           )
         )
       )

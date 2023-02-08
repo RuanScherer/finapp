@@ -13,7 +13,7 @@ export function SignIn() {
           <Text color="primary.500" display="inline">
             Fin
           </Text>
-          Share
+          App
         </Heading>
 
         <Text
