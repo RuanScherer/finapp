@@ -1,12 +1,12 @@
-import { Flex } from "@chakra-ui/react";
+import { ChakraProps, Flex } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { boxShadow } from "../../../../theme";
 
-interface CardProps {
+interface CardProps extends ChakraProps {
   children: ReactNode
 }
 
-export function Card({ children }: CardProps) {
+export function Card({ children, ...rest }: CardProps) {
   return (
     <Flex
       flexDirection="column"
@@ -16,6 +16,7 @@ export function Card({ children }: CardProps) {
       boxShadow={boxShadow[100]}
       h="full"
       p="5"
+      {...rest}
     >
       {children}
     </Flex>

@@ -7,10 +7,14 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { Input } from "../../../components/Form/Input";
 import { Radio } from "../../../components/Form/Radio/Radio";
+import { TransactionRecurrence } from "../../../shared/enums/transactionRecurrence";
+import { TransactionsStatus } from "../../../shared/enums/transactionStatus";
+import { TransactionType } from "../../../shared/enums/transactionType";
+import { formatDateForFauna } from "../../../shared/utils/formatDateForFauna";
 import { NewTransactionFormData } from "./NewTransaction.types";
 import { useNewTransaction } from "./useNewTransaction";
 
-const currentDate = new Date().toISOString().slice(0, 10)
+const currentDate = formatDateForFauna(new Date())
 
 const newTransactionFormSchema = yup.object().shape({
   name: yup.string().required("Nome é obrigatório"),
@@ -30,7 +34,7 @@ const newTransactionFormSchema = yup.object().shape({
     .min(currentDate, "A data deve ser atual ou futura")
     .required("Data de vencimento é obrigatória"),
   installmentAmount: yup.number().when("recurrence", {
-    is: "PARCELADO",
+    is: TransactionRecurrence.PARCELADO,
     then: yup
       .number()
       .typeError("Quantidade de parcelas deve ser um número")
@@ -58,8 +62,8 @@ export function NewTransaction() {
   const installmentAmount = watch("installmentAmount")
 
   useEffect(() => {
-    if (recurrence !== "UNICO") {
-      setValue("status", "PENDENTE")
+    if (recurrence !== TransactionRecurrence.UNICO) {
+      setValue("status", TransactionsStatus.PENDENTE)
     }
   }, [recurrence])
 
@@ -140,21 +144,21 @@ export function NewTransaction() {
         <SimpleGrid columns={2} gap={4}>
           <Radio
             label="Recorrência"
-            defaultValue="UNICO"
+            defaultValue={TransactionRecurrence.UNICO}
             options={[
-              { value: "UNICO", label: "Único" },
-              { value: "PARCELADO", label: "Parcelado" },
-              { value: "FIXO", label: "Fixo" }
+              { value: TransactionRecurrence.UNICO, label: "Único" },
+              { value: TransactionRecurrence.PARCELADO, label: "Parcelado" },
+              { value: TransactionRecurrence.FIXO, label: "Fixo" }
             ]}
             {...register("recurrence")}
           />
 
           <Radio
             label="Tipo"
-            defaultValue="DESPESA"
+            defaultValue={TransactionType.DESPESA}
             options={[
-              { value: "RECEITA", label: "Receita" },
-              { value: "DESPESA", label: "Despesa" }
+              { value: TransactionType.RECEITA, label: "Receita" },
+              { value: TransactionType.DESPESA, label: "Despesa" }
             ]}
             {...register("type")}
           />
@@ -162,10 +166,10 @@ export function NewTransaction() {
           {(!recurrence || recurrence === "UNICO") && (
             <Radio
               label="Situação"
-              defaultValue="PENDENTE"
+              defaultValue={TransactionsStatus.PENDENTE}
               options={[
-                { value: "PENDENTE", label: "Pendente" },
-                { value: "QUITADO", label: "Quitado" }
+                { value: TransactionsStatus.PENDENTE, label: "Pendente" },
+                { value: TransactionsStatus.QUITADO, label: "Quitado" }
               ]}
               {...register("status")}
             />
@@ -182,7 +186,7 @@ export function NewTransaction() {
         />
       </SimpleGrid>
 
-      {recurrence === "PARCELADO" && (
+      {recurrence === TransactionRecurrence.PARCELADO && (
         <>
           <Heading
             mt="6"

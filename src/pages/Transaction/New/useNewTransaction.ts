@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../../contexts/AuthContext"
 import { useToast } from "../../../hooks/useToast"
 import { fauna } from "../../../services/faunadb"
+import { TransactionRecurrence } from "../../../shared/enums/transactionRecurrence"
+import { TransactionsStatus } from "../../../shared/enums/transactionStatus"
+import { formatDateForFauna } from "../../../shared/utils/formatDateForFauna"
 import { FaunaDBTransaction, NewTransactionFormData } from "./NewTransaction.types"
 
 export function useNewTransaction() {
@@ -48,27 +51,27 @@ export function useNewTransaction() {
 
   async function handleSave(data: NewTransactionFormData) {
     const transaction = data
-    if (transaction.recurrence !== "UNICO") {
-      transaction.status = "PENDENTE"
+    if (transaction.recurrence !== TransactionRecurrence.UNICO) {
+      transaction.status = TransactionsStatus.PENDENTE
     }
 
     try {
       const transactionRefId = await persistTransaction(transaction)
 
-      if (transaction.recurrence === "PARCELADO") {
+      if (transaction.recurrence === TransactionRecurrence.PARCELADO) {
         await persistInstallments(transaction, transactionRefId)
       }
       
       toast({
-        title: "Success!",
-        description: "Your transaction was just created.",
+        title: "Sucesso!",
+        description: "Sua transacão foi criada.",
         status: "success"
       })
       navigate("/home")
     } catch {
       toast({
-        title: "Error creating transaction.",
-        description: "An error occurred while creating your transaction. Please try again.",
+        title: "Erro ao criar transação.",
+        description: "Ocorreu um erro ao criar sua transação. Por favor, tente novamente.",
         status: "error"
       })
     }
@@ -81,7 +84,7 @@ export function useNewTransaction() {
         {
           data: {
             ...data,
-            dueDate: q.Date(data.dueDate.toISOString().slice(0, 10)),
+            dueDate: q.Date(formatDateForFauna(data.dueDate)),
             userId: user!.id
           }
         }
@@ -128,8 +131,8 @@ export function useNewTransaction() {
         category: transaction.category,
         paymentMethod: transaction.paymentMethod,
         type: transaction.type,
-        status: "PENDENTE",
-        dueDate: q.Date(dueDate.toISOString().slice(0, 10)),
+        status: TransactionsStatus.PENDENTE,
+        dueDate: q.Date(formatDateForFauna(dueDate)),
         userId: user?.id,
         transactionRefId
       })

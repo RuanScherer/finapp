@@ -1,0 +1,2 @@
+export { MonthPendencies } from "./MonthPendencies";
+

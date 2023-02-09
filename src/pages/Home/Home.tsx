@@ -16,7 +16,7 @@ export function Home() {
   return (
     <Box
       w="full"
-      maxW="1200px"
+      maxW="1024px"
       mx="auto"
       px="4"
       py="6"
