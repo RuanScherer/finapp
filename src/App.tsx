@@ -4,8 +4,11 @@ import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/600.css';
 import '@fontsource/poppins/700.css';
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { Router } from "./router";
 import { theme } from "./theme";
+
+ChartJS.register(ArcElement, Tooltip, Legend)
 
 function App() {
   return (

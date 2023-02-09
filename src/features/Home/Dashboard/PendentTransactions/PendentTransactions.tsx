@@ -28,7 +28,7 @@ export function PendentTransactions() {
 
       {lastPendentTransactions ? (
         lastPendentTransactions.map(transaction => (
-          <TransactionRow transaction={transaction} />
+          <TransactionRow transaction={transaction} key={transaction.ref.id} />
         ))
       ) : (
         <>

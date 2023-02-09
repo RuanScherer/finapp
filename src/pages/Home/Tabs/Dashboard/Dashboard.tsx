@@ -2,6 +2,7 @@ import { Grid, GridItem, Heading } from "@chakra-ui/react";
 import { MonthPendencies } from "../../../../features/Home/Dashboard/MonthPendencies";
 import { MonthStat } from "../../../../features/Home/Dashboard/MonthStat";
 import { PendentTransactions } from "../../../../features/Home/Dashboard/PendentTransactions";
+import { TransactionsPerCategory } from "../../../../features/Home/Dashboard/TransactionsPerCategory";
 import { monthsName } from "../../../../shared/constants/monthsName";
 import { TransactionType } from "../../../../shared/enums/transactionType";
 
@@ -31,6 +32,10 @@ export function Dashboard() {
 
         <GridItem colSpan={12}>
           <PendentTransactions />
+        </GridItem>
+
+        <GridItem colSpan={12}>
+          <TransactionsPerCategory />
         </GridItem>
       </Grid>
     </>

@@ -10,12 +10,14 @@ specifiers:
   '@types/react': ^18.0.26
   '@types/react-dom': ^18.0.9
   '@vitejs/plugin-react': ^3.0.0
+  chart.js: ^4.2.0
   faunadb: ^4.7.1
   firebase: ^9.16.0
   framer-motion: ^8.5.2
   localforage: ^1.10.0
   match-sorter: ^6.3.1
   react: ^18.2.0
+  react-chartjs-2: ^5.2.0
   react-dom: ^18.2.0
   react-hook-form: ^7.42.1
   react-icons: ^4.7.1
@@ -32,12 +34,14 @@ dependencies:
   '@fontsource/poppins': 4.5.10
   '@hookform/resolvers': 2.9.10_react-hook-form@7.42.1
   '@types/node': 18.11.18
+  chart.js: 4.2.0
   faunadb: 4.7.1
   firebase: 9.16.0
   framer-motion: 8.5.2_biqbaboplfbrettd7655fr4n2y
   localforage: 1.10.0
   match-sorter: 6.3.1
   react: 18.2.0
+  react-chartjs-2: 5.2.0_uxqdnqzacoapcp4mwytn5yclyu
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.42.1_react@18.2.0
   react-icons: 4.7.1_react@18.2.0
@@ -2217,6 +2221,10 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
+  /@kurkle/color/0.3.2:
+    resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
+    dev: false
+
   /@motionone/animation/10.15.1:
     resolution: {integrity: sha512-mZcJxLjHor+bhcPuIFErMDNyrdb2vJur8lSfMCsuCB4UyV8ILZLvK+t+pg56erv8ud9xQGK/1OGPt10agPrCyQ==}
     dependencies:
@@ -2489,6 +2497,13 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+    dev: false
+
+  /chart.js/4.2.0:
+    resolution: {integrity: sha512-wbtcV+QKeH0F7gQZaCJEIpsNriFheacouJQTVIjITi3eQA8bTlIBoknz0+dgV79aeKLNMAX+nDslIVE/nJ3rzA==}
+    engines: {pnpm: ^7.0.0}
+    dependencies:
+      '@kurkle/color': 0.3.2
     dev: false
 
   /cli-boxes/2.2.1:
@@ -3054,6 +3069,16 @@ packages:
       '@protobufjs/utf8': 1.1.0
       '@types/node': 18.11.18
       long: 5.2.1
+    dev: false
+
+  /react-chartjs-2/5.2.0_uxqdnqzacoapcp4mwytn5yclyu:
+    resolution: {integrity: sha512-98iN5aguJyVSxp5U3CblRLH67J8gkfyGNbiK3c+l1QI/G4irHMPQw44aEPmjVag+YKTyQ260NcF82GTQ3bdscA==}
+    peerDependencies:
+      chart.js: ^4.1.1
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      chart.js: 4.2.0
+      react: 18.2.0
     dev: false
 
   /react-clientside-effect/1.2.6_react@18.2.0:
