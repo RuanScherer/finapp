@@ -15,7 +15,7 @@ export function Dashboard() {
         <Header />
       </Box>
 
-      <Heading fontSize="xl" fontWeight="semibold" w="full" mb="4">
+      <Heading fontSize="2xl" fontWeight="semibold" w="full" mb="4">
         Visão geral de {monthsName[new Date().getMonth()]}
       </Heading>
 
@@ -31,7 +31,7 @@ export function Dashboard() {
         <GridItem colSpan={7}>
           <MonthStat type={TransactionType.RECEITA} />
         </GridItem>
-        
+
         <GridItem colSpan={10}>
           <MonthPendencies />
         </GridItem>
@@ -45,5 +45,5 @@ export function Dashboard() {
         </GridItem>
       </Grid>
     </Container>
-  )
+  );
 }

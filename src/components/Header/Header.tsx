@@ -5,16 +5,12 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "./Link";
 
 export function Header() {
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   return (
     <>
       <Flex as="header" justifyContent="space-between" alignItems="center">
-        <Heading
-          fontSize="3xl"
-          fontWeight="bold"
-          letterSpacing="wide"
-        >
+        <Heading fontSize="3xl" fontWeight="bold" letterSpacing="wide">
           <Text color="primary.500" display="inline">
             Fin
           </Text>
@@ -22,11 +18,7 @@ export function Header() {
         </Heading>
 
         <ReactRouterLink to="/transaction/new">
-          <Button
-            leftIcon={<RxPlus />}
-          >
-            Adicionar transação
-          </Button>
+          <Button leftIcon={<RxPlus />}>Adicionar transação</Button>
         </ReactRouterLink>
 
         <Avatar
@@ -36,12 +28,7 @@ export function Header() {
         />
       </Flex>
 
-      <HStack
-        alignItems="center"
-        gap="1"
-        py="2"
-        mt="6"
-      >
+      <HStack alignItems="center" justifyContent="center" gap="1" py="2" mt="6">
         <Link to="/dashboard">
           <RxDashboard />
           Dashboard
@@ -58,5 +45,5 @@ export function Header() {
         </Link>
       </HStack>
     </>
-  )
+  );
 }
