@@ -1,4 +1,4 @@
-import { TransactionType } from "../../../../shared/enums/transactionType"
+import { TransactionType } from "../../../shared/enums/transactionType"
 
 export interface GetMonthPendenciesStatParams {
   transactionType: TransactionType

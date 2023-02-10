@@ -1,7 +1,7 @@
 import { Tag, Td, Text, theme, Tr } from "@chakra-ui/react";
 import { RxArrowBottomLeft, RxArrowTopRight } from "react-icons/rx";
-import { TransactionType } from "../../../../../shared/enums/transactionType";
-import { currencyFormatter } from "../../../../../shared/utils/currencyFormatter";
+import { TransactionType } from "../../../../shared/enums/transactionType";
+import { currencyFormatter } from "../../../../shared/utils/currencyFormatter";
 import { Transaction } from "../PendentTransactions.types";
 
 interface TransactionRowProps {

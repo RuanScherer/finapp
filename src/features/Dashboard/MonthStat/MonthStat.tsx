@@ -1,6 +1,6 @@
 import { Heading, Skeleton } from "@chakra-ui/react";
-import { Stat } from "../../../../components/Stat/Stat";
-import { TransactionType } from "../../../../shared/enums/transactionType";
+import { Stat } from "../../../components/Stat/Stat";
+import { TransactionType } from "../../../shared/enums/transactionType";
 import { Card } from "../Card";
 import { MonthStatProps } from "./MonthStat.types";
 import { useMonthStat } from "./useMonthStat";

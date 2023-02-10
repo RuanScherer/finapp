@@ -10,6 +10,7 @@ import { Radio } from "../../../components/Form/Radio/Radio";
 import { TransactionRecurrence } from "../../../shared/enums/transactionRecurrence";
 import { TransactionsStatus } from "../../../shared/enums/transactionStatus";
 import { TransactionType } from "../../../shared/enums/transactionType";
+import { currencyFormatter } from "../../../shared/utils/currencyFormatter";
 import { formatDateForFauna } from "../../../shared/utils/formatDateForFauna";
 import { NewTransactionFormData } from "./NewTransaction.types";
 import { useNewTransaction } from "./useNewTransaction";
@@ -215,13 +216,9 @@ export function NewTransaction() {
                 <Text fontSize="small" mt="1" color="text.600">
                   Valor das parcelas:
                   {" "}
-                  {Intl
-                    .NumberFormat("pt-BR", {
-                      style: "currency",
-                      currency: "BRL"
-                    })
-                    .format(Number(amount) / Number(installmentAmount))
-                  }
+                  {currencyFormatter.format(
+                    Number(amount) / Number(installmentAmount)
+                  )}
                 </Text>
               )}
             </Box>

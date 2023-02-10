@@ -1,5 +1,6 @@
 import { Heading, HStack, Skeleton, Text } from "@chakra-ui/react";
-import { EmptyState } from "../../../../components/EmptyState";
+import { Link } from "react-router-dom";
+import { EmptyState } from "../../../components/EmptyState";
 import { Card } from "../Card";
 import { TransactionsTable } from "./TransactionsTable";
 import { usePendentTransactions } from "./usePendentTransactions";
@@ -15,18 +16,20 @@ export function PendentTransactions() {
         </Heading>
 
         {lastPendentTransactions?.length && (
-          <Text
-            fontSize="sm"
-            color="primary.500"
-            cursor="pointer"
-            textAlign="right"
-            mt="2"
-            _hover={{
-              filter: "brightness(0.8)"
-            }}
-          >
-            Ver tudo
-          </Text>
+          <Link to="/transactions">
+            <Text
+              fontSize="sm"
+              color="primary.500"
+              cursor="pointer"
+              textAlign="right"
+              mt="2"
+              _hover={{
+                filter: "brightness(0.8)"
+              }}
+            >
+              Ver tudo
+            </Text>
+          </Link>
         )}
       </HStack>
 

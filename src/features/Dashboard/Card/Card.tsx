@@ -1,6 +1,6 @@
 import { ChakraProps, Flex } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { boxShadow } from "../../../../theme";
+import { boxShadow } from "../../../theme";
 
 interface CardProps extends ChakraProps {
   children: ReactNode

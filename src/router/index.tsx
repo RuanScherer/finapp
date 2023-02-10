@@ -1,9 +1,10 @@
 import { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthContextProvider, useAuth } from "../contexts/AuthContext";
-import { Home } from "../pages/Home";
+import { Dashboard } from "../pages/Dashboard";
 import { SignIn } from "../pages/SignIn";
 import { NewTransaction } from "../pages/Transaction/New";
+import { TransactionsView } from "../pages/Transaction/View";
 
 interface PublicOnlyRouteProps {
   children: ReactNode;
@@ -11,7 +12,7 @@ interface PublicOnlyRouteProps {
 
 function PublicOnlyRoute({ children }: PublicOnlyRouteProps) {
   const { user } = useAuth();
-  if (user) return <Navigate to="/home" replace />;
+  if (user) return <Navigate to="/dashboard" replace />;
   return <>{children}</>;
 }
 
@@ -47,10 +48,18 @@ export function Router() {
             }
           />
           <Route
-            path="/home"
+            path="/dashboard"
             element={
               <AuthProtectedRoute>
-                <Home />
+                <Dashboard />
+              </AuthProtectedRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <AuthProtectedRoute>
+                <TransactionsView />
               </AuthProtectedRoute>
             }
           />

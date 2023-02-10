@@ -67,7 +67,7 @@ export function useNewTransaction() {
         description: "Sua transacão foi criada.",
         status: "success"
       })
-      navigate("/home")
+      navigate("/dashboard")
     } catch {
       toast({
         title: "Erro ao criar transação.",

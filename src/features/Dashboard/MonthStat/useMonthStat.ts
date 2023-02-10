@@ -1,11 +1,11 @@
 import { query as q } from "faunadb"
 import { useCallback, useEffect, useState } from "react"
-import { useAuth } from "../../../../contexts/AuthContext"
-import { useToast } from "../../../../hooks/useToast"
-import { fauna } from "../../../../services/faunadb"
-import { TransactionType } from "../../../../shared/enums/transactionType"
-import { formatDateForFauna } from "../../../../shared/utils/formatDateForFauna"
-import { getRangeDatesForCurrentMonth } from "../../../../shared/utils/getRangeDatesForCurrentMonth"
+import { useAuth } from "../../../contexts/AuthContext"
+import { useToast } from "../../../hooks/useToast"
+import { fauna } from "../../../services/faunadb"
+import { TransactionType } from "../../../shared/enums/transactionType"
+import { formatDateForFauna } from "../../../shared/utils/formatDateForFauna"
+import { getRangeDatesForCurrentMonth } from "../../../shared/utils/getRangeDatesForCurrentMonth"
 import { GetMonthStatParams, GetMonthStatQueryReturn } from "./MonthStat.types"
 
 export function useMonthStat(type: TransactionType) {
