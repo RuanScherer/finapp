@@ -1,4 +1,4 @@
-import { HStack, Tag, Text, theme } from "@chakra-ui/react";
+import { Tag, Td, Text, theme, Tr } from "@chakra-ui/react";
 import { RxArrowBottomLeft, RxArrowTopRight } from "react-icons/rx";
 import { TransactionType } from "../../../../../shared/enums/transactionType";
 import { currencyFormatter } from "../../../../../shared/utils/currencyFormatter";
@@ -10,11 +10,13 @@ interface TransactionRowProps {
 
 export function TransactionRow({ transaction }: TransactionRowProps) {
   return (
-    <HStack justifyContent="space-between" alignItems="center" mt="2">
-      <HStack alignItems="center">
+    <Tr>
+      <Td>
         <Text color="text.700">
           {transaction.name}
         </Text>
+      </Td>
+      <Td>
         <Tag
           variant="subtle"
           size="sm"
@@ -23,18 +25,19 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
         >
           {transaction.category}
         </Tag>
-      </HStack>
-      
-      <HStack alignItems="center">
+      </Td>
+      <Td>
         {transaction.type === TransactionType.DESPESA ? (
           <RxArrowBottomLeft color={theme.colors.red[500]} />
         ) : (
           <RxArrowTopRight color={theme.colors.green[500]} />
         )}
+      </Td>
+      <Td>
         <Text fontWeight="semibold">
           {currencyFormatter.format(transaction.amount)}
         </Text>
-      </HStack>
-    </HStack>
+      </Td>
+    </Tr>
   )
 }

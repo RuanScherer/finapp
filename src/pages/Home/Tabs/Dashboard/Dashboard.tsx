@@ -30,11 +30,11 @@ export function Dashboard() {
           <MonthPendencies />
         </GridItem>
 
-        <GridItem colSpan={12}>
+        <GridItem colSpan={14}>
           <PendentTransactions />
         </GridItem>
 
-        <GridItem colSpan={12}>
+        <GridItem colSpan={10}>
           <TransactionsPerCategory />
         </GridItem>
       </Grid>

@@ -5,34 +5,29 @@ import { useToast } from "../../../../hooks/useToast";
 import { fauna } from "../../../../services/faunadb";
 import { formatDateForFauna } from "../../../../shared/utils/formatDateForFauna";
 import { getRangeDatesForCurrentMonth } from "../../../../shared/utils/getRangeDatesForCurrentMonth";
-import { LastPendentTransactionByMonthQueryReturn, Transaction } from "./PendentTransactions.types";
+import { GetTransactionsPerCategoryQueryResult, TransactionsPerCategory } from "./TransactionsPerCategory.type";
 
-export function usePendentTransactions() {
-  const [lastPendentTransactions, setLastPendentTransactions] = useState<Transaction[]>()
+export function useTransactionsPerCategory() {
+  const [transactionsPerCategory, setTransactionsPerCategory] = useState<TransactionsPerCategory[]>()
   const { user } = useAuth()
   const toast = useToast()
 
-  const loadLastPendentTransactions = useCallback(async () => {
+  const loadTransactionsPerCategory = useCallback(async () => {
     const { fromDate, toDate } = getRangeDatesForCurrentMonth()
-
-    const transactions = await fauna.query<LastPendentTransactionByMonthQueryReturn>(
+    const result = await fauna.query<GetTransactionsPerCategoryQueryResult>(
       q.Call(
-        "get_pendent_transactions",
+        "get_transactions_per_category",
         user!.id,
         q.Date(formatDateForFauna(fromDate)),
-        q.Date(formatDateForFauna(toDate))
+        q.Date(formatDateForFauna(toDate)),
       )
     )
-    const formattedTransactions = transactions.data.map(transaction => ({
-      ...transaction,
-      dueDate: transaction.dueDate.date
-    }))
-    setLastPendentTransactions(formattedTransactions)
+    setTransactionsPerCategory(result.data)
   }, [])
 
   useEffect(() => {
     try {
-      loadLastPendentTransactions()
+      loadTransactionsPerCategory()
     } catch {
       toast({
         title: "Erro ao buscar dados.",
@@ -42,5 +37,5 @@ export function usePendentTransactions() {
     }
   }, [])
 
-  return { lastPendentTransactions }
+  return { transactionsPerCategory };
 }
