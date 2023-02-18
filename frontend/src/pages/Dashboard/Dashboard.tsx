@@ -1,12 +1,12 @@
 import { Box, Grid, GridItem, Heading } from "@chakra-ui/react";
-import { Container } from "../../components/Container";
-import { Header } from "../../components/Header";
-import { MonthPendencies } from "../../features/Dashboard/MonthPendencies";
-import { MonthStat } from "../../features/Dashboard/MonthStat";
-import { PendentTransactions } from "../../features/Dashboard/PendentTransactions";
-import { TransactionsPerCategory } from "../../features/Dashboard/TransactionsPerCategory";
-import { monthsName } from "../../shared/constants/monthsName";
-import { TransactionType } from "../../shared/enums/transactionType";
+import { Container } from "@components/Container";
+import { Header } from "@components/Header";
+import { MonthPendencies } from "@features/Dashboard/MonthPendencies";
+import { MonthStat } from "@features/Dashboard/MonthStat";
+import { PendentTransactions } from "@features/Dashboard/PendentTransactions";
+import { TransactionsPerCategory } from "@features/Dashboard/TransactionsPerCategory";
+import { monthsName } from "@shared/constants/monthsName";
+import { TransactionType } from "@shared/enums/transactionType";
 
 export function Dashboard() {
   return (

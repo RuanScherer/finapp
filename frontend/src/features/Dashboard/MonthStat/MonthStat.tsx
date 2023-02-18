@@ -1,12 +1,12 @@
 import { Heading, Skeleton } from "@chakra-ui/react";
-import { Stat } from "../../../components/Stat/Stat";
-import { TransactionType } from "../../../shared/enums/transactionType";
+import { Stat } from "@components/Stat/Stat";
+import { TransactionType } from "@shared/enums/transactionType";
 import { Card } from "../Card";
 import { MonthStatProps } from "./MonthStat.types";
 import { useMonthStat } from "./useMonthStat";
 
 export function MonthStat({ type }: MonthStatProps) {
-  const { amount } = useMonthStat(type)
+  const { amount } = useMonthStat(type);
 
   return (
     <Card>
@@ -20,5 +20,5 @@ export function MonthStat({ type }: MonthStatProps) {
         <Skeleton h="40px" mt="2.5" />
       )}
     </Card>
-  )
+  );
 }

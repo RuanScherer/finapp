@@ -1,11 +1,11 @@
 import { Heading, SimpleGrid, Skeleton } from "@chakra-ui/react";
-import { Stat } from "../../../components/Stat/Stat";
-import { TransactionType } from "../../../shared/enums/transactionType";
+import { Stat } from "@components/Stat/Stat";
+import { TransactionType } from "@shared/enums/transactionType";
 import { Card } from "../Card";
 import { useMonthPendencies } from "./useMonthPendencies";
 
 export function MonthPendencies() {
-  const { pendentAmountToPay, pendentAmountToReceive } = useMonthPendencies()
+  const { pendentAmountToPay, pendentAmountToReceive } = useMonthPendencies();
 
   return (
     <Card>
@@ -15,10 +15,7 @@ export function MonthPendencies() {
 
       <SimpleGrid columns={2} gap="2">
         {pendentAmountToPay != undefined ? (
-          <Stat
-            type={TransactionType.DESPESA}
-            amount={pendentAmountToPay}
-          />
+          <Stat type={TransactionType.DESPESA} amount={pendentAmountToPay} />
         ) : (
           <Skeleton h="20px" mt="2.5" />
         )}
@@ -33,5 +30,5 @@ export function MonthPendencies() {
         )}
       </SimpleGrid>
     </Card>
-  )
+  );
 }

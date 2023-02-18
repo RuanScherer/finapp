@@ -1,13 +1,13 @@
 import { Heading, HStack, Skeleton, Text } from "@chakra-ui/react";
+import { EmptyState } from "@components/EmptyState";
 import { Link } from "react-router-dom";
-import { EmptyState } from "../../../components/EmptyState";
 import { Card } from "../Card";
 import { TransactionsTable } from "./TransactionsTable";
 import { usePendentTransactions } from "./usePendentTransactions";
 
 export function PendentTransactions() {
   const { lastPendentTransactions } = usePendentTransactions();
-  
+
   return (
     <Card>
       <HStack justifyContent="space-between" alignItems="center" mb="2">
@@ -24,7 +24,7 @@ export function PendentTransactions() {
               textAlign="right"
               mt="2"
               _hover={{
-                filter: "brightness(0.8)"
+                filter: "brightness(0.8)",
               }}
             >
               Ver tudo
@@ -49,5 +49,5 @@ export function PendentTransactions() {
         </>
       )}
     </Card>
-  )
+  );
 }

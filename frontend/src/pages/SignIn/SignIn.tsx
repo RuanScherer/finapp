@@ -1,7 +1,7 @@
 import { Button, Center, Flex, Heading, Text } from "@chakra-ui/react";
+import { useAuth } from "@contexts/AuthContext";
+import { colors } from "@theme/index";
 import { FaGoogle } from "react-icons/fa";
-import { useAuth } from "../../contexts/AuthContext";
-import { colors } from "../../theme";
 
 export function SignIn() {
   const { signInWithGoogle } = useAuth();

@@ -1,9 +1,9 @@
 import { ChakraProps, Flex } from "@chakra-ui/react";
+import { boxShadow } from "@theme/index";
 import { ReactNode } from "react";
-import { boxShadow } from "../../../theme";
 
 interface CardProps extends ChakraProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export function Card({ children, ...rest }: CardProps) {
@@ -20,5 +20,5 @@ export function Card({ children, ...rest }: CardProps) {
     >
       {children}
     </Flex>
-  )
+  );
 }

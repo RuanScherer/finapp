@@ -1,7 +1,7 @@
 import { Avatar, Button, Flex, Heading, HStack, Text } from "@chakra-ui/react";
+import { useAuth } from "@contexts/AuthContext";
 import { RxAvatar, RxDashboard, RxPlus, RxStack } from "react-icons/rx";
 import { Link as ReactRouterLink } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "./Link";
 
 export function Header() {

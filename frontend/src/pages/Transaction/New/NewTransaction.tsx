@@ -1,21 +1,29 @@
-import { Box, Button, Flex, Heading, HStack, SimpleGrid, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  SimpleGrid,
+  Text,
+} from "@chakra-ui/react";
+import { Input } from "@components/Form/Input";
+import { Radio } from "@components/Form/Radio/Radio";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
+import { TransactionsStatus } from "@shared/enums/transactionStatus";
+import { TransactionType } from "@shared/enums/transactionType";
+import { currencyFormatter } from "@shared/utils/currencyFormatter";
+import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { RxArrowLeft } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { Input } from "../../../components/Form/Input";
-import { Radio } from "../../../components/Form/Radio/Radio";
-import { TransactionRecurrence } from "../../../shared/enums/transactionRecurrence";
-import { TransactionsStatus } from "../../../shared/enums/transactionStatus";
-import { TransactionType } from "../../../shared/enums/transactionType";
-import { currencyFormatter } from "../../../shared/utils/currencyFormatter";
-import { formatDateForFauna } from "../../../shared/utils/formatDateForFauna";
 import { NewTransactionFormData } from "./NewTransaction.types";
 import { useNewTransaction } from "./useNewTransaction";
 
-const currentDate = formatDateForFauna(new Date())
+const currentDate = formatDateForFauna(new Date());
 
 const newTransactionFormSchema = yup.object().shape({
   name: yup.string().required("Nome é obrigatório"),
@@ -41,35 +49,33 @@ const newTransactionFormSchema = yup.object().shape({
       .typeError("Quantidade de parcelas deve ser um número")
       .min(1, "Quantidade de parcelas deve ser maior que zero")
       .required("Quantidade de parcelas é obrigatório"),
-    otherwise: yup.number().typeError("Quantidade de parcelas deve ser um número")
+    otherwise: yup
+      .number()
+      .typeError("Quantidade de parcelas deve ser um número"),
   }),
-})
+});
 
 export function NewTransaction() {
-  const {
-    register,
-    formState,
-    handleSubmit,
-    watch,
-    setValue
-  } = useForm<NewTransactionFormData>({
-    resolver: yupResolver(newTransactionFormSchema)
-  })
-  const { categorySuggestions, paymentMethodSuggestions, handleSave } = useNewTransaction()
-  const navigate = useNavigate()
+  const { register, formState, handleSubmit, watch, setValue } =
+    useForm<NewTransactionFormData>({
+      resolver: yupResolver(newTransactionFormSchema),
+    });
+  const { categorySuggestions, paymentMethodSuggestions, handleSave } =
+    useNewTransaction();
+  const navigate = useNavigate();
 
-  const recurrence = watch("recurrence")
-  const amount = watch("amount")
-  const installmentAmount = watch("installmentAmount")
+  const recurrence = watch("recurrence");
+  const amount = watch("amount");
+  const installmentAmount = watch("installmentAmount");
 
   useEffect(() => {
     if (recurrence !== TransactionRecurrence.UNICO) {
-      setValue("status", TransactionsStatus.PENDENTE)
+      setValue("status", TransactionsStatus.PENDENTE);
     }
-  }, [recurrence])
+  }, [recurrence]);
 
   function handleBack() {
-    navigate(-1)
+    navigate(-1);
   }
 
   return (
@@ -97,12 +103,7 @@ export function NewTransaction() {
         Nova transação
       </Heading>
 
-      <SimpleGrid
-        columns={2}
-        gap="4"
-        w="full"
-        mt="10"
-      >
+      <SimpleGrid columns={2} gap="4" w="full" mt="10">
         <Input
           label="Nome"
           error={formState.errors.name}
@@ -125,7 +126,7 @@ export function NewTransaction() {
           {...register("category")}
         />
         <datalist id="categories">
-          {categorySuggestions?.map(category => (
+          {categorySuggestions?.map((category) => (
             <option value={category} key={category} />
           ))}
         </datalist>
@@ -137,11 +138,11 @@ export function NewTransaction() {
           {...register("paymentMethod")}
         />
         <datalist id="paymentMethods">
-          {paymentMethodSuggestions?.map(paymentMethod => (
+          {paymentMethodSuggestions?.map((paymentMethod) => (
             <option value={paymentMethod} key={paymentMethod} />
           ))}
         </datalist>
-        
+
         <SimpleGrid columns={2} gap={4}>
           <Radio
             label="Recorrência"
@@ -149,7 +150,7 @@ export function NewTransaction() {
             options={[
               { value: TransactionRecurrence.UNICO, label: "Único" },
               { value: TransactionRecurrence.PARCELADO, label: "Parcelado" },
-              { value: TransactionRecurrence.FIXO, label: "Fixo" }
+              { value: TransactionRecurrence.FIXO, label: "Fixo" },
             ]}
             {...register("recurrence")}
           />
@@ -159,7 +160,7 @@ export function NewTransaction() {
             defaultValue={TransactionType.DESPESA}
             options={[
               { value: TransactionType.RECEITA, label: "Receita" },
-              { value: TransactionType.DESPESA, label: "Despesa" }
+              { value: TransactionType.DESPESA, label: "Despesa" },
             ]}
             {...register("type")}
           />
@@ -170,7 +171,7 @@ export function NewTransaction() {
               defaultValue={TransactionsStatus.PENDENTE}
               options={[
                 { value: TransactionsStatus.PENDENTE, label: "Pendente" },
-                { value: TransactionsStatus.QUITADO, label: "Quitado" }
+                { value: TransactionsStatus.QUITADO, label: "Quitado" },
               ]}
               {...register("status")}
             />
@@ -189,21 +190,11 @@ export function NewTransaction() {
 
       {recurrence === TransactionRecurrence.PARCELADO && (
         <>
-          <Heading
-            mt="6"
-            fontSize="xl"
-            fontWeight="semibold"
-            w="full"
-          >
+          <Heading mt="6" fontSize="xl" fontWeight="semibold" w="full">
             Parcelamento
           </Heading>
 
-          <SimpleGrid
-            columns={2}
-            gap="4"
-            w="full"
-            mt="2"
-          >
+          <SimpleGrid columns={2} gap="4" w="full" mt="2">
             <Box>
               <Input
                 type="number"
@@ -214,8 +205,7 @@ export function NewTransaction() {
 
               {amount && installmentAmount && (
                 <Text fontSize="small" mt="1" color="text.600">
-                  Valor das parcelas:
-                  {" "}
+                  Valor das parcelas:{" "}
                   {currencyFormatter.format(
                     Number(amount) / Number(installmentAmount)
                   )}
@@ -247,5 +237,5 @@ export function NewTransaction() {
         </Button>
       </HStack>
     </Flex>
-  )
+  );
 }

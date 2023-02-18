@@ -1,27 +1,27 @@
-import { TransactionType } from "../../../shared/enums/transactionType"
+import { TransactionType } from "@shared/enums/transactionType";
 
 export interface Transaction {
-  dueDate: Date
+  dueDate: Date;
   ref: {
-    id: string
-  }
-  amount: number
-  category: string
-  name: string
-  type: TransactionType
+    id: string;
+  };
+  amount: number;
+  category: string;
+  name: string;
+  type: TransactionType;
 }
 
 export interface LastPendentTransactionByMonthQueryReturn {
   data: Array<{
     dueDate: {
-      date: Date
-    }
+      date: Date;
+    };
     ref: {
-      id: string
-    }
-    amount: number
-    category: string
-    name: string
-    type: TransactionType
-  }>
+      id: string;
+    };
+    amount: number;
+    category: string;
+    name: string;
+    type: TransactionType;
+  }>;
 }

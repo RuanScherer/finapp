@@ -1,10 +1,10 @@
+import { AuthContextProvider, useAuth } from "@contexts/AuthContext";
+import { Dashboard } from "@pages/Dashboard";
+import { SignIn } from "@pages/SignIn";
+import { NewTransaction } from "@pages/Transaction/New";
+import { TransactionsView } from "@pages/Transaction/View";
 import { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { AuthContextProvider, useAuth } from "../contexts/AuthContext";
-import { Dashboard } from "../pages/Dashboard";
-import { SignIn } from "../pages/SignIn";
-import { NewTransaction } from "../pages/Transaction/New";
-import { TransactionsView } from "../pages/Transaction/View";
 
 interface PublicOnlyRouteProps {
   children: ReactNode;
