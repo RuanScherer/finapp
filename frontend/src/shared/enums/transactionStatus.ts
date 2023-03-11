@@ -1,4 +1,4 @@
-export enum TransactionsStatus {
+export enum TransactionStatus {
   PENDENTE = "PENDENTE",
   QUITADO = "QUITADO",
 }

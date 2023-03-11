@@ -11,7 +11,7 @@ import { Input } from "@components/Form/Input";
 import { Radio } from "@components/Form/Radio/Radio";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
-import { TransactionsStatus } from "@shared/enums/transactionStatus";
+import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";
 import { currencyFormatter } from "@shared/utils/currencyFormatter";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
@@ -70,7 +70,7 @@ export function NewTransaction() {
 
   useEffect(() => {
     if (recurrence !== TransactionRecurrence.UNICO) {
-      setValue("status", TransactionsStatus.PENDENTE);
+      setValue("status", TransactionStatus.PENDENTE);
     }
   }, [recurrence]);
 
@@ -168,10 +168,10 @@ export function NewTransaction() {
           {(!recurrence || recurrence === "UNICO") && (
             <Radio
               label="Situação"
-              defaultValue={TransactionsStatus.PENDENTE}
+              defaultValue={TransactionStatus.PENDENTE}
               options={[
-                { value: TransactionsStatus.PENDENTE, label: "Pendente" },
-                { value: TransactionsStatus.QUITADO, label: "Quitado" },
+                { value: TransactionStatus.PENDENTE, label: "Pendente" },
+                { value: TransactionStatus.QUITADO, label: "Quitado" },
               ]}
               {...register("status")}
             />

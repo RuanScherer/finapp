@@ -1,5 +1,5 @@
 import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
-import { TransactionsStatus } from "@shared/enums/transactionStatus";
+import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";
 
 export type NewTransactionFormData = {
@@ -8,7 +8,7 @@ export type NewTransactionFormData = {
   category: string;
   paymentMethod: string;
   type: TransactionType;
-  status: TransactionsStatus;
+  status: TransactionStatus;
   recurrence: TransactionRecurrence;
   dueDate: Date;
   installmentAmount?: number;

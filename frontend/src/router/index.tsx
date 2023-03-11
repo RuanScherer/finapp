@@ -1,4 +1,5 @@
 import { AuthContextProvider, useAuth } from "@contexts/AuthContext";
+import { TransactionsViewContextProvider } from "@contexts/TransactionsViewContext/TransactionsViewContext";
 import { Dashboard } from "@pages/Dashboard";
 import { SignIn } from "@pages/SignIn";
 import { NewTransaction } from "@pages/Transaction/New";
@@ -59,7 +60,9 @@ export function Router() {
             path="/transactions"
             element={
               <AuthProtectedRoute>
-                <TransactionsView />
+                <TransactionsViewContextProvider>
+                  <TransactionsView />
+                </TransactionsViewContextProvider>
               </AuthProtectedRoute>
             }
           />

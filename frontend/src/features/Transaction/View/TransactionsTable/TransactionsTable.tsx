@@ -29,7 +29,6 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
           {transactions.map((transaction) => (
             <TransactionRow
               transaction={transaction}
-              onClick={console.log}
               key={transaction.ref.id}
             />
           ))}

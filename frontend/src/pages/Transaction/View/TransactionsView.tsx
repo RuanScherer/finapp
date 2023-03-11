@@ -1,10 +1,10 @@
 import { Box, Heading, HStack, Input, Skeleton } from "@chakra-ui/react";
 import { Container } from "@components/Container";
 import { Header } from "@components/Header";
+import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { Card } from "@features/Dashboard/Card";
 import { TransactionsTable } from "@features/Transaction/View/TransactionsTable";
 import { monthsName } from "@shared/constants/monthsName";
-import { useTransactionsView } from "./useTransactionsView";
 
 export function TransactionsView() {
   const { transactions } = useTransactionsView();

@@ -8,7 +8,8 @@ import {
   Tooltip,
   Tr,
 } from "@chakra-ui/react";
-import { TransactionsStatus } from "@shared/enums/transactionStatus";
+import { useTransactionsView } from "@contexts/TransactionsViewContext";
+import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";
 import { currencyFormatter } from "@shared/utils/currencyFormatter";
 import { theme } from "@theme/index";
@@ -18,8 +19,10 @@ import {
   RxCheck,
   RxCheckCircled,
   RxClock,
+  RxCounterClockwiseClock,
   RxPencil1,
 } from "react-icons/rx";
+import { Link } from "react-router-dom";
 import { TransactionRowProps } from "./TransactionRow.types";
 
 const defaultTagProps = {
@@ -36,9 +39,21 @@ const defaultActionTooltipProps = {
   fontSize: "xs",
 };
 
-export function TransactionRow({ transaction, onClick }: TransactionRowProps) {
-  function handleSelectTransaction() {
-    onClick(transaction);
+export function TransactionRow({ transaction }: TransactionRowProps) {
+  const { updateTransactionStatusByRefId } = useTransactionsView();
+
+  function handleSettleTransaction() {
+    updateTransactionStatusByRefId(
+      transaction.ref.id,
+      TransactionStatus.QUITADO
+    );
+  }
+
+  function handleMakeTransactionPending() {
+    updateTransactionStatusByRefId(
+      transaction.ref.id,
+      TransactionStatus.PENDENTE
+    );
   }
 
   return (
@@ -65,10 +80,10 @@ export function TransactionRow({ transaction, onClick }: TransactionRowProps) {
         <Tag
           {...defaultTagProps}
           colorScheme={
-            transaction.status === TransactionsStatus.PENDENTE ? "red" : "green"
+            transaction.status === TransactionStatus.PENDENTE ? "red" : "green"
           }
         >
-          {transaction.status === TransactionsStatus.PENDENTE ? (
+          {transaction.status === TransactionStatus.PENDENTE ? (
             <>
               <TagLeftIcon as={RxClock} strokeWidth={0.5} />
               <TagLabel>Pendente</TagLabel>
@@ -84,26 +99,45 @@ export function TransactionRow({ transaction, onClick }: TransactionRowProps) {
 
       <Td>
         <HStack gap="1">
-          <Tooltip {...defaultActionTooltipProps} label="Quitar transação">
-            <IconButton
-              size="sm"
-              colorScheme="primary"
-              aria-label="Quitar transação"
-              icon={<RxCheck size={20} />}
-              borderRadius="full"
-            />
-          </Tooltip>
+          {transaction.status === TransactionStatus.PENDENTE ? (
+            <Tooltip {...defaultActionTooltipProps} label="Quitar transação">
+              <IconButton
+                size="sm"
+                colorScheme="green"
+                aria-label="Quitar transação"
+                icon={<RxCheck size={20} />}
+                borderRadius="full"
+                onClick={handleSettleTransaction}
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip
+              {...defaultActionTooltipProps}
+              label="Tornar transação pendente"
+            >
+              <IconButton
+                size="sm"
+                colorScheme="red"
+                aria-label="Tornar transação pendente"
+                icon={<RxCounterClockwiseClock size={18} />}
+                borderRadius="full"
+                onClick={handleMakeTransactionPending}
+              />
+            </Tooltip>
+          )}
 
           <Tooltip
             {...defaultActionTooltipProps}
             label="Ver detalhes da transação"
           >
-            <IconButton
-              size="sm"
-              aria-label="Ver detalhes da transação"
-              icon={<RxPencil1 size={18} />}
-              borderRadius="full"
-            />
+            <Link to={`/transactions/${transaction.ref.id}`}>
+              <IconButton
+                size="sm"
+                aria-label="Ver detalhes da transação"
+                icon={<RxPencil1 size={18} />}
+                borderRadius="full"
+              />
+            </Link>
           </Tooltip>
         </HStack>
       </Td>

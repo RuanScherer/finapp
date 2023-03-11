@@ -2,7 +2,7 @@ import { useAuth } from "@contexts/AuthContext";
 import { useToast } from "@hooks/useToast";
 import { fauna } from "@services/faunadb";
 import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
-import { TransactionsStatus } from "@shared/enums/transactionStatus";
+import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { query as q } from "faunadb";
 import { useCallback, useEffect, useState } from "react";
@@ -53,7 +53,7 @@ export function useNewTransaction() {
   async function handleSave(data: NewTransactionFormData) {
     const transaction = data;
     if (transaction.recurrence !== TransactionRecurrence.UNICO) {
-      transaction.status = TransactionsStatus.PENDENTE;
+      transaction.status = TransactionStatus.PENDENTE;
     }
 
     try {
@@ -136,7 +136,7 @@ export function useNewTransaction() {
         category: transaction.category,
         paymentMethod: transaction.paymentMethod,
         type: transaction.type,
-        status: TransactionsStatus.PENDENTE,
+        status: TransactionStatus.PENDENTE,
         dueDate: q.Date(formatDateForFauna(dueDate)),
         userId: user?.id,
         transactionRefId,
