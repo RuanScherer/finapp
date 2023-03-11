@@ -14,8 +14,8 @@ interface TransactionProps {
   type: TransactionType;
   status: TransactionStatus;
   recurrence: TransactionRecurrence;
-  installmentAmount?: TransactionInstallmentAmount;
-  dueDate: Date;
+  installmentAmount: TransactionInstallmentAmount;
+  dueDate?: Date;
 }
 
 export class Transaction {
@@ -27,7 +27,11 @@ export class Transaction {
     id?: string
   ) {
     this._id = id ?? randomUUID();
-    this.props = props;
+    this.props = {
+      ...props,
+      status: props.status ?? TransactionStatus.PENDING,
+      dueDate: props.dueDate ?? new Date(),
+    };
   }
 
   get id(): string {

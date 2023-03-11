@@ -1,92 +1,14 @@
-import {
-  Box,
-  Heading,
-  HStack,
-  Input,
-  Table,
-  TableContainer,
-  Tag,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Box, Heading, HStack, Input, Skeleton } from "@chakra-ui/react";
 import { Container } from "@components/Container";
 import { Header } from "@components/Header";
 import { Card } from "@features/Dashboard/Card";
+import { TransactionsTable } from "@features/Transaction/View/TransactionsTable";
 import { monthsName } from "@shared/constants/monthsName";
-import { currencyFormatter } from "@shared/utils/currencyFormatter";
-import { theme } from "@theme/index";
-import { RxArrowBottomLeft } from "react-icons/rx";
-
-const transactions = [
-  {
-    id: 1,
-    name: "Finclass",
-    type: "DESPESA",
-    category: "Estudos",
-    paymentMethod: "Cartão de crédito",
-    amount: 24.9,
-    status: "PENDENTE",
-  },
-  {
-    id: 2,
-    name: "Faculdade",
-    type: "DESPESA",
-    category: "Estudos",
-    paymentMethod: "Cartão de crédito",
-    amount: 24.9,
-    status: "PENDENTE",
-  },
-  {
-    id: 2,
-    name: "Faculdade",
-    type: "DESPESA",
-    category: "Estudos",
-    paymentMethod: "Cartão de crédito",
-    amount: 24.9,
-    status: "PENDENTE",
-  },
-  {
-    id: 2,
-    name: "Faculdade",
-    type: "DESPESA",
-    category: "Estudos",
-    paymentMethod: "Cartão de crédito",
-    amount: 24.9,
-    status: "PENDENTE",
-  },
-  {
-    id: 2,
-    name: "Faculdade",
-    type: "DESPESA",
-    category: "Estudos",
-    paymentMethod: "Cartão de crédito",
-    amount: 24.9,
-    status: "PENDENTE",
-  },
-  {
-    id: 2,
-    name: "Faculdade",
-    type: "DESPESA",
-    category: "Estudos",
-    paymentMethod: "Cartão de crédito",
-    amount: 24.9,
-    status: "PENDENTE",
-  },
-  {
-    id: 2,
-    name: "Faculdade",
-    type: "DESPESA",
-    category: "Estudos",
-    paymentMethod: "Cartão de crédito",
-    amount: 24.9,
-    status: "PENDENTE",
-  },
-];
+import { useTransactionsView } from "./useTransactionsView";
 
 export function TransactionsView() {
+  const { transactions } = useTransactionsView();
+
   return (
     <Container>
       <Box mb="4">
@@ -102,55 +24,23 @@ export function TransactionsView() {
       </HStack>
 
       <Card>
-        <TableContainer>
-          <Table>
-            <Thead>
-              <Tr>
-                <Th>Nome</Th>
-                <Th>Tipo</Th>
-                <Th>Categoria</Th>
-                <Th>Forma de pagamento</Th>
-                <Th>Valor</Th>
-                <Th>Status</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {transactions.map((transaction) => (
-                <Tr>
-                  <Td>{transaction.name}</Td>
-                  <Td>
-                    <RxArrowBottomLeft
-                      color={theme.colors.red[500]}
-                      strokeWidth="1"
-                    />
-                  </Td>
-                  <Td>
-                    <Tag
-                      variant="subtle"
-                      size="md"
-                      bgColor="gray.200"
-                      borderRadius="full"
-                    >
-                      {transaction.category}
-                    </Tag>
-                  </Td>
-                  <Td>
-                    <Tag
-                      variant="subtle"
-                      size="md"
-                      bgColor="gray.200"
-                      borderRadius="full"
-                    >
-                      {transaction.paymentMethod}
-                    </Tag>
-                  </Td>
-                  <Td>{currencyFormatter.format(transaction.amount)}</Td>
-                  <Td>{transaction.status}</Td>
-                </Tr>
+        {transactions ? (
+          <TransactionsTable transactions={transactions} />
+        ) : (
+          <>
+            {Array(10)
+              .fill(undefined)
+              .map((_, index) => (
+                <Skeleton
+                  h="40px"
+                  startColor="gray.100"
+                  endColor="gray.300"
+                  mt={index === 0 ? 0 : 2}
+                  key={index}
+                />
               ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+          </>
+        )}
       </Card>
     </Container>
   );

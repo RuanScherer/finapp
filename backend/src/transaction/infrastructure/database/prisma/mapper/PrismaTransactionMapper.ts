@@ -1,13 +1,6 @@
-import {TransactionType} from "./TransactionType";
-import {TransactionStatus} from "./TransactionStatus";
-import {TransactionRecurrence} from "./TransactionRecurrence";
-import {randomUUID} from "crypto";
-import {TransactionName} from "./TransactionName";
-import {TransactionAmount} from "./TransactionAmount";
-import {TransactionInstallmentAmount} from "./TransactionInstallmentAmount";
-import {Transaction} from "@transaction/domain/Transaction";
+import {Transaction} from "@transaction/application/domain/Transaction";
 
-interface FaunaTransactionProps {
+interface PrismaTransactionProps {
   id: string;
   name: string;
   amount: number;
@@ -20,8 +13,8 @@ interface FaunaTransactionProps {
   dueDate: Date;
 }
 
-export class FaunaTransaction {
-  private props: FaunaTransactionProps;
+export class PrismaTransaction {
+  private props: PrismaTransactionProps;
 
   constructor(transaction: Transaction) {
     this.props = {
