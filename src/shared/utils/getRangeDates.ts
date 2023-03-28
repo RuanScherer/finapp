@@ -1,6 +1,6 @@
 export function getRangeDatesForCurrentMonth() {
   const currentDate = new Date();
-  getRangeDatesByBaseDate(currentDate);
+  return getRangeDatesByBaseDate(currentDate);
 }
 
 export function getRangeDatesByBaseDate(date: Date) {
