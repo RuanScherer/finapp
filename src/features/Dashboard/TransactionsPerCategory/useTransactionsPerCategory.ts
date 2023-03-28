@@ -2,7 +2,7 @@ import { useAuth } from "@contexts/AuthContext";
 import { useToast } from "@hooks/useToast";
 import { fauna } from "@services/faunadb";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
-import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDatesForCurrentMonth";
+import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDates";
 import { query as q } from "faunadb";
 import { useQuery } from "react-query";
 import { GetTransactionsPerCategoryQueryResult } from "./TransactionsPerCategory.type";

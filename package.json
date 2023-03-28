@@ -16,6 +16,7 @@
     "@hookform/resolvers": "^2.9.10",
     "@types/node": "^18.11.18",
     "chart.js": "^4.2.0",
+    "date-fns": "^2.29.3",
     "faunadb": "^4.7.1",
     "firebase": "^9.16.0",
     "framer-motion": "^8.5.2",

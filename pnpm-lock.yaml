@@ -11,6 +11,7 @@ specifiers:
   '@types/react-dom': ^18.0.9
   '@vitejs/plugin-react': ^3.0.0
   chart.js: ^4.2.0
+  date-fns: ^2.29.3
   faunadb: ^4.7.1
   firebase: ^9.16.0
   framer-motion: ^8.5.2
@@ -37,6 +38,7 @@ dependencies:
   '@hookform/resolvers': 2.9.10_react-hook-form@7.42.1
   '@types/node': 18.11.18
   chart.js: 4.2.0
+  date-fns: 2.29.3
   faunadb: 4.7.1
   firebase: 9.16.0
   framer-motion: 8.5.2_biqbaboplfbrettd7655fr4n2y
@@ -2626,6 +2628,11 @@ packages:
 
   /csstype/3.1.1:
     resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==}
+
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
+    dev: false
 
   /debug/4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}

@@ -3,7 +3,7 @@ import { useToast } from "@hooks/useToast";
 import { fauna } from "@services/faunadb";
 import { TransactionType } from "@shared/enums/transactionType";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
-import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDatesForCurrentMonth";
+import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDates";
 import { query as q } from "faunadb";
 import { useQuery } from "react-query";
 import { GetMonthStatQueryReturn } from "./MonthStat.types";
