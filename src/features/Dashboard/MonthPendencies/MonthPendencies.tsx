@@ -5,7 +5,14 @@ import { Card } from "../Card";
 import { useMonthPendencies } from "./useMonthPendencies";
 
 export function MonthPendencies() {
-  const { pendentAmountToPay, pendentAmountToReceive } = useMonthPendencies();
+  const {
+    isLoadingPendentAmountToPay,
+    isErrorPendentAmountToPay,
+    pendentAmountToPay,
+    isLoadingPendentAmountToReceive,
+    isErrorPendentAmountToReceive,
+    pendentAmountToReceive,
+  } = useMonthPendencies();
 
   return (
     <Card>
@@ -14,19 +21,19 @@ export function MonthPendencies() {
       </Heading>
 
       <SimpleGrid columns={2} gap="2">
-        {pendentAmountToPay != undefined ? (
-          <Stat type={TransactionType.DESPESA} amount={pendentAmountToPay} />
-        ) : (
+        {isLoadingPendentAmountToPay || isErrorPendentAmountToPay ? (
           <Skeleton h="20px" mt="2.5" />
+        ) : (
+          <Stat type={TransactionType.DESPESA} amount={pendentAmountToPay!} />
         )}
 
-        {pendentAmountToReceive != undefined ? (
+        {isLoadingPendentAmountToReceive || isErrorPendentAmountToReceive ? (
+          <Skeleton h="20px" mt="2.5" />
+        ) : (
           <Stat
             type={TransactionType.RECEITA}
-            amount={pendentAmountToReceive}
+            amount={pendentAmountToReceive!}
           />
-        ) : (
-          <Skeleton h="20px" mt="2.5" />
         )}
       </SimpleGrid>
     </Card>

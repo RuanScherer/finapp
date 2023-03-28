@@ -4,34 +4,34 @@ import { fauna } from "@services/faunadb";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDatesForCurrentMonth";
 import { query as q } from "faunadb";
-import { useCallback, useEffect, useState } from "react";
-import {
-  GetTransactionsPerCategoryQueryResult,
-  TransactionsPerCategory,
-} from "./TransactionsPerCategory.type";
+import { useQuery } from "react-query";
+import { GetTransactionsPerCategoryQueryResult } from "./TransactionsPerCategory.type";
 
 export function useTransactionsPerCategory() {
-  const [transactionsPerCategory, setTransactionsPerCategory] =
-    useState<TransactionsPerCategory[]>();
   const { user } = useAuth();
   const toast = useToast();
 
-  const loadTransactionsPerCategory = useCallback(async () => {
-    const { fromDate, toDate } = getRangeDatesForCurrentMonth();
-    const result = await fauna.query<GetTransactionsPerCategoryQueryResult>(
-      q.Call(
-        "get_transactions_per_category",
-        user!.id,
-        q.Date(formatDateForFauna(fromDate)),
-        q.Date(formatDateForFauna(toDate))
-      )
-    );
-    setTransactionsPerCategory(result.data);
-  }, []);
+  const { data: transactionsPerCategory } = useQuery(
+    "dashboardTransactionsPerCategory",
+    fetchTransactionsPerCategory,
+    {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    }
+  );
 
-  useEffect(() => {
+  async function fetchTransactionsPerCategory() {
+    const { fromDate, toDate } = getRangeDatesForCurrentMonth();
+
     try {
-      loadTransactionsPerCategory();
+      const result = await fauna.query<GetTransactionsPerCategoryQueryResult>(
+        q.Call(
+          "get_transactions_per_category",
+          user!.id,
+          q.Date(formatDateForFauna(fromDate)),
+          q.Date(formatDateForFauna(toDate))
+        )
+      );
+      return result.data;
     } catch {
       toast({
         title: "Erro ao buscar dados.",
@@ -40,7 +40,7 @@ export function useTransactionsPerCategory() {
         status: "error",
       });
     }
-  }, []);
+  }
 
   return { transactionsPerCategory };
 }

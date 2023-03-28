@@ -1,23 +1,19 @@
 import { useAuth } from "@contexts/AuthContext";
 import { useToast } from "@hooks/useToast";
 import { fauna } from "@services/faunadb";
-import { TransactionStatus } from "@shared/enums/transactionStatus";
+import { queryClient } from "@services/queryClient";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDatesForCurrentMonth";
 import { query as q } from "faunadb";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useState } from "react";
+import { QueryFunctionContext, useMutation, useQuery } from "react-query";
 import {
   GetTransactionsViewByMonthParams,
   GetTransactionsViewByMonthReturn,
   Transaction,
   TransactionsViewContextData,
   TransactionsViewContextProviderProps,
+  UpdateTransactionStatusByRefIdParams,
 } from "./TransactionsViewContext.types";
 
 const TransactionsViewContext = createContext<TransactionsViewContextData>(
@@ -27,41 +23,67 @@ const TransactionsViewContext = createContext<TransactionsViewContextData>(
 export function TransactionsViewContextProvider({
   children,
 }: TransactionsViewContextProviderProps) {
-  const [transactions, setTransactions] = useState<Transaction[]>();
+  const [transactionsQueryDates, setTransactionsQueryDates] = useState<{
+    fromDate: Date;
+    toDate: Date;
+  }>(getRangeDatesForCurrentMonth());
   const { user } = useAuth();
   const toast = useToast();
 
-  const getTransactionsViewByMonth = useCallback(
-    async ({ userId, fromDate, toDate }: GetTransactionsViewByMonthParams) => {
-      const fromDateFormatted = q.Date(formatDateForFauna(fromDate));
-      const toDateFormatted = q.Date(formatDateForFauna(toDate));
+  const { data: transactions } = useQuery(
+    ["transactionsByMonth", transactionsQueryDates],
+    fetchTransactionsViewByMonth,
+    {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    }
+  );
+
+  const updateTransactionStatusByRefIdMutation = useMutation<
+    void,
+    unknown,
+    UpdateTransactionStatusByRefIdParams
+  >(doUpdateTransactionStatusByRefId, {
+    onSuccess: (_data, variables) => {
+      const originalTransaction = transactions!.find(
+        (transaction) => transaction.ref.id === variables.refId
+      );
+      const updatedTransaction: Transaction = {
+        ...originalTransaction!,
+        status: variables.status,
+      };
+      queryClient.setQueryData(
+        ["transactionsByMonth", transactionsQueryDates],
+        (oldData?: Transaction[]) => {
+          const newData = oldData?.map((transaction) => {
+            if (transaction.ref.id === variables.refId) {
+              return updatedTransaction;
+            }
+            return transaction;
+          });
+          return newData ?? [];
+        }
+      );
+    },
+  });
+
+  async function fetchTransactionsViewByMonth({
+    queryKey,
+  }: QueryFunctionContext<any>) {
+    const [_key, { fromDate, toDate }] = queryKey;
+
+    const fromDateFormatted = q.Date(formatDateForFauna(fromDate));
+    const toDateFormatted = q.Date(formatDateForFauna(toDate));
+
+    try {
       const result = await fauna.query<GetTransactionsViewByMonthReturn>(
         q.Call(
           "get_transactions_view_by_month",
-          userId,
+          user!.id,
           fromDateFormatted,
           toDateFormatted
         )
       );
       return result.data;
-    },
-    []
-  );
-
-  const loadTransactions = useCallback(async () => {
-    const { fromDate, toDate } = getRangeDatesForCurrentMonth();
-
-    const transactions = await getTransactionsViewByMonth({
-      userId: user!.id,
-      fromDate,
-      toDate,
-    });
-    setTransactions(transactions);
-  }, []);
-
-  useEffect(() => {
-    try {
-      loadTransactions();
     } catch {
       toast({
         title: "Erro ao buscar transações.",
@@ -70,33 +92,25 @@ export function TransactionsViewContextProvider({
         status: "error",
       });
     }
-  }, []);
+  }
 
-  async function updateTransactionStatusByRefId(
-    refId: string,
-    status: TransactionStatus
-  ) {
+  function getTransactionsViewByMonth({
+    fromDate,
+    toDate,
+  }: GetTransactionsViewByMonthParams) {
+    setTransactionsQueryDates({ fromDate, toDate });
+  }
+
+  async function doUpdateTransactionStatusByRefId({
+    refId,
+    status,
+  }: UpdateTransactionStatusByRefIdParams) {
     try {
       await fauna.query(
         q.Update(q.Ref(q.Collection("transactions"), refId), {
           data: {
             status,
           },
-        })
-      );
-      const originalTransaction = transactions!.find(
-        (transaction) => transaction.ref.id === refId
-      );
-      const updatedTransaction: Transaction = {
-        ...originalTransaction!,
-        status,
-      };
-      setTransactions((transactions) =>
-        transactions!.map((transaction) => {
-          if (transaction.ref.id === refId) {
-            return updatedTransaction;
-          }
-          return transaction;
         })
       );
     } catch {
@@ -110,9 +124,20 @@ export function TransactionsViewContextProvider({
     }
   }
 
+  async function updateTransactionStatusByRefId({
+    refId,
+    status,
+  }: UpdateTransactionStatusByRefIdParams) {
+    await updateTransactionStatusByRefIdMutation.mutateAsync({ refId, status });
+  }
+
   return (
     <TransactionsViewContext.Provider
-      value={{ transactions, updateTransactionStatusByRefId }}
+      value={{
+        transactions,
+        getTransactionsViewByMonth,
+        updateTransactionStatusByRefId,
+      }}
     >
       {children}
     </TransactionsViewContext.Provider>

@@ -43,17 +43,17 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
   const { updateTransactionStatusByRefId } = useTransactionsView();
 
   function handleSettleTransaction() {
-    updateTransactionStatusByRefId(
-      transaction.ref.id,
-      TransactionStatus.QUITADO
-    );
+    updateTransactionStatusByRefId({
+      refId: transaction.ref.id,
+      status: TransactionStatus.QUITADO,
+    });
   }
 
   function handleMakeTransactionPending() {
-    updateTransactionStatusByRefId(
-      transaction.ref.id,
-      TransactionStatus.PENDENTE
-    );
+    updateTransactionStatusByRefId({
+      refId: transaction.ref.id,
+      status: TransactionStatus.PENDENTE,
+    });
   }
 
   return (

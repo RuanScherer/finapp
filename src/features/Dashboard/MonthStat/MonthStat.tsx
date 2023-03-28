@@ -6,7 +6,7 @@ import { MonthStatProps } from "./MonthStat.types";
 import { useMonthStat } from "./useMonthStat";
 
 export function MonthStat({ type }: MonthStatProps) {
-  const { amount } = useMonthStat(type);
+  const { amount, isLoading, isError } = useMonthStat(type);
 
   return (
     <Card>
@@ -14,10 +14,10 @@ export function MonthStat({ type }: MonthStatProps) {
         {type === TransactionType.DESPESA ? "Despesas" : "Receitas"}
       </Heading>
 
-      {amount != undefined ? (
-        <Stat type={type} amount={amount} />
-      ) : (
+      {isLoading || isError ? (
         <Skeleton h="40px" mt="2.5" />
+      ) : (
+        <Stat type={type} amount={amount!} />
       )}
     </Card>
   );

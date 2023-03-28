@@ -5,51 +5,37 @@ import { TransactionType } from "@shared/enums/transactionType";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDatesForCurrentMonth";
 import { query as q } from "faunadb";
-import { useCallback, useEffect, useState } from "react";
-import { GetMonthStatParams, GetMonthStatQueryReturn } from "./MonthStat.types";
+import { useQuery } from "react-query";
+import { GetMonthStatQueryReturn } from "./MonthStat.types";
 
 export function useMonthStat(type: TransactionType) {
-  const [amount, setAmount] = useState<number>();
   const { user } = useAuth();
   const toast = useToast();
 
-  const getMonthStat = useCallback(
-    async ({
-      transactionType,
-      userId,
-      fromDate,
-      toDate,
-    }: GetMonthStatParams) => {
-      const fromDateFormatted = q.Date(formatDateForFauna(fromDate));
-      const toDateFormatted = q.Date(formatDateForFauna(toDate));
+  const {
+    data: amount,
+    isLoading,
+    isError,
+  } = useQuery(["dashboardMonthStat", type], fecthMonthStat, {
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  async function fecthMonthStat() {
+    const { fromDate, toDate } = getRangeDatesForCurrentMonth();
+    const fromDateFormatted = q.Date(formatDateForFauna(fromDate));
+    const toDateFormatted = q.Date(formatDateForFauna(toDate));
+
+    try {
       const result = await fauna.query<GetMonthStatQueryReturn>(
         q.Call(
           "get_month_balance",
-          transactionType,
-          userId,
+          type,
+          user!.id,
           fromDateFormatted,
           toDateFormatted
         )
       );
       return result.data[0];
-    },
-    []
-  );
-
-  const loadStatData = useCallback(async () => {
-    const { fromDate, toDate } = getRangeDatesForCurrentMonth();
-    const amount = await getMonthStat({
-      transactionType: type,
-      userId: user!.id,
-      fromDate,
-      toDate,
-    });
-    setAmount(amount);
-  }, []);
-
-  useEffect(() => {
-    try {
-      loadStatData();
     } catch {
       toast({
         title: "Erro ao buscar dados.",
@@ -58,7 +44,7 @@ export function useMonthStat(type: TransactionType) {
         status: "error",
       });
     }
-  }, []);
+  }
 
-  return { amount };
+  return { amount, isLoading, isError };
 }

@@ -4,40 +4,39 @@ import { fauna } from "@services/faunadb";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDatesForCurrentMonth";
 import { query as q } from "faunadb";
-import { useCallback, useEffect, useState } from "react";
-import {
-  LastPendentTransactionByMonthQueryReturn,
-  Transaction,
-} from "./PendentTransactions.types";
+import { useQuery } from "react-query";
+import { LastPendentTransactionByMonthQueryReturn } from "./PendentTransactions.types";
 
 export function usePendentTransactions() {
-  const [lastPendentTransactions, setLastPendentTransactions] =
-    useState<Transaction[]>();
   const { user } = useAuth();
   const toast = useToast();
 
-  const loadLastPendentTransactions = useCallback(async () => {
+  const { data: lastPendentTransactions } = useQuery(
+    "dashboardPendentTransactions",
+    fetchPendentTransactions,
+    {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    }
+  );
+
+  async function fetchPendentTransactions() {
     const { fromDate, toDate } = getRangeDatesForCurrentMonth();
 
-    const transactions =
-      await fauna.query<LastPendentTransactionByMonthQueryReturn>(
-        q.Call(
-          "get_pendent_transactions",
-          user!.id,
-          q.Date(formatDateForFauna(fromDate)),
-          q.Date(formatDateForFauna(toDate))
-        )
-      );
-    const formattedTransactions = transactions.data.map((transaction) => ({
-      ...transaction,
-      dueDate: transaction.dueDate.date,
-    }));
-    setLastPendentTransactions(formattedTransactions);
-  }, []);
-
-  useEffect(() => {
     try {
-      loadLastPendentTransactions();
+      const transactions =
+        await fauna.query<LastPendentTransactionByMonthQueryReturn>(
+          q.Call(
+            "get_pendent_transactions",
+            user!.id,
+            q.Date(formatDateForFauna(fromDate)),
+            q.Date(formatDateForFauna(toDate))
+          )
+        );
+      const formattedTransactions = transactions.data.map((transaction) => ({
+        ...transaction,
+        dueDate: transaction.dueDate.date,
+      }));
+      return formattedTransactions;
     } catch {
       toast({
         title: "Erro ao buscar dados.",
@@ -46,7 +45,7 @@ export function usePendentTransactions() {
         status: "error",
       });
     }
-  }, []);
+  }
 
   return { lastPendentTransactions };
 }

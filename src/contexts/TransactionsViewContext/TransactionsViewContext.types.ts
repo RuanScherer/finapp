@@ -4,10 +4,14 @@ import { TransactionType } from "@shared/enums/transactionType";
 
 export interface TransactionsViewContextData {
   transactions?: Array<Transaction>;
-  updateTransactionStatusByRefId: (
-    refId: string,
-    status: TransactionStatus
-  ) => Promise<void>;
+  getTransactionsViewByMonth: ({
+    fromDate,
+    toDate,
+  }: GetTransactionsViewByMonthParams) => void;
+  updateTransactionStatusByRefId: ({
+    refId,
+    status,
+  }: UpdateTransactionStatusByRefIdParams) => Promise<void>;
 }
 
 export interface TransactionsViewContextProviderProps {
@@ -15,13 +19,17 @@ export interface TransactionsViewContextProviderProps {
 }
 
 export interface GetTransactionsViewByMonthParams {
-  userId: string;
   fromDate: Date;
   toDate: Date;
 }
 
 export interface GetTransactionsViewByMonthReturn {
   data: Array<Transaction>;
+}
+
+export interface UpdateTransactionStatusByRefIdParams {
+  refId: string;
+  status: TransactionStatus;
 }
 
 export interface Transaction {
