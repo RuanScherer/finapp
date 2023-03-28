@@ -63,6 +63,9 @@ export function TransactionsViewContextProvider({
           return newData ?? [];
         }
       );
+      queryClient.invalidateQueries({
+        predicate: (query) => String(query.queryKey[0]).startsWith("dashboard"),
+      });
     },
   });
 
