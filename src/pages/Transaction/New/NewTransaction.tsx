@@ -42,16 +42,14 @@ const newTransactionFormSchema = yup.object().shape({
     .typeError("Insira uma data válida")
     .min(currentDate, "A data deve ser atual ou futura")
     .required("Data de vencimento é obrigatória"),
-  installmentAmount: yup.number().when("recurrence", {
+  installmentAmount: yup.mixed().when("recurrence", {
     is: TransactionRecurrence.PARCELADO,
     then: yup
       .number()
       .typeError("Quantidade de parcelas deve ser um número")
       .min(1, "Quantidade de parcelas deve ser maior que zero")
       .required("Quantidade de parcelas é obrigatório"),
-    otherwise: yup
-      .number()
-      .typeError("Quantidade de parcelas deve ser um número"),
+    otherwise: yup.mixed(),
   }),
 });
 
@@ -59,6 +57,9 @@ export function NewTransaction() {
   const { register, formState, handleSubmit, watch, setValue } =
     useForm<NewTransactionFormData>({
       resolver: yupResolver(newTransactionFormSchema),
+      defaultValues: {
+        status: TransactionStatus.PENDENTE,
+      },
     });
   const { categorySuggestions, paymentMethodSuggestions, handleSave } =
     useNewTransaction();

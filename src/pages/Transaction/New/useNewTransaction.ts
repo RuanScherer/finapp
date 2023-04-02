@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import {
   FaunaDBTransaction,
   NewTransactionFormData,
+  NewTransactionPayload,
 } from "./NewTransaction.types";
 
 export function useNewTransaction() {
@@ -56,9 +57,14 @@ export function useNewTransaction() {
   );
 
   async function handleSave(data: NewTransactionFormData) {
-    const transaction = data;
+    const transaction = data as NewTransactionPayload;
+
     if (transaction.recurrence !== TransactionRecurrence.UNICO) {
       transaction.status = TransactionStatus.PENDENTE;
+    }
+
+    if (transaction.recurrence === TransactionRecurrence.FIXO) {
+      transaction.settledMonths = [];
     }
 
     try {

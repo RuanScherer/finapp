@@ -63,7 +63,6 @@ export function TransactionsView() {
             variant="filled"
             w="fit-content"
             _focus={{
-              background: "primaryAlpha.200",
               borderColor: "primary.300",
             }}
             onChange={handleChangeBaseDate}

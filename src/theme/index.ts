@@ -1,8 +1,8 @@
 import { extendTheme } from "@chakra-ui/react";
 
 export const boxShadow = {
-  100: "#959da533 0px 8px 24px"
-}
+  100: "#959da533 0px 8px 24px",
+};
 
 export const colors = {
   dark: {
@@ -50,12 +50,12 @@ export const colors = {
     200: "#F5FDFF",
     300: "#F2F2F2",
     400: "#DFDFDF",
-  }
-}
+  },
+};
 
 const fonts = {
   body: `'Poppins', sans-serif`,
   heading: `'Poppins', sans-serif`,
-}
+};
 
 export const theme = extendTheme({ colors, fonts });
