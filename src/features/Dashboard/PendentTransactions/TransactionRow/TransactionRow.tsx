@@ -20,7 +20,7 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
         </Tag>
       </Td>
       <Td>
-        {transaction.type === TransactionType.RECEITA ? (
+        {transaction.type === TransactionType.INCOME ? (
           <RxArrowBottomLeft color={theme.colors.green[500]} strokeWidth="1" />
         ) : (
           <RxArrowTopRight color={theme.colors.red[500]} strokeWidth="1" />

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import {
   FaunaDBTransaction,
   NewTransactionFormData,
+  NewTransactionPayload,
 } from "./NewTransaction.types";
 
 export function useNewTransaction() {
@@ -56,15 +57,16 @@ export function useNewTransaction() {
   );
 
   async function handleSave(data: NewTransactionFormData) {
-    const transaction = data;
-    if (transaction.recurrence !== TransactionRecurrence.UNICO) {
-      transaction.status = TransactionStatus.PENDENTE;
+    const transaction = data as NewTransactionPayload;
+
+    if (transaction.recurrence !== TransactionRecurrence.UNIQUE) {
+      transaction.status = TransactionStatus.PENDENT;
     }
 
     try {
       const transactionRefId = await persistTransaction(transaction);
 
-      if (transaction.recurrence === TransactionRecurrence.PARCELADO) {
+      if (transaction.recurrence !== TransactionRecurrence.UNIQUE) {
         await persistInstallments(transaction, transactionRefId);
       }
 
@@ -138,11 +140,14 @@ export function useNewTransaction() {
 
       installments.push({
         name: transaction.name,
-        amount: transaction.amount / transaction.installmentAmount!,
+        amount:
+          transaction.recurrence === TransactionRecurrence.INSTALLMENT
+            ? transaction.amount / transaction.installmentAmount!
+            : transaction.amount,
         category: transaction.category,
         paymentMethod: transaction.paymentMethod,
         type: transaction.type,
-        status: TransactionStatus.PENDENTE,
+        status: TransactionStatus.PENDENT,
         dueDate: q.Date(formatDateForFauna(dueDate)),
         userId: user?.id,
         transactionRefId,

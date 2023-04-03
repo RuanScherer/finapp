@@ -25,18 +25,18 @@ export function Dashboard() {
         gap="4"
       >
         <GridItem colSpan={7}>
-          <MonthStat type={TransactionType.DESPESA} />
+          <MonthStat type={TransactionType.OUTCOME} />
         </GridItem>
 
         <GridItem colSpan={7}>
-          <MonthStat type={TransactionType.RECEITA} />
+          <MonthStat type={TransactionType.INCOME} />
         </GridItem>
 
         <GridItem colSpan={10}>
           <MonthPendencies />
         </GridItem>
 
-        <GridItem colSpan={14}>
+        <GridItem colSpan={24}>
           <PendentTransactions />
         </GridItem>
 

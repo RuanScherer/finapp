@@ -1,5 +1,5 @@
 export enum TransactionRecurrence {
-  UNICO = "UNICO",
-  PARCELADO = "PARCELADO",
-  FIXO = "FIXO"
+  UNIQUE = "UNICO",
+  INSTALLMENT = "PARCELADO",
+  FIXED = "FIXO",
 }

@@ -12,6 +12,10 @@ export interface TransactionsViewContextData {
     refId,
     status,
   }: UpdateTransactionStatusByRefIdParams) => Promise<void>;
+  transactionsQueryDates: {
+    fromDate: Date;
+    toDate: Date;
+  };
 }
 
 export interface TransactionsViewContextProviderProps {

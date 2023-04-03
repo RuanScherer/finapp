@@ -18,7 +18,8 @@ import { ChangeEvent } from "react";
 import { RxInfoCircled } from "react-icons/rx";
 
 export function TransactionsView() {
-  const { transactions, getTransactionsViewByMonth } = useTransactionsView();
+  const { transactions, getTransactionsViewByMonth, transactionsQueryDates } =
+    useTransactionsView();
 
   function handleChangeBaseDate(event: ChangeEvent<HTMLInputElement>) {
     const baseDate = event.target.value;
@@ -39,9 +40,9 @@ export function TransactionsView() {
         <Header />
       </Box>
 
-      <HStack alignItems="center" justifyContent="end" my="4">
+      <HStack alignItems="center" justifyContent="end" mb="4">
         <Heading fontSize="2xl" fontWeight="semibold" w="full">
-          Transações de {monthsName[new Date().getMonth()]}
+          Transações de {monthsName[transactionsQueryDates.fromDate.getMonth()]}
         </Heading>
 
         <HStack alignItems="center" gap="1">
@@ -63,7 +64,6 @@ export function TransactionsView() {
             variant="filled"
             w="fit-content"
             _focus={{
-              background: "primaryAlpha.200",
               borderColor: "primary.300",
             }}
             onChange={handleChangeBaseDate}

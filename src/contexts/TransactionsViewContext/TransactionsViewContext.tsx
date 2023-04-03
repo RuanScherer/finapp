@@ -140,6 +140,7 @@ export function TransactionsViewContextProvider({
         transactions,
         getTransactionsViewByMonth,
         updateTransactionStatusByRefId,
+        transactionsQueryDates,
       }}
     >
       {children}

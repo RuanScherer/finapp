@@ -3,27 +3,30 @@ import { Transaction } from "../PendentTransactions.types";
 import { TransactionRow } from "../TransactionRow";
 
 interface TransactionsTableProps {
-  transactions: Transaction[]
+  transactions: Transaction[];
 }
 
 export function TransactionsTable({ transactions }: TransactionsTableProps) {
   return (
     <TableContainer>
-      <Table size="sm" colorScheme="gray">
+      <Table colorScheme="gray">
         <Thead>
           <Tr>
             <Th>Nome</Th>
             <Th>Categoria</Th>
-            <Th></Th>
+            <Th>Tipo</Th>
             <Th>Valor</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {transactions.map(transaction => (
-            <TransactionRow transaction={transaction} key={transaction.ref.id} />
+          {transactions.map((transaction) => (
+            <TransactionRow
+              transaction={transaction}
+              key={transaction.ref.id}
+            />
           ))}
         </Tbody>
       </Table>
     </TableContainer>
-  )
+  );
 }

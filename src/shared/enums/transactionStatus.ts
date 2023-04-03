@@ -1,4 +1,4 @@
 export enum TransactionStatus {
-  PENDENTE = "PENDENTE",
-  QUITADO = "QUITADO",
+  PENDENT = "PENDENTE",
+  SETTLED = "QUITADO",
 }
