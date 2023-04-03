@@ -11,7 +11,7 @@ export function MonthStat({ type }: MonthStatProps) {
   return (
     <Card>
       <Heading fontSize="xl" fontWeight="semibold">
-        {type === TransactionType.DESPESA ? "Despesas" : "Receitas"}
+        {type === TransactionType.OUTCOME ? "Despesas" : "Receitas"}
       </Heading>
 
       {isLoading || isError ? (

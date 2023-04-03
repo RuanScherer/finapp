@@ -12,7 +12,7 @@ export function Stat({ type, amount }: StatProps) {
   let color;
   let Icon;
 
-  if (type === TransactionType.DESPESA) {
+  if (type === TransactionType.OUTCOME) {
     color = theme.colors.red[400];
     Icon = RxArrowBottomLeft;
   } else {

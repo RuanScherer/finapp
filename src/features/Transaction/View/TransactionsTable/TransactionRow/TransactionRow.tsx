@@ -45,14 +45,14 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
   function handleSettleTransaction() {
     updateTransactionStatusByRefId({
       refId: transaction.ref.id,
-      status: TransactionStatus.QUITADO,
+      status: TransactionStatus.SETTLED,
     });
   }
 
   function handleMakeTransactionPending() {
     updateTransactionStatusByRefId({
       refId: transaction.ref.id,
-      status: TransactionStatus.PENDENTE,
+      status: TransactionStatus.PENDENT,
     });
   }
 
@@ -61,7 +61,7 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
       <Td>{transaction.name}</Td>
 
       <Td>
-        {transaction.type === TransactionType.RECEITA ? (
+        {transaction.type === TransactionType.INCOME ? (
           <RxArrowBottomLeft color={theme.colors.green[500]} strokeWidth="1" />
         ) : (
           <RxArrowTopRight color={theme.colors.red[500]} strokeWidth="1" />
@@ -80,10 +80,10 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
         <Tag
           {...defaultTagProps}
           colorScheme={
-            transaction.status === TransactionStatus.PENDENTE ? "red" : "green"
+            transaction.status === TransactionStatus.PENDENT ? "red" : "green"
           }
         >
-          {transaction.status === TransactionStatus.PENDENTE ? (
+          {transaction.status === TransactionStatus.PENDENT ? (
             <>
               <TagLeftIcon as={RxClock} strokeWidth={0.5} />
               <TagLabel>Pendente</TagLabel>
@@ -99,7 +99,7 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
 
       <Td>
         <HStack gap="1">
-          {transaction.status === TransactionStatus.PENDENTE ? (
+          {transaction.status === TransactionStatus.PENDENT ? (
             <Tooltip {...defaultActionTooltipProps} label="Quitar transação">
               <IconButton
                 size="sm"

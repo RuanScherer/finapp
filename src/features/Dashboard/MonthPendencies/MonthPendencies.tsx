@@ -24,14 +24,14 @@ export function MonthPendencies() {
         {isLoadingPendentAmountToPay || isErrorPendentAmountToPay ? (
           <Skeleton h="20px" mt="2.5" />
         ) : (
-          <Stat type={TransactionType.DESPESA} amount={pendentAmountToPay!} />
+          <Stat type={TransactionType.OUTCOME} amount={pendentAmountToPay!} />
         )}
 
         {isLoadingPendentAmountToReceive || isErrorPendentAmountToReceive ? (
           <Skeleton h="20px" mt="2.5" />
         ) : (
           <Stat
-            type={TransactionType.RECEITA}
+            type={TransactionType.INCOME}
             amount={pendentAmountToReceive!}
           />
         )}
