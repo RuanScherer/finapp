@@ -2,14 +2,14 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut as firebaseSignOut,
-  User
+  User,
 } from "firebase/auth";
 import {
   createContext,
   ReactNode,
   useContext,
   useEffect,
-  useState
+  useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../services/firebase";
@@ -50,7 +50,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     const provider = new GoogleAuthProvider();
     const { user } = await signInWithPopup(auth, provider);
     fillUserData(user);
-    navigate("/home", { replace: true });
+    navigate("/dashboard", { replace: true });
   }
 
   function fillUserData(user: User | null) {
@@ -65,7 +65,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     setUser({
       id: uid,
       name: displayName,
-      avatar: photoURL
+      avatar: photoURL,
     });
   }
 
