@@ -1,3 +1,5 @@
+import { Container } from "@components/Container";
+import { Header } from "@components/Header";
 import { AuthContextProvider, useAuth } from "@contexts/AuthContext";
 import { TransactionsViewContextProvider } from "@contexts/TransactionsViewContext/TransactionsViewContext";
 import { Dashboard } from "@pages/Dashboard";
@@ -5,7 +7,13 @@ import { SignIn } from "@pages/SignIn";
 import { NewTransaction } from "@pages/Transaction/New";
 import { TransactionsView } from "@pages/Transaction/View";
 import { ReactNode } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
 
 interface PublicOnlyRouteProps {
   children: ReactNode;
@@ -33,39 +41,45 @@ export function Router() {
       <AuthContextProvider>
         <Routes>
           <Route
-            index
             element={
               <PublicOnlyRoute>
-                <SignIn />
+                <Outlet />
               </PublicOnlyRoute>
             }
-          />
+          >
+            <Route index element={<SignIn />} />
+            <Route path="/signin" element={<SignIn />} />
+          </Route>
+
           <Route
-            path="/signin"
             element={
-              <PublicOnlyRoute>
-                <SignIn />
-              </PublicOnlyRoute>
+              <Container>
+                <Header />
+                <Outlet />
+              </Container>
             }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <AuthProtectedRoute>
-                <Dashboard />
-              </AuthProtectedRoute>
-            }
-          />
-          <Route
-            path="/transactions"
-            element={
-              <AuthProtectedRoute>
-                <TransactionsViewContextProvider>
-                  <TransactionsView />
-                </TransactionsViewContextProvider>
-              </AuthProtectedRoute>
-            }
-          />
+          >
+            <Route
+              path="/dashboard"
+              element={
+                <AuthProtectedRoute>
+                  <Dashboard />
+                </AuthProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/transactions"
+              element={
+                <AuthProtectedRoute>
+                  <TransactionsViewContextProvider>
+                    <TransactionsView />
+                  </TransactionsViewContextProvider>
+                </AuthProtectedRoute>
+              }
+            />
+          </Route>
+
           <Route
             path="/transaction/new"
             element={
