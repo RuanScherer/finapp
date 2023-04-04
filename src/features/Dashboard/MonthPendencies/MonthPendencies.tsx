@@ -24,7 +24,10 @@ export function MonthPendencies() {
         {isLoadingPendentAmountToPay || isErrorPendentAmountToPay ? (
           <Skeleton h="20px" mt="2.5" />
         ) : (
-          <Stat type={TransactionType.OUTCOME} amount={pendentAmountToPay!} />
+          <Stat
+            type={TransactionType.OUTCOME}
+            amount={pendentAmountToPay ?? 0}
+          />
         )}
 
         {isLoadingPendentAmountToReceive || isErrorPendentAmountToReceive ? (
@@ -32,7 +35,7 @@ export function MonthPendencies() {
         ) : (
           <Stat
             type={TransactionType.INCOME}
-            amount={pendentAmountToReceive!}
+            amount={pendentAmountToReceive ?? 0}
           />
         )}
       </SimpleGrid>

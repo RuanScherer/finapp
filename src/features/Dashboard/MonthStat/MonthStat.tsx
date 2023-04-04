@@ -17,7 +17,7 @@ export function MonthStat({ type }: MonthStatProps) {
       {isLoading || isError ? (
         <Skeleton h="40px" mt="2.5" />
       ) : (
-        <Stat type={type} amount={amount!} />
+        <Stat type={type} amount={amount ?? 0} />
       )}
     </Card>
   );
