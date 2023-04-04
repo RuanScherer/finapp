@@ -26,7 +26,6 @@ export function TransactionsView() {
 
     // check if date is invalid
     if (!baseDate) return;
-    console.log(baseDate);
 
     const rangeDates = getRangeDatesByBaseDate(
       formatDateToUTC(new Date(baseDate))
