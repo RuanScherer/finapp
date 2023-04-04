@@ -1,6 +1,15 @@
-import { Avatar, Button, Flex, Heading, HStack, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  IconButton,
+  Text,
+} from "@chakra-ui/react";
 import { useAuth } from "@contexts/AuthContext";
-import { RxAvatar, RxDashboard, RxPlus, RxStack } from "react-icons/rx";
+import { RxDashboard, RxPlus, RxStack } from "react-icons/rx";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link } from "./Link";
 
@@ -17,18 +26,37 @@ export function Header() {
           App
         </Heading>
 
-        <ReactRouterLink to="/transaction/new">
-          <Button leftIcon={<RxPlus />}>Adicionar transação</Button>
-        </ReactRouterLink>
+        <Box display={["none", "block"]}>
+          <ReactRouterLink to="/transaction/new">
+            <Button leftIcon={<RxPlus />}>Adicionar transação</Button>
+          </ReactRouterLink>
+        </Box>
 
-        <Avatar
-          src={user?.avatar ?? undefined}
-          name={user?.name}
-          bgColor="light.100"
-        />
+        <HStack alignItems="center" gap={2}>
+          <IconButton
+            display={["flex", "none"]}
+            icon={<RxPlus size={18} />}
+            aria-label="Adicionar transação"
+            alignItems="center"
+            borderRadius="full"
+          />
+
+          <Avatar
+            src={user?.avatar ?? undefined}
+            name={user?.name}
+            bgColor="light.100"
+          />
+        </HStack>
       </Flex>
 
-      <HStack alignItems="center" justifyContent="center" gap="1" py="2" mt="6">
+      <HStack
+        alignItems="center"
+        justifyContent="center"
+        wrap="wrap"
+        gap="1"
+        py="2"
+        mt="6"
+      >
         <Link to="/dashboard">
           <RxDashboard />
           Dashboard
@@ -37,11 +65,6 @@ export function Header() {
         <Link to="/transactions">
           <RxStack size="18" />
           Transações
-        </Link>
-
-        <Link to="settings">
-          <RxAvatar size="18" />
-          Configurações
         </Link>
       </HStack>
     </>

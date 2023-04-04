@@ -19,20 +19,16 @@ export function Dashboard() {
         Visão geral de {monthsName[new Date().getMonth()]}
       </Heading>
 
-      <Grid
-        templateRows="repeat(2, auto)"
-        templateColumns="repeat(24, 1fr)"
-        gap="4"
-      >
-        <GridItem colSpan={7}>
+      <Grid templateColumns="repeat(24, 1fr)" rowGap={4} columnGap={[0, 4, 4]}>
+        <GridItem colSpan={[24, 12, 7]}>
           <MonthStat type={TransactionType.OUTCOME} />
         </GridItem>
 
-        <GridItem colSpan={7}>
+        <GridItem colSpan={[24, 12, 7]}>
           <MonthStat type={TransactionType.INCOME} />
         </GridItem>
 
-        <GridItem colSpan={10}>
+        <GridItem colSpan={[24, 24, 10]}>
           <MonthPendencies />
         </GridItem>
 
@@ -40,7 +36,7 @@ export function Dashboard() {
           <PendentTransactions />
         </GridItem>
 
-        <GridItem colSpan={10}>
+        <GridItem colSpan={[24, 24, 10]}>
           <TransactionsPerCategory />
         </GridItem>
       </Grid>

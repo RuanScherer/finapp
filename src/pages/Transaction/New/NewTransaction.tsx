@@ -108,7 +108,7 @@ export function NewTransaction() {
         Nova transação
       </Heading>
 
-      <SimpleGrid columns={2} gap="4" w="full" mt="10">
+      <SimpleGrid columns={[1, 2]} gap="4" w="full" mt="10">
         <Input
           label="Nome"
           error={formState.errors.name}
