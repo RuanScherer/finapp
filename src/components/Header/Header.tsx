@@ -6,15 +6,19 @@ import {
   Heading,
   HStack,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Text,
 } from "@chakra-ui/react";
 import { useAuth } from "@contexts/AuthContext";
-import { RxDashboard, RxPlus, RxStack } from "react-icons/rx";
+import { RxDashboard, RxExit, RxPlus, RxStack } from "react-icons/rx";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link } from "./Link";
 
 export function Header() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     <>
@@ -41,11 +45,28 @@ export function Header() {
             borderRadius="full"
           />
 
-          <Avatar
-            src={user?.avatar ?? undefined}
-            name={user?.name}
-            bgColor="light.100"
-          />
+          <Menu autoSelect={false}>
+            <MenuButton>
+              <Avatar
+                src={user?.avatar ?? undefined}
+                name={user?.name}
+                bgColor="light.100"
+              />
+            </MenuButton>
+
+            <MenuList
+              shadow="md"
+              bgColor="background.100"
+              borderColor="gray.100"
+            >
+              <MenuItem onClick={signOut}>
+                <HStack gap={1}>
+                  <RxExit />
+                  <Text>Sair</Text>
+                </HStack>
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </HStack>
       </Flex>
 
