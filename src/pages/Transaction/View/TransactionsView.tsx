@@ -6,8 +6,6 @@ import {
   Skeleton,
   Tooltip,
 } from "@chakra-ui/react";
-import { Container } from "@components/Container";
-import { Header } from "@components/Header";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { Card } from "@features/Dashboard/Card";
 import { TransactionsTable } from "@features/Transaction/View/TransactionsTable";
@@ -34,11 +32,7 @@ export function TransactionsView() {
   }
 
   return (
-    <Container>
-      <Box mb="4">
-        <Header />
-      </Box>
-
+    <>
       <HStack alignItems="center" justifyContent="end" mb="4">
         <Heading fontSize="2xl" fontWeight="semibold" w="full">
           Transações de {monthsName[transactionsQueryDates.fromDate.getMonth()]}
@@ -89,6 +83,6 @@ export function TransactionsView() {
           </>
         )}
       </Card>
-    </Container>
+    </>
   );
 }
