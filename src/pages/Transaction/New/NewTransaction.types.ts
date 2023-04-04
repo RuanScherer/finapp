@@ -14,15 +14,11 @@ export interface NewTransactionFormData {
   installmentAmount?: number;
 }
 
-export interface NewTransactionPayload extends NewTransactionFormData {
-  settledMonths?: Date[];
-}
-
 export type FaunaDBTransaction = {
   ref: {
     id: string;
   };
-  data: NewTransactionPayload & {
+  data: NewTransactionFormData & {
     userId: string;
   };
 };
