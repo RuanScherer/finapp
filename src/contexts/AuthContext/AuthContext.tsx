@@ -4,36 +4,14 @@ import {
   signOut as firebaseSignOut,
   User,
 } from "firebase/auth";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../services/firebase";
-
-interface AuthContextType {
-  user: UserType | undefined;
-  signInWithGoogle: () => Promise<void>;
-  signOut: () => Promise<void>;
-}
-
-type UserType = {
-  id: string;
-  name: string;
-  avatar: string | null;
-  username?: string;
-};
-
-type FirestoreUser = {
-  username?: string;
-};
-
-interface AuthContextProviderProps {
-  children: ReactNode;
-}
+import { auth } from "../../services/firebase";
+import {
+  AuthContextProviderProps,
+  AuthContextType,
+  UserType,
+} from "./AuthContext.types";
 
 const AuthContext = createContext({} as AuthContextType);
 
