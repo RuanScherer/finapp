@@ -122,16 +122,12 @@ export function NewTransaction() {
           isCurrency
           label="Valor"
           error={formState.errors.amount}
+          _disabled={{
+            opacity: 1,
+            cursor: "not-allowed",
+          }}
           {...register("amount", {
-            onChange: (e) => {
-              if (recurrence !== TransactionRecurrence.INSTALLMENT) return;
-
-              const amount = Number(e.target.value);
-              if (!installmentAmount || !amount) return;
-
-              const installmentValue = amount / installmentAmount;
-              setValue("installmentValue", installmentValue);
-            },
+            disabled: recurrence === TransactionRecurrence.INSTALLMENT,
           })}
         />
 
@@ -220,7 +216,7 @@ export function NewTransaction() {
                   const installmentAmount = Number(e.target.value);
                   const amount =
                     (installmentValue ?? 0) * (installmentAmount ?? 1);
-                  setValue("amount", amount);
+                  if (amount) setValue("amount", amount);
                 },
               })}
             />
@@ -234,7 +230,7 @@ export function NewTransaction() {
                   const installmentValue = Number(e.target.value);
                   const amount =
                     (installmentValue ?? 0) * (installmentAmount ?? 1);
-                  setValue("amount", amount);
+                  if (amount) setValue("amount", amount);
                 },
               })}
             />
