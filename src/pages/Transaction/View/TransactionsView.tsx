@@ -33,8 +33,19 @@ export function TransactionsView() {
 
   return (
     <>
-      <HStack alignItems="center" justifyContent="end" my="4">
-        <Heading fontSize="2xl" fontWeight="semibold" w="full">
+      <HStack
+        alignItems="center"
+        justifyContent={["center", "center", "space-between"]}
+        wrap="wrap"
+        gap="2"
+        my="4"
+      >
+        <Heading
+          fontSize="2xl"
+          fontWeight="semibold"
+          textAlign={["center", "center", "start"]}
+          w={["full", "full", "fit-content"]}
+        >
           Transações de {monthsName[transactionsQueryDates.fromDate.getMonth()]}
         </Heading>
 
