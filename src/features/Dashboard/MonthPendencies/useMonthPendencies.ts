@@ -17,7 +17,7 @@ export function useMonthPendencies() {
     isLoading: isLoadingPendentAmountToReceive,
     isError: isErrorPendentAmountToReceive,
   } = useQuery(
-    ["dashboardMonthPendencies", { transactionType: TransactionType.OUTCOME }],
+    ["dashboardMonthPendencies", { transactionType: TransactionType.INCOME }],
     fetchMonthPendencies,
     {
       staleTime: 5 * 60 * 1000,
@@ -29,7 +29,7 @@ export function useMonthPendencies() {
     isLoading: isLoadingPendentAmountToPay,
     isError: isErrorPendentAmountToPay,
   } = useQuery(
-    ["dashboardMonthPendencies", { transactionType: TransactionType.INCOME }],
+    ["dashboardMonthPendencies", { transactionType: TransactionType.OUTCOME }],
     fetchMonthPendencies,
     {
       staleTime: 5 * 60 * 1000,
