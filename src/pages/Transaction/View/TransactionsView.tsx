@@ -33,7 +33,7 @@ export function TransactionsView() {
 
   return (
     <>
-      <HStack alignItems="center" justifyContent="end" mb="4">
+      <HStack alignItems="center" justifyContent="end" my="4">
         <Heading fontSize="2xl" fontWeight="semibold" w="full">
           Transações de {monthsName[transactionsQueryDates.fromDate.getMonth()]}
         </Heading>

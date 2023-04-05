@@ -9,7 +9,7 @@ import { TransactionType } from "@shared/enums/transactionType";
 export function Dashboard() {
   return (
     <>
-      <Heading fontSize="2xl" fontWeight="semibold" w="full" mb="4">
+      <Heading fontSize="2xl" fontWeight="semibold" w="full" my="4">
         Visão geral de {monthsName[new Date().getMonth()]}
       </Heading>
 
