@@ -3,9 +3,9 @@ import {
   Box,
   Button,
   Flex,
-  Heading,
   HStack,
   IconButton,
+  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -15,6 +15,7 @@ import {
 import { useAuth } from "@contexts/AuthContext";
 import { RxDashboard, RxExit, RxPlus, RxStack } from "react-icons/rx";
 import { Link as ReactRouterLink } from "react-router-dom";
+import logo from "../../../assets/logo.svg";
 import { Link } from "./Link";
 
 export function Header() {
@@ -23,12 +24,12 @@ export function Header() {
   return (
     <>
       <Flex as="header" justifyContent="space-between" alignItems="center">
-        <Heading fontSize="3xl" fontWeight="bold" letterSpacing="wide">
-          <Text color="primary.500" display="inline">
-            Fin
-          </Text>
-          App
-        </Heading>
+        <Image
+          src={logo}
+          width={12}
+          height={12}
+          alt="Quadrado roxo arredondado escrito FinApp - Logo do FinApp"
+        />
 
         <Box display={["none", "block"]}>
           <ReactRouterLink to="/transaction/new">
