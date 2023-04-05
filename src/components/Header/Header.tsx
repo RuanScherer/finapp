@@ -38,13 +38,15 @@ export function Header() {
         </Box>
 
         <HStack alignItems="center" gap={2}>
-          <IconButton
-            display={["flex", "none"]}
-            icon={<RxPlus size={18} />}
-            aria-label="Adicionar transação"
-            alignItems="center"
-            borderRadius="full"
-          />
+          <ReactRouterLink to="/transaction/new">
+            <IconButton
+              display={["flex", "none"]}
+              icon={<RxPlus size={18} />}
+              aria-label="Adicionar transação"
+              alignItems="center"
+              borderRadius="full"
+            />
+          </ReactRouterLink>
 
           <Menu autoSelect={false}>
             <MenuButton>
