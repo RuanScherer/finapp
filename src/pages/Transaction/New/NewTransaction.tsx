@@ -1,19 +1,10 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  SimpleGrid,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Flex, Heading, HStack, SimpleGrid } from "@chakra-ui/react";
 import { Input } from "@components/Form/Input";
 import { Radio } from "@components/Form/Radio/Radio";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";
-import { currencyFormatter } from "@shared/utils/currencyFormatter";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -51,6 +42,15 @@ const newTransactionFormSchema = yup.object().shape({
       .required("Quantidade de parcelas é obrigatório"),
     otherwise: yup.mixed(),
   }),
+  installmentValue: yup.mixed().when("recurrence", {
+    is: TransactionRecurrence.INSTALLMENT,
+    then: yup
+      .number()
+      .typeError("Valor da parcela deve ser um número")
+      .min(1, "Valor da parcela deve ser maior que zero")
+      .required("Valor da parcela é obrigatório"),
+    otherwise: yup.mixed(),
+  }),
 });
 
 export function NewTransaction() {
@@ -68,6 +68,7 @@ export function NewTransaction() {
   const recurrence = watch("recurrence");
   const amount = watch("amount");
   const installmentAmount = watch("installmentAmount");
+  const installmentValue = watch("installmentValue");
 
   useEffect(() => {
     if (recurrence !== TransactionRecurrence.UNIQUE) {
@@ -121,7 +122,13 @@ export function NewTransaction() {
           isCurrency
           label="Valor"
           error={formState.errors.amount}
-          {...register("amount")}
+          _disabled={{
+            opacity: 1,
+            cursor: "not-allowed",
+          }}
+          {...register("amount", {
+            disabled: recurrence === TransactionRecurrence.INSTALLMENT,
+          })}
         />
 
         <Input
@@ -200,28 +207,38 @@ export function NewTransaction() {
           </Heading>
 
           <SimpleGrid columns={2} gap="4" w="full" mt="2">
-            <Box>
-              <Input
-                type="number"
-                label="Quantidade de parcelas"
-                error={formState.errors.installmentAmount}
-                {...register("installmentAmount")}
-              />
+            <Input
+              type="number"
+              label="Quantidade de parcelas"
+              error={formState.errors.installmentAmount}
+              {...register("installmentAmount", {
+                onChange: (e) => {
+                  const installmentAmount = Number(e.target.value);
+                  const amount =
+                    (installmentValue ?? 0) * (installmentAmount ?? 1);
+                  if (amount) setValue("amount", amount);
+                },
+              })}
+            />
 
-              {amount && installmentAmount && (
-                <Text fontSize="small" mt="1" color="text.600">
-                  Valor das parcelas:{" "}
-                  {currencyFormatter.format(
-                    Number(amount) / Number(installmentAmount)
-                  )}
-                </Text>
-              )}
-            </Box>
+            <Input
+              type="number"
+              label="Valor da parcela"
+              error={formState.errors.installmentValue}
+              {...register("installmentValue", {
+                onChange: (e) => {
+                  const installmentValue = Number(e.target.value);
+                  const amount =
+                    (installmentValue ?? 0) * (installmentAmount ?? 1);
+                  if (amount) setValue("amount", amount);
+                },
+              })}
+            />
           </SimpleGrid>
         </>
       )}
 
-      <HStack justifyContent="center" mt="10" w="full">
+      <HStack justifyContent="center" gap="4" mt="10" w="full">
         <Button
           type="button"
           flex="1"

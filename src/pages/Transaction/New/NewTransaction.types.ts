@@ -12,6 +12,7 @@ export interface NewTransactionFormData {
   recurrence: TransactionRecurrence;
   dueDate: Date;
   installmentAmount?: number;
+  installmentValue?: number;
 }
 
 export type FaunaDBTransaction = {

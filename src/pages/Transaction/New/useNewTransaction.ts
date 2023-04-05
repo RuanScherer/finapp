@@ -58,6 +58,9 @@ export function useNewTransaction() {
   async function handleSave(data: NewTransactionFormData) {
     const transaction = data as NewTransactionFormData;
 
+    // this field is used only for user experience in the form and should not be persisted
+    delete transaction.installmentValue;
+
     if (transaction.recurrence !== TransactionRecurrence.UNIQUE) {
       transaction.status = TransactionStatus.PENDENT;
     }
