@@ -23,7 +23,7 @@ export function SignIn() {
           color="text.700"
           my="3"
         >
-          Enter the platform using your Google account
+          Entre na plataforma usando sua conta do Google.
         </Text>
 
         <Button

@@ -1,45 +1,21 @@
 import { Container } from "@components/Container";
 import { Header } from "@components/Header";
-import { AuthContextProvider, useAuth } from "@contexts/AuthContext";
-import { TransactionsViewContextProvider } from "@contexts/TransactionsViewContext/TransactionsViewContext";
+import { AuthContextProvider } from "@contexts/AuthContext";
+import { TransactionsViewContextProvider } from "@contexts/TransactionsViewContext";
 import { Dashboard } from "@pages/Dashboard";
 import { SignIn } from "@pages/SignIn";
 import { NewTransaction } from "@pages/Transaction/New";
 import { TransactionsView } from "@pages/Transaction/View";
-import { ReactNode } from "react";
-import {
-  BrowserRouter,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-} from "react-router-dom";
-
-interface PublicOnlyRouteProps {
-  children: ReactNode;
-}
-
-function PublicOnlyRoute({ children }: PublicOnlyRouteProps) {
-  const { user } = useAuth();
-  if (user) return <Navigate to="/dashboard" replace />;
-  return <>{children}</>;
-}
-
-interface AuthProtectedRouteProps {
-  children: ReactNode;
-}
-
-function AuthProtectedRoute({ children }: AuthProtectedRouteProps) {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/" replace />;
-  return <>{children}</>;
-}
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { AuthProtectedRoute } from "./AuthProtectedRoute";
+import { PublicOnlyRoute } from "./PublicOnlyRoute";
 
 export function Router() {
   return (
     <BrowserRouter>
       <AuthContextProvider>
         <Routes>
+          {/* === Public Routes === */}
           <Route
             element={
               <PublicOnlyRoute>
@@ -51,43 +27,36 @@ export function Router() {
             <Route path="/signin" element={<SignIn />} />
           </Route>
 
+          {/* === Private Routes === */}
           <Route
             element={
-              <Container>
-                <Header />
+              <AuthProtectedRoute>
                 <Outlet />
-              </Container>
+              </AuthProtectedRoute>
             }
           >
             <Route
-              path="/dashboard"
               element={
-                <AuthProtectedRoute>
-                  <Dashboard />
-                </AuthProtectedRoute>
+                <Container>
+                  <Header />
+                  <Outlet />
+                </Container>
               }
-            />
+            >
+              <Route path="/dashboard" element={<Dashboard />} />
 
-            <Route
-              path="/transactions"
-              element={
-                <AuthProtectedRoute>
+              <Route
+                path="/transactions"
+                element={
                   <TransactionsViewContextProvider>
                     <TransactionsView />
                   </TransactionsViewContextProvider>
-                </AuthProtectedRoute>
-              }
-            />
-          </Route>
+                }
+              />
+            </Route>
 
-          <Route
-            path="/transaction/new"
-            element={
-              <AuthProtectedRoute>
-                <NewTransaction />
-              </AuthProtectedRoute>
-            }
-          />
+            <Route path="/transaction/new" element={<NewTransaction />} />
+          </Route>
         </Routes>
       </AuthContextProvider>
     </BrowserRouter>

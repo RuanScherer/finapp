@@ -48,7 +48,7 @@ export function Header() {
             />
           </ReactRouterLink>
 
-          <Menu autoSelect={false}>
+          <Menu autoSelect={false} placement="bottom-end">
             <MenuButton>
               <Avatar
                 src={user?.avatar ?? undefined}
