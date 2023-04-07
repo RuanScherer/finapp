@@ -235,6 +235,8 @@ export function NewTransaction() {
               type="number"
               label="Valor da parcela"
               error={formState.errors.installmentValue}
+              isCurrency
+              step="0.01"
               {...register("installmentValue", {
                 onChange: (e) => {
                   const installmentValue = Number(e.target.value);
