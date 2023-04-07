@@ -116,20 +116,30 @@ export function NewTransaction() {
           {...register("name")}
         />
 
-        <Input
-          type="number"
-          step="0.01"
-          isCurrency
-          label="Valor"
-          error={formState.errors.amount}
-          _disabled={{
-            opacity: 1,
-            cursor: "not-allowed",
-          }}
-          {...register("amount", {
-            disabled: recurrence === TransactionRecurrence.INSTALLMENT,
-          })}
-        />
+        {recurrence === TransactionRecurrence.INSTALLMENT ? (
+          <Input
+            name="amount-readonly"
+            type="number"
+            step="0.01"
+            isCurrency
+            label="Valor"
+            isDisabled
+            _disabled={{
+              opacity: 1,
+              cursor: "not-allowed",
+            }}
+            value={amount}
+          />
+        ) : (
+          <Input
+            type="number"
+            step="0.01"
+            isCurrency
+            label="Valor"
+            error={formState.errors.amount}
+            {...register("amount")}
+          />
+        )}
 
         <Input
           list="categories"
@@ -225,6 +235,8 @@ export function NewTransaction() {
               type="number"
               label="Valor da parcela"
               error={formState.errors.installmentValue}
+              isCurrency
+              step="0.01"
               {...register("installmentValue", {
                 onChange: (e) => {
                   const installmentValue = Number(e.target.value);
