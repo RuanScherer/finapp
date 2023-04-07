@@ -70,6 +70,7 @@ export function TransactionsView() {
             _focus={{
               borderColor: "primary.300",
             }}
+            value={transactionsQueryDates.fromDate.toISOString().split("T")[0]}
             onChange={handleChangeBaseDate}
           />
         </HStack>
