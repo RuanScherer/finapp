@@ -12,6 +12,7 @@ export interface TransactionsViewContextData {
     refId,
     status,
   }: UpdateTransactionStatusByRefIdParams) => Promise<void>;
+  refreshTransactionsViewByMonth: () => Promise<void>;
   transactionsQueryDates: {
     fromDate: Date;
     toDate: Date;
@@ -47,7 +48,10 @@ export interface Transaction {
   category: string;
   amount: number;
   name: string;
-  ref: {
-    id: string;
-  };
+  ref: DocumentRef;
+  transactionRefId?: string;
+}
+
+interface DocumentRef {
+  id: string;
 }

@@ -21,13 +21,13 @@ import {
   RxClock,
   RxCounterClockwiseClock,
   RxPencil1,
+  RxTrash,
 } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { TransactionRowProps } from "./TransactionRow.types";
 
 const defaultTagProps = {
   variant: "subtle",
-  size: "md",
   fontSize: "smaller",
   borderRadius: "full",
 };
@@ -39,7 +39,7 @@ const defaultActionTooltipProps = {
   fontSize: "xs",
 };
 
-export function TransactionRow({ transaction }: TransactionRowProps) {
+export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
   const { updateTransactionStatusByRefId } = useTransactionsView();
 
   function handleSettleTransaction() {
@@ -138,6 +138,16 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
                 borderRadius="full"
               />
             </Link>
+          </Tooltip>
+
+          <Tooltip {...defaultActionTooltipProps} label="Excluir transação">
+            <IconButton
+              size="sm"
+              aria-label="Excluir transação"
+              icon={<RxTrash size={18} />}
+              borderRadius="full"
+              onClick={() => onRemove(transaction)}
+            />
           </Tooltip>
         </HStack>
       </Td>

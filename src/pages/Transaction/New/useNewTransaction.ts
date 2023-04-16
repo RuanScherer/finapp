@@ -78,7 +78,7 @@ export function useNewTransaction() {
         description: "Sua transacão foi criada.",
         status: "success",
       });
-      navigate("/dashboard");
+      navigate(-1);
     } catch {
       toast({
         title: "Erro ao criar transação.",
@@ -151,6 +151,7 @@ export function useNewTransaction() {
         type: transaction.type,
         status: TransactionStatus.PENDENT,
         dueDate: q.Date(formatDateForFauna(dueDate)),
+        recurrence: transaction.recurrence,
         userId: user!.id,
         transactionRefId,
       } as any;

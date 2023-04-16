@@ -4,6 +4,7 @@ import { TransactionType } from "@shared/enums/transactionType";
 
 export interface TransactionRowProps {
   transaction: Transaction;
+  onRemove: (transaction: Transaction) => void;
 }
 
 export interface Transaction {

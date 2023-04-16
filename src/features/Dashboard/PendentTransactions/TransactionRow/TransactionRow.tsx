@@ -15,7 +15,12 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
         <Text color="text.700">{transaction.name}</Text>
       </Td>
       <Td>
-        <Tag variant="subtle" size="sm" borderRadius="full" colorScheme="gray">
+        <Tag
+          variant="subtle"
+          fontSize="smaller"
+          borderRadius="full"
+          colorScheme="gray"
+        >
           <TagLabel>{transaction.category}</TagLabel>
         </Tag>
       </Td>
@@ -27,9 +32,7 @@ export function TransactionRow({ transaction }: TransactionRowProps) {
         )}
       </Td>
       <Td>
-        <Text fontWeight="semibold">
-          {currencyFormatter.format(transaction.amount)}
-        </Text>
+        <Text>{currencyFormatter.format(transaction.amount)}</Text>
       </Td>
     </Tr>
   );
