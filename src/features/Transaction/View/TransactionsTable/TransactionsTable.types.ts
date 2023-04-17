@@ -6,7 +6,7 @@ export interface TransactionsTableProps {
   transactions: Transaction[];
 }
 
-interface Transaction {
+export interface Transaction {
   dueDate: {
     date: Date;
   };
@@ -20,4 +20,17 @@ interface Transaction {
   ref: {
     id: string;
   };
+  transactionRefId?: string;
+}
+
+interface DocumentRef {
+  id: string;
+}
+
+export interface GetTransactionByRefResult {
+  ref: DocumentRef;
+}
+
+export interface GetTransactionsByTransactionRefIdResult {
+  data: Array<DocumentRef>;
 }

@@ -13,7 +13,7 @@ import {
   Transaction,
   TransactionsViewContextData,
   TransactionsViewContextProviderProps,
-  UpdateTransactionStatusByRefIdParams,
+  UpdateTransactionStatusByRefIdParams
 } from "./TransactionsViewContext.types";
 
 const TransactionsViewContext = createContext<TransactionsViewContextData>(
@@ -30,7 +30,7 @@ export function TransactionsViewContextProvider({
   const { user } = useAuth();
   const toast = useToast();
 
-  const { data: transactions } = useQuery(
+  const { data: transactions, refetch: refetchTransactionsViewByMonth } = useQuery(
     ["transactionsByMonth", transactionsQueryDates],
     fetchTransactionsViewByMonth,
     {
@@ -134,12 +134,17 @@ export function TransactionsViewContextProvider({
     await updateTransactionStatusByRefIdMutation.mutateAsync({ refId, status });
   }
 
+  async function refreshTransactionsViewByMonth() {
+    await refetchTransactionsViewByMonth();
+  }
+
   return (
     <TransactionsViewContext.Provider
       value={{
         transactions,
         getTransactionsViewByMonth,
         updateTransactionStatusByRefId,
+        refreshTransactionsViewByMonth,
         transactionsQueryDates,
       }}
     >

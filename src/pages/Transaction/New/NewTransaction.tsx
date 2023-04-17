@@ -226,7 +226,9 @@ export function NewTransaction() {
                   const installmentAmount = Number(e.target.value);
                   const amount =
                     (installmentValue ?? 0) * (installmentAmount ?? 1);
-                  if (amount) setValue("amount", amount);
+                  if (amount) {
+                    setValue("amount", Number(amount.toFixed(2)));
+                  }
                 },
               })}
             />
@@ -242,7 +244,9 @@ export function NewTransaction() {
                   const installmentValue = Number(e.target.value);
                   const amount =
                     (installmentValue ?? 0) * (installmentAmount ?? 1);
-                  if (amount) setValue("amount", amount);
+                  if (amount) {
+                    setValue("amount", Number(amount.toFixed(2)));
+                  }
                 },
               })}
             />
