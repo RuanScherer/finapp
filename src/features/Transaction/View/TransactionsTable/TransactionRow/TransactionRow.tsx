@@ -6,7 +6,7 @@ import {
   TagLeftIcon,
   Td,
   Tooltip,
-  Tr,
+  Tr
 } from "@chakra-ui/react";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
@@ -21,7 +21,7 @@ import {
   RxClock,
   RxCounterClockwiseClock,
   RxPencil1,
-  RxTrash,
+  RxTrash
 } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { TransactionRowProps } from "./TransactionRow.types";
@@ -71,6 +71,12 @@ export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
       <Td>
         <Tag {...defaultTagProps} colorScheme="gray">
           <TagLabel>{transaction.paymentMethod}</TagLabel>
+        </Tag>
+      </Td>
+
+      <Td>
+        <Tag {...defaultTagProps} colorScheme="gray">
+          <TagLabel>{transaction.category}</TagLabel>
         </Tag>
       </Td>
 

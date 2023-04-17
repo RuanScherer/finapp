@@ -46,6 +46,7 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
               <Th>Nome</Th>
               <Th>Tipo</Th>
               <Th>Forma de pagamento</Th>
+              <Th>Categoria</Th>
               <Th>Valor</Th>
               <Th>Status</Th>
               <Th>Ações</Th>
