@@ -11,16 +11,15 @@ export function Link({ children, to }: LinkProps) {
   const isActive = location.pathname === to
 
   const conditionalStyles = isActive ? {
-    color: "primary.500",
+    color: "white",
     fontWeight: "semibold",
-    bgColor: "primaryAlpha.400",
-    _hover: {
-      bgColor: "primaryAlpha.500",
-    }
+    borderBottom: "3px solid white",
   } : {
+    color: "whiteAlpha.800",
     fontWeight: "medium",
+    borderBottom: "3px solid transparent",
     _hover: {
-      bgColor: "primaryAlpha.300",
+      color: "white"
     }
   }
 
@@ -31,10 +30,12 @@ export function Link({ children, to }: LinkProps) {
         alignItems="center"
         gap="2"
         px="4"
-        py="2"
-        borderRadius="full"
+        pt="2"
+        pb="3"
         cursor="pointer"
         transition="ease-in-out 0.3s"
+        transitionProperty="color, border-bottom-color"
+        fontSize={['sm', 'md']}
         {...conditionalStyles}
       >
         {children}

@@ -2,95 +2,112 @@ import {
   Avatar,
   Box,
   Button,
-  Flex,
+  Heading,
   HStack,
   IconButton,
-  Image,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Text,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
+import { Container } from "@components/Container";
 import { useAuth } from "@contexts/AuthContext";
 import { RxDashboard, RxExit, RxPlus, RxStack } from "react-icons/rx";
 import { Link as ReactRouterLink } from "react-router-dom";
-import logo from "../../../assets/logo.svg";
 import { Link } from "./Link";
 
 export function Header() {
   const { user, signOut } = useAuth();
+  const confirmSignOutDisclosure = useDisclosure();
 
   return (
-    <>
-      <Flex as="header" justifyContent="space-between" alignItems="center">
-        <Image
-          src={logo}
-          width={12}
-          height={12}
-          alt="Quadrado roxo arredondado escrito FinApp - Logo do FinApp"
-        />
+    <Box bgColor="primary.500" shadow="md">
+      <Container>
+        <HStack gap={[1, 2]}>
+          <HStack alignItems="center" gap={1} flex={1}>
+            <Avatar
+              src={user?.avatar ?? undefined}
+              name={user?.name}
+              bgColor="light.100"
+              w={[10, 14]}
+              h={[10, 14]}
+            />
 
-        <Box display={["none", "block"]}>
-          <ReactRouterLink to="/transaction/new">
-            <Button leftIcon={<RxPlus />}>Adicionar transação</Button>
-          </ReactRouterLink>
-        </Box>
+            <VStack alignItems="start">
+              <Heading
+                color="whiteAlpha.900"
+                fontWeight="medium"
+                fontSize={["lg", "xl", "2xl"]}
+                lineHeight={1}
+              >
+                Olá, {user!.name}
+              </Heading>
 
-        <HStack alignItems="center" gap={2}>
+              <Text
+                as="time"
+                display={["none", "block"]}
+                color="whiteAlpha.800"
+                fontSize={"sm"}
+                lineHeight={1}
+              >
+                {new Date().toLocaleDateString("pt-BR", {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </Text>
+            </VStack>
+          </HStack>
+
           <ReactRouterLink to="/transaction/new">
+            <Button
+              display={["none", "none", "flex"]}
+              bgColor="whiteAlpha.200"
+              textColor="whiteAlpha.900"
+              leftIcon={<RxPlus color="white" strokeWidth={1} />}
+              _hover={{
+                bgColor: "whiteAlpha.300",
+              }}
+            >
+              Adicionar transação
+            </Button>
+
             <IconButton
-              display={["flex", "none"]}
-              icon={<RxPlus size={18} />}
-              aria-label="Adicionar transação"
-              alignItems="center"
+              display={["flex", "flex", "none"]}
+              bgColor="whiteAlpha.200"
+              textColor="whiteAlpha.900"
+              icon={<RxPlus color="white" strokeWidth={1} />}
+              aria-label="Sair do FinApp"
               borderRadius="full"
+              _hover={{
+                bgColor: "whiteAlpha.300",
+              }}
             />
           </ReactRouterLink>
 
-          <Menu autoSelect={false} placement="bottom-end">
-            <MenuButton>
-              <Avatar
-                src={user?.avatar ?? undefined}
-                name={user?.name}
-                bgColor="light.100"
-              />
-            </MenuButton>
-
-            <MenuList
-              shadow="md"
-              bgColor="background.100"
-              borderColor="gray.100"
-            >
-              <MenuItem onClick={signOut}>
-                <HStack gap={1}>
-                  <RxExit />
-                  <Text>Sair</Text>
-                </HStack>
-              </MenuItem>
-            </MenuList>
-          </Menu>
+          <IconButton
+            bgColor="whiteAlpha.200"
+            textColor="whiteAlpha.900"
+            icon={<RxExit color="white" strokeWidth={0.6} />}
+            aria-label="Sair do FinApp"
+            borderRadius="full"
+            _hover={{
+              bgColor: "whiteAlpha.300",
+            }}
+          />
         </HStack>
-      </Flex>
 
-      <HStack
-        alignItems="center"
-        justifyContent="center"
-        wrap="wrap"
-        gap="1"
-        py="2"
-        mt="6"
-      >
-        <Link to="/dashboard">
-          <RxDashboard />
-          Dashboard
-        </Link>
+        <HStack alignItems="center" wrap="wrap" gap="1" py="2" mt="4">
+          <Link to="/dashboard">
+            <RxDashboard />
+            Dashboard
+          </Link>
 
-        <Link to="/transactions">
-          <RxStack size="18" />
-          Transações
-        </Link>
-      </HStack>
-    </>
+          <Link to="/transactions">
+            <RxStack size="18" />
+            Transações
+          </Link>
+        </HStack>
+      </Container>
+    </Box>
   );
 }
