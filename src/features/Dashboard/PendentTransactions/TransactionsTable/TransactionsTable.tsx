@@ -9,7 +9,7 @@ interface TransactionsTableProps {
 export function TransactionsTable({ transactions }: TransactionsTableProps) {
   return (
     <TableContainer>
-      <Table colorScheme="gray">
+      <Table colorScheme="gray" size={["sm", "sm", "md"]}>
         <Thead>
           <Tr>
             <Th>Nome</Th>
@@ -18,6 +18,7 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
             <Th>Valor</Th>
           </Tr>
         </Thead>
+
         <Tbody>
           {transactions.map((transaction) => (
             <TransactionRow

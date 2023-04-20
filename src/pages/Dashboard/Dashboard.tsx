@@ -10,34 +10,26 @@ export function Dashboard() {
       templateColumns="repeat(24, 1fr)"
       rowGap={4}
       columnGap={[0, 4, 4]}
-      mt={2}
+      my={2}
     >
       {/* === Visão geral === */}
       <GridItem colSpan={24}>
-        <Heading
-          fontSize="xl"
-          fontWeight="semibold"
-          w="full"
-        >
+        <Heading fontSize="xl" fontWeight="semibold" w="full">
           Visão geral de {monthsName[new Date().getMonth()]}
         </Heading>
       </GridItem>
 
-      <GridItem colSpan={[24, 12, 6]}>
+      <GridItem colSpan={[24, 12, 10, 8, 6]}>
         <MonthStat type={TransactionType.INCOME} />
       </GridItem>
 
-      <GridItem colSpan={[24, 12, 6]}>
+      <GridItem colSpan={[24, 12, 10, 8, 6]}>
         <MonthStat type={TransactionType.OUTCOME} />
       </GridItem>
 
       {/* === Pendências === */}
       <GridItem colSpan={24} mt={2}>
-        <Heading
-          fontSize="xl"
-          fontWeight="semibold"
-          w="full"
-        >
+        <Heading fontSize="xl" fontWeight="semibold" w="full">
           Pendências
         </Heading>
       </GridItem>

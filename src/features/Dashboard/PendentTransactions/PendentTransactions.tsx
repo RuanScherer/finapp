@@ -39,9 +39,7 @@ export function PendentTransactions() {
             filter: "brightness(0.8)",
           }}
         >
-          <Link to="/transactions">
-            Ver tudo
-          </Link>
+          <Link to="/transactions">Ver tudo</Link>
         </Text>
       )}
     </Card>

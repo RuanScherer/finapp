@@ -37,11 +37,12 @@ export function TransactionsView() {
         alignItems="center"
         justifyContent={["center", "center", "space-between"]}
         wrap="wrap"
-        gap="2"
-        my="4"
+        gap={2}
+        mt={2}
+        mb={4}
       >
         <Heading
-          fontSize="2xl"
+          fontSize="xl"
           fontWeight="semibold"
           textAlign={["center", "center", "start"]}
           w={["full", "full", "fit-content"]}

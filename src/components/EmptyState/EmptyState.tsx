@@ -14,13 +14,9 @@ export function EmptyState({ children, ...rest }: EmptyStateProps) {
       py="6"
       {...rest}
     >
-      <Text
-        color="text.600"
-        textAlign="center"
-        lineHeight="short"
-      >
+      <Text textAlign="center" lineHeight="short" flex={1}>
         {children}
       </Text>
     </HStack>
-  )
+  );
 }

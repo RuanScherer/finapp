@@ -1,4 +1,4 @@
-import { extendTheme } from "@chakra-ui/react";
+import { createMultiStyleConfigHelpers, extendTheme } from "@chakra-ui/react";
 
 export const boxShadow = {
   100: "#959da533 0px 8px 24px",
@@ -58,4 +58,33 @@ const fonts = {
   heading: `'Poppins', sans-serif`,
 };
 
-export const theme = extendTheme({ colors, fonts });
+const Button = {
+  baseStyle: {
+    fontWeight: "medium",
+  },
+};
+
+const tableHelper = createMultiStyleConfigHelpers(["table", "th", "td"]);
+
+export const Table = tableHelper.defineMultiStyleConfig({
+  sizes: {
+    sm: {
+      th: {
+        py: 2,
+      },
+      td: {
+        py: 3,
+        fontSize: "sm",
+      },
+    },
+  },
+});
+
+export const theme = extendTheme({
+  colors,
+  fonts,
+  components: {
+    Button,
+    Table,
+  },
+});
