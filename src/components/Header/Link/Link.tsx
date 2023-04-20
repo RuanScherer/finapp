@@ -1,44 +1,50 @@
-import { Text } from "@chakra-ui/react"
-import { Link as ReactRouterLink, useLocation } from "react-router-dom"
+import { Text, theme } from "@chakra-ui/react";
+import { cloneElement } from "react";
+import { Link as ReactRouterLink, useLocation } from "react-router-dom";
+import { LinkProps } from "./Link.types";
 
-interface LinkProps {
-  children: React.ReactNode | React.ReactNode[]
-  to: string
-}
+export function Link({ to, icon, label }: LinkProps) {
+  const location = useLocation();
+  const isActive = location.pathname === to;
 
-export function Link({ children, to }: LinkProps) {
-  const location = useLocation()
-  const isActive = location.pathname === to
-
-  const conditionalStyles = isActive ? {
-    color: "primary.500",
-    fontWeight: "semibold",
-    bgColor: "primaryAlpha.400",
-    _hover: {
-      bgColor: "primaryAlpha.500",
-    }
-  } : {
-    fontWeight: "medium",
-    _hover: {
-      bgColor: "primaryAlpha.300",
-    }
-  }
+  const conditionalStyles = isActive
+    ? {
+        color: theme.colors.white,
+        bgColor: "whiteAlpha.300",
+        _hover: {
+          color: theme.colors.whiteAlpha[800],
+        },
+      }
+    : {
+        color: theme.colors.whiteAlpha[800],
+        _hover: {
+          color: theme.colors.white,
+        },
+      };
 
   return (
     <ReactRouterLink to={to}>
       <Text
         display="flex"
         alignItems="center"
-        gap="2"
-        px="4"
-        py="2"
+        gap={[1, 2]}
+        px={[3, 4]}
+        py={[1.5, 2]}
+        fontSize={["sm", "md"]}
+        fontWeight="medium"
         borderRadius="full"
         cursor="pointer"
         transition="ease-in-out 0.3s"
+        transitionProperty="color, background-color"
         {...conditionalStyles}
       >
-        {children}
+        {cloneElement(icon, {
+          color: conditionalStyles.color,
+          stroke: conditionalStyles.color,
+          size: 18,
+        })}
+        {label}
       </Text>
     </ReactRouterLink>
-  )
+  );
 }

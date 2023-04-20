@@ -24,7 +24,8 @@
       "@pages/*": ["pages/*"],
       "@services/*": ["services/*"],
       "@shared/*": ["shared/*"],
-      "@theme/*": ["theme/*"]
+      "@theme/*": ["theme/*"],
+      "@assets/*": ["./../assets/*"]
     }
   },
   "include": ["src"],

@@ -1,10 +1,4 @@
-import {
-  Table,
-  TableContainer,
-  Tbody, Th,
-  Thead,
-  Tr
-} from "@chakra-ui/react";
+import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
 import { EmptyState } from "@components/EmptyState";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { ConfirmTransactionRemovalModal } from "./ConfirmTransactionRemovalModal";
@@ -19,13 +13,13 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
     handleCloseConfirmTransactionRemovalModal,
     warningMessage,
     transactionToRemove,
-    removeTransaction
+    removeTransaction,
   } = useTransactionsTable();
   const { refreshTransactionsViewByMonth } = useTransactionsView();
-  
+
   async function handleRemoveTransaction(transaction: Transaction) {
-    await removeTransaction(transaction)
-    await refreshTransactionsViewByMonth()
+    await removeTransaction(transaction);
+    await refreshTransactionsViewByMonth();
     handleCloseConfirmTransactionRemovalModal();
   }
 
@@ -40,7 +34,7 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
   return (
     <>
       <TableContainer>
-        <Table>
+        <Table size={["sm", "sm", "md"]}>
           <Thead>
             <Tr>
               <Th>Nome</Th>

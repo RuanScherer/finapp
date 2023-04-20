@@ -37,10 +37,12 @@ export function Router() {
           >
             <Route
               element={
-                <Container>
+                <>
                   <Header />
-                  <Outlet />
-                </Container>
+                  <Container>
+                    <Outlet />
+                  </Container>
+                </>
               }
             >
               <Route path="/dashboard" element={<Dashboard />} />

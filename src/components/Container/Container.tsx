@@ -8,7 +8,7 @@ export function Container({ children }: ContainerProps) {
   return (
     <Box
       w="full"
-      maxW="1024px"
+      maxW="1200px"
       mx="auto"
       px="4"
       py="6"

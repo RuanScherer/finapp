@@ -1,4 +1,5 @@
-import { Button, Center, Flex, Heading, Text } from "@chakra-ui/react";
+import logo from "@assets/logo.svg";
+import { Button, Center, Flex, Image, Text } from "@chakra-ui/react";
 import { useAuth } from "@contexts/AuthContext";
 import { colors } from "@theme/index";
 import { FaGoogle } from "react-icons/fa";
@@ -7,14 +8,14 @@ export function SignIn() {
   const { signInWithGoogle } = useAuth();
 
   return (
-    <Center minH="100vh">
+    <Center minH="100vh" p={2}>
       <Flex direction="column" alignItems="center">
-        <Heading fontSize="4xl" fontWeight="semibold" letterSpacing="wide">
-          <Text color="primary.500" display="inline">
-            Fin
-          </Text>
-          App
-        </Heading>
+        <Image
+          src={logo}
+          alt="Quadrado roxo com escrita 'FinApp' em branco - Logo do FinApp"
+          w={20}
+          h={20}
+        />
 
         <Text
           fontSize="lg"

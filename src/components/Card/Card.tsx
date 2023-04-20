@@ -1,5 +1,4 @@
 import { ChakraProps, Flex } from "@chakra-ui/react";
-import { boxShadow } from "@theme/index";
 import { ReactNode } from "react";
 
 interface CardProps extends ChakraProps {
@@ -11,9 +10,9 @@ export function Card({ children, ...rest }: CardProps) {
     <Flex
       flexDirection="column"
       alignItems="stretch"
-      bgColor="background.100"
+      bgColor="white"
       borderRadius="xl"
-      boxShadow={boxShadow[100]}
+      shadow="sm"
       h="full"
       p="5"
       {...rest}

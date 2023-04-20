@@ -1,2 +1,0 @@
-export { MonthPendencies } from "./MonthPendencies";
-
