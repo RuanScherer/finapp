@@ -107,7 +107,7 @@ export function Header() {
             </VStack>
           </HStack>
 
-          <HStack wrap="wrap" gap="1" py="2">
+          <HStack wrap="wrap" gap="1" rowGap="2" py="2">
             <Link to="/dashboard" icon={<RxDashboard />} label="Dashboard" />
 
             <Link to="/transactions" icon={<RxStack />} label="Transações" />
