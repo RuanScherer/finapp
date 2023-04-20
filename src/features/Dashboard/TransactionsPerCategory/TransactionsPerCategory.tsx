@@ -56,7 +56,12 @@ export function TransactionsPerCategory() {
           )
         ) : (
           <Center>
-            <Spinner color="primary.500" size="xl" mt="2" />
+            <Spinner
+              color="primary.500"
+              size="xl"
+              mt="2"
+              speed="1s"
+            />
           </Center>
         )}
       </Box>

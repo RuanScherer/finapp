@@ -1,4 +1,4 @@
-import { Heading, HStack, Skeleton, Text } from "@chakra-ui/react";
+import { Skeleton, Text } from "@chakra-ui/react";
 import { EmptyState } from "@components/EmptyState";
 import { Link } from "react-router-dom";
 import { Card } from "../Card";
@@ -10,29 +10,6 @@ export function PendentTransactions() {
 
   return (
     <Card>
-      <HStack justifyContent="space-between" alignItems="center" mb="2">
-        <Heading fontSize="xl" fontWeight="semibold">
-          Pendências
-        </Heading>
-
-        {lastPendentTransactions?.length && (
-          <Link to="/transactions">
-            <Text
-              fontSize="sm"
-              color="primary.500"
-              cursor="pointer"
-              textAlign="right"
-              mt="2"
-              _hover={{
-                filter: "brightness(0.8)",
-              }}
-            >
-              Ver tudo
-            </Text>
-          </Link>
-        )}
-      </HStack>
-
       {lastPendentTransactions ? (
         lastPendentTransactions.length > 0 ? (
           <TransactionsTable transactions={lastPendentTransactions} />
@@ -47,6 +24,25 @@ export function PendentTransactions() {
           <Skeleton h="20px" mt="2" />
           <Skeleton h="20px" mt="2" />
         </>
+      )}
+
+      {lastPendentTransactions?.length && (
+        <Text
+          fontSize="sm"
+          color="primary.500"
+          cursor="pointer"
+          textAlign="center"
+          w="fit-content"
+          mx="auto"
+          mt="4"
+          _hover={{
+            filter: "brightness(0.8)",
+          }}
+        >
+          <Link to="/transactions">
+            Ver tudo
+          </Link>
+        </Text>
       )}
     </Card>
   );

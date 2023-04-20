@@ -1,23 +1,58 @@
-import { Heading, Skeleton } from "@chakra-ui/react";
-import { Stat } from "@components/Stat/Stat";
+import { HStack, Spinner, Text, theme } from "@chakra-ui/react";
 import { TransactionType } from "@shared/enums/transactionType";
+import { currencyFormatter } from "@shared/utils/currencyFormatter";
+import { RxArrowBottomLeft, RxArrowTopRight } from "react-icons/rx";
 import { Card } from "../Card";
 import { MonthStatProps } from "./MonthStat.types";
 import { useMonthStat } from "./useMonthStat";
 
 export function MonthStat({ type }: MonthStatProps) {
-  const { amount, isLoading, isError } = useMonthStat(type);
+  const { amount, pendentAmount } = useMonthStat(type);
+
+  let cardBgColor
+  let color;
+  let Icon;
+
+  if (type === TransactionType.OUTCOME) {
+    cardBgColor = '#FEE9F3';
+    color = theme.colors.red[500];
+    Icon = RxArrowBottomLeft;
+  } else {
+    cardBgColor = '#D8F7F5';
+    color = theme.colors.green[400];
+    Icon = RxArrowTopRight;
+  }
 
   return (
-    <Card>
-      <Heading fontSize="xl" fontWeight="semibold">
-        {type === TransactionType.OUTCOME ? "Despesas" : "Receitas"}
-      </Heading>
+    <Card bgColor={cardBgColor}>
+      <HStack
+        alignItems="center"
+        spacing={1}
+        justifyContent="space-between"
+      >
+        <Text fontWeight="medium" color="gray.700">
+          {type === TransactionType.OUTCOME ? "Despesas" : "Receitas"}
+        </Text>
+        
+        <Icon
+          color={color}
+          size={16}
+          strokeWidth="1"
+        />
+      </HStack>
 
-      {isLoading || isError ? (
-        <Skeleton h="40px" mt="2.5" />
+      {amount === undefined ? (
+        <Spinner color="primary.500" my={2} speed="1s" />
       ) : (
-        <Stat type={type} amount={amount ?? 0} />
+        <Text fontSize="2xl" fontWeight="medium">
+          {currencyFormatter.format(amount ?? 0)}
+        </Text>
+      )}
+
+      {pendentAmount !== undefined && (
+        <Text fontSize="sm">
+          {currencyFormatter.format(pendentAmount ?? 0)} em aberto
+        </Text>
       )}
     </Card>
   );

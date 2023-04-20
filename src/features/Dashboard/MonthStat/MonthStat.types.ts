@@ -7,3 +7,7 @@ export interface MonthStatProps {
 export interface GetMonthStatQueryReturn {
   data: number[];
 }
+
+export interface GetMonthPendenciesQueryReturn {
+  data: number[];
+}

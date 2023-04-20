@@ -47,7 +47,7 @@ export const colors = {
   },
   background: {
     100: "#FDFDFD",
-    200: "#F5FDFF",
+    200: "#F2F9FF",
     300: "#F2F2F2",
     400: "#DFDFDF",
   },
