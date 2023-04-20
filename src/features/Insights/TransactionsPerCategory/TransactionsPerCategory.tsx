@@ -1,7 +1,7 @@
 import { Box, Center, Heading, Spinner, theme } from "@chakra-ui/react";
+import { Card } from "@components/Card";
 import { EmptyState } from "@components/EmptyState";
 import { Doughnut } from "react-chartjs-2";
-import { Card } from "../Card";
 import { useTransactionsPerCategory } from "./useTransactionsPerCategory";
 
 const colors = theme.colors;
@@ -56,12 +56,7 @@ export function TransactionsPerCategory() {
           )
         ) : (
           <Center>
-            <Spinner
-              color="primary.500"
-              size="xl"
-              mt="2"
-              speed="1s"
-            />
+            <Spinner color="primary.500" size="xl" mt="2" speed="1s" />
           </Center>
         )}
       </Box>

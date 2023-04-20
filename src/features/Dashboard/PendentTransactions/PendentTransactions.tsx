@@ -1,7 +1,7 @@
 import { Skeleton, Text } from "@chakra-ui/react";
+import { Card } from "@components/Card";
 import { EmptyState } from "@components/EmptyState";
 import { Link } from "react-router-dom";
-import { Card } from "../Card";
 import { TransactionsTable } from "./TransactionsTable";
 import { usePendentTransactions } from "./usePendentTransactions";
 

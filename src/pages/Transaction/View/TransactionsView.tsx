@@ -6,8 +6,8 @@ import {
   Skeleton,
   Tooltip,
 } from "@chakra-ui/react";
+import { Card } from "@components/Card";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
-import { Card } from "@features/Dashboard/Card";
 import { TransactionsTable } from "@features/Transaction/View/TransactionsTable";
 import { monthsName } from "@shared/constants/monthsName";
 import { formatDateToUTC } from "@shared/utils/formatDateToUTC";

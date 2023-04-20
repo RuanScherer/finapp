@@ -1,44 +1,36 @@
 import { HStack, Spinner, Text, theme } from "@chakra-ui/react";
+import { Card } from "@components/Card";
 import { TransactionType } from "@shared/enums/transactionType";
 import { currencyFormatter } from "@shared/utils/currencyFormatter";
 import { RxArrowBottomLeft, RxArrowTopRight } from "react-icons/rx";
-import { Card } from "../Card";
 import { MonthStatProps } from "./MonthStat.types";
 import { useMonthStat } from "./useMonthStat";
 
 export function MonthStat({ type }: MonthStatProps) {
   const { amount, pendentAmount } = useMonthStat(type);
 
-  let cardBgColor
+  let cardBgColor;
   let color;
   let Icon;
 
   if (type === TransactionType.OUTCOME) {
-    cardBgColor = '#FEE9F3';
+    cardBgColor = "#FEE9F3";
     color = theme.colors.red[500];
     Icon = RxArrowBottomLeft;
   } else {
-    cardBgColor = '#D8F7F5';
+    cardBgColor = "#D8F7F5";
     color = theme.colors.green[400];
     Icon = RxArrowTopRight;
   }
 
   return (
     <Card bgColor={cardBgColor}>
-      <HStack
-        alignItems="center"
-        spacing={1}
-        justifyContent="space-between"
-      >
+      <HStack alignItems="center" spacing={1} justifyContent="space-between">
         <Text fontWeight="medium" color="gray.700">
           {type === TransactionType.OUTCOME ? "Despesas" : "Receitas"}
         </Text>
-        
-        <Icon
-          color={color}
-          size={16}
-          strokeWidth="1"
-        />
+
+        <Icon color={color} size={16} strokeWidth="1" />
       </HStack>
 
       {amount === undefined ? (
