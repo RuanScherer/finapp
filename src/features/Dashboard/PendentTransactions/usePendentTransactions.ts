@@ -15,7 +15,7 @@ export function usePendentTransactions() {
     "dashboardPendentTransactions",
     fetchPendentTransactions,
     {
-      staleTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 10 * 60 * 1000, // 10 minutes
     }
   );
 

@@ -26,7 +26,7 @@ export function PendentTransactions() {
         </>
       )}
 
-      {lastPendentTransactions?.length && (
+      {!!lastPendentTransactions?.length && (
         <Text
           fontSize="sm"
           color="primary.500"
