@@ -36,7 +36,24 @@ export function useEditTransaction() {
       q.Get(q.Ref(q.Collection("transactions"), transactionId))
     );
 
+    if (transaction.data.recurrence !== TransactionRecurrence.UNIQUE) {
+      toast({
+        title: "Ops, calma aí!.",
+        description:
+          "Ainda não é possível editar transações fixas ou parceladas.",
+        status: "error",
+      });
+      throw new Error(
+        "Ainda não é possível editar transações fixas ou parceladas."
+      );
+    }
+
     if (transaction.data.userId !== user!.id) {
+      toast({
+        title: "Erro ao obter transação.",
+        description: "Você não tem permissão para editar esta transação.",
+        status: "error",
+      });
       throw new Error("Você não tem permissão para editar esta transação.");
     }
     return transaction;

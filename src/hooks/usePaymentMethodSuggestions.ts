@@ -22,7 +22,7 @@ export function usePaymentMethodSuggestions() {
       return paymentMethods.data;
     },
     {
-      staleTime: 60 * 60 * 1000, // 60 minutes
+      staleTime: 60 * 60 * 1000, // 1 hour
     }
   );
 
