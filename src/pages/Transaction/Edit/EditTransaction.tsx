@@ -15,18 +15,15 @@ import { usePaymentMethodSuggestions } from "@hooks/usePaymentMethodSuggestions"
 import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";
-import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { RxArrowLeft } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { NewTransactionFormData } from "./NewTransaction.types";
-import { useNewTransaction } from "./useNewTransaction";
+import { EditTransactionFormData } from "./EditTransaction.types";
+import { useEditTransaction } from "./useEditTransaction";
 
-const currentDate = formatDateForFauna(new Date());
-
-const newTransactionFormSchema = yup.object().shape({
+const editTransactionFormSchema = yup.object().shape({
   name: yup.string().required("Nome é obrigatório"),
   amount: yup
     .number()
@@ -36,13 +33,11 @@ const newTransactionFormSchema = yup.object().shape({
   category: yup.string().required("Categoria é obrigatória"),
   paymentMethod: yup.string().required("Forma de pagamento é obrigatória"),
   type: yup.string().required("Tipo é obrigatório"),
-  status: yup.string().required("Situação é obrigatória"),
-  recurrence: yup.string().required("Recorrência é obrigatória"),
-  dueDate: yup
-    .date()
-    .typeError("Insira uma data válida")
-    .min(currentDate, "A data deve ser atual ou futura")
-    .required("Data de vencimento é obrigatória"),
+  status: yup.mixed().when("recurrence", {
+    is: TransactionRecurrence.UNIQUE,
+    then: yup.string().required("Situação é obrigatória"),
+    otherwise: yup.mixed(),
+  }),
   installmentAmount: yup.mixed().when("recurrence", {
     is: TransactionRecurrence.INSTALLMENT,
     then: yup
@@ -63,33 +58,26 @@ const newTransactionFormSchema = yup.object().shape({
   }),
 });
 
-export function NewTransaction() {
-  const { register, formState, handleSubmit, watch, setValue } =
-    useForm<NewTransactionFormData>({
-      resolver: yupResolver(newTransactionFormSchema),
-      defaultValues: {
-        status: TransactionStatus.PENDENT,
-      },
+export function EditTransaction() {
+  const { transaction, handleSave } = useEditTransaction();
+  const { register, formState, handleSubmit, watch, setValue, reset } =
+    useForm<EditTransactionFormData>({
+      resolver: yupResolver(editTransactionFormSchema),
     });
-  const { handleSave } = useNewTransaction();
   const { data: categorySuggestions } = useCategorySuggestions();
   const { data: paymentMethodSuggestions } = usePaymentMethodSuggestions();
   const navigate = useNavigate();
 
-  const recurrence = watch("recurrence");
+  useEffect(() => {
+    if (transaction) {
+      reset(transaction.data);
+    }
+  }, [transaction, reset]);
+
+  const recurrence = transaction?.data.recurrence;
   const amount = watch("amount");
   const installmentAmount = watch("installmentAmount");
   const installmentValue = watch("installmentValue");
-
-  useEffect(() => {
-    if (recurrence !== TransactionRecurrence.UNIQUE) {
-      setValue("status", TransactionStatus.PENDENT);
-    }
-
-    if (recurrence === TransactionRecurrence.FIXED) {
-      setValue("installmentAmount", 12); // 1 year
-    }
-  }, [recurrence]);
 
   function handleBack() {
     navigate(-1);
@@ -113,7 +101,7 @@ export function NewTransaction() {
               fontWeight="semibold"
               color="whiteAlpha.900"
             >
-              Nova transação
+              Editar transação
             </Heading>
 
             <Box visibility="hidden">
@@ -192,20 +180,6 @@ export function NewTransaction() {
 
             <SimpleGrid columns={2} gap={4}>
               <Radio
-                label="Recorrência"
-                defaultValue={TransactionRecurrence.UNIQUE}
-                options={[
-                  { value: TransactionRecurrence.UNIQUE, label: "Único" },
-                  {
-                    value: TransactionRecurrence.INSTALLMENT,
-                    label: "Parcelado",
-                  },
-                  { value: TransactionRecurrence.FIXED, label: "Fixo" },
-                ]}
-                {...register("recurrence")}
-              />
-
-              <Radio
                 label="Tipo"
                 defaultValue={TransactionType.OUTCOME}
                 options={[
@@ -215,7 +189,7 @@ export function NewTransaction() {
                 {...register("type")}
               />
 
-              {(!recurrence || recurrence === "UNICO") && (
+              {recurrence === TransactionRecurrence.UNIQUE && (
                 <Radio
                   label="Situação"
                   defaultValue={TransactionStatus.PENDENT}
@@ -227,15 +201,6 @@ export function NewTransaction() {
                 />
               )}
             </SimpleGrid>
-
-            <Input
-              type="date"
-              label="Vencimento"
-              min={currentDate}
-              defaultValue={currentDate}
-              error={formState.errors.dueDate}
-              {...register("dueDate")}
-            />
           </SimpleGrid>
 
           {recurrence === TransactionRecurrence.INSTALLMENT && (

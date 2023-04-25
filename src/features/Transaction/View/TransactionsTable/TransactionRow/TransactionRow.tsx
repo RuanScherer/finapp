@@ -6,7 +6,7 @@ import {
   TagLeftIcon,
   Td,
   Tooltip,
-  Tr
+  Tr,
 } from "@chakra-ui/react";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
@@ -20,10 +20,9 @@ import {
   RxCheckCircled,
   RxClock,
   RxCounterClockwiseClock,
-  RxPencil1,
-  RxTrash
+  RxTrash,
 } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { TransactionRowProps } from "./TransactionRow.types";
 
 const defaultTagProps = {
@@ -41,23 +40,40 @@ const defaultActionTooltipProps = {
 
 export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
   const { updateTransactionStatusByRefId } = useTransactionsView();
+  const navigate = useNavigate();
 
-  function handleSettleTransaction() {
+  function handleSettleTransaction(event: React.MouseEvent) {
+    event.stopPropagation();
     updateTransactionStatusByRefId({
       refId: transaction.ref.id,
       status: TransactionStatus.SETTLED,
     });
   }
 
-  function handleMakeTransactionPending() {
+  function handleMakeTransactionPending(event: React.MouseEvent) {
+    event.stopPropagation();
     updateTransactionStatusByRefId({
       refId: transaction.ref.id,
       status: TransactionStatus.PENDENT,
     });
   }
 
+  function handleRemoveTransaction(event: React.MouseEvent) {
+    event.stopPropagation();
+    onRemove(transaction);
+  }
+
+  function handleSelectTransaction() {
+    navigate(`/transaction/${transaction.ref.id}`);
+  }
+
   return (
-    <Tr transition=".3s" _hover={{ bgColor: "gray.50" }}>
+    <Tr
+      transition=".3s"
+      cursor="pointer"
+      _hover={{ bgColor: "gray.50" }}
+      onClick={handleSelectTransaction}
+    >
       <Td>{transaction.name}</Td>
 
       <Td>
@@ -132,27 +148,13 @@ export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
             </Tooltip>
           )}
 
-          <Tooltip
-            {...defaultActionTooltipProps}
-            label="Ver detalhes da transação"
-          >
-            <Link to={`/transactions/${transaction.ref.id}`}>
-              <IconButton
-                size="sm"
-                aria-label="Ver detalhes da transação"
-                icon={<RxPencil1 size={18} />}
-                borderRadius="full"
-              />
-            </Link>
-          </Tooltip>
-
           <Tooltip {...defaultActionTooltipProps} label="Excluir transação">
             <IconButton
               size="sm"
               aria-label="Excluir transação"
               icon={<RxTrash size={18} />}
               borderRadius="full"
-              onClick={() => onRemove(transaction)}
+              onClick={handleRemoveTransaction}
             />
           </Tooltip>
         </HStack>
