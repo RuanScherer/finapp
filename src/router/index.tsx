@@ -4,6 +4,7 @@ import { AuthContextProvider } from "@contexts/AuthContext";
 import { TransactionsViewContextProvider } from "@contexts/TransactionsViewContext";
 import { Dashboard } from "@pages/Dashboard";
 import { SignIn } from "@pages/SignIn";
+import { EditTransaction } from "@pages/Transaction/Edit";
 import { NewTransaction } from "@pages/Transaction/New";
 import { TransactionsView } from "@pages/Transaction/View";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
@@ -58,6 +59,10 @@ export function Router() {
             </Route>
 
             <Route path="/transaction/new" element={<NewTransaction />} />
+            <Route
+              path="/transaction/:transactionId"
+              element={<EditTransaction />}
+            />
           </Route>
         </Routes>
       </AuthContextProvider>

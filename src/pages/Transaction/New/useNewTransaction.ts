@@ -6,7 +6,6 @@ import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { query as q } from "faunadb";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import {
   FaunaDBTransaction,
@@ -18,46 +17,7 @@ export function useNewTransaction() {
   const toast = useToast();
   const navigate = useNavigate();
 
-  const { data: categorySuggestions } = useQuery(
-    "categorySuggestions",
-    async () => {
-      const categories = await fauna.query<{ data: string[] }>(
-        q.Paginate(
-          q.Distinct(
-            q.Match(q.Index("categories_of_transactions_by_user_id"), user!.id)
-          )
-        )
-      );
-      return categories.data;
-    },
-    {
-      staleTime: 10 * 60 * 1000, // 10 minutes
-    }
-  );
-
-  const { data: paymentMethodSuggestions } = useQuery(
-    "paymentMethodSuggestions",
-    async () => {
-      const paymentMethods = await fauna.query<{ data: string[] }>(
-        q.Paginate(
-          q.Distinct(
-            q.Match(
-              q.Index("payment_methods_of_transactions_by_user_id"),
-              user!.id
-            )
-          )
-        )
-      );
-      return paymentMethods.data;
-    },
-    {
-      staleTime: 10 * 60 * 1000, // 10 minutes
-    }
-  );
-
-  async function handleSave(data: NewTransactionFormData) {
-    const transaction = data as NewTransactionFormData;
-
+  async function handleSave(transaction: NewTransactionFormData) {
     // this field is used only for user experience in the form and should not be persisted
     delete transaction.installmentValue;
 
@@ -168,7 +128,5 @@ export function useNewTransaction() {
 
   return {
     handleSave,
-    categorySuggestions,
-    paymentMethodSuggestions,
   };
 }
