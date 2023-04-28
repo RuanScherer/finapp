@@ -21,6 +21,8 @@ export interface Transaction {
     id: string;
   };
   transactionRefId?: string;
+  installmentAmount?: number;
+  installmentOrder?: number;
 }
 
 interface DocumentRef {

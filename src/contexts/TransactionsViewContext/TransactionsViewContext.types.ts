@@ -50,6 +50,8 @@ export interface Transaction {
   name: string;
   ref: DocumentRef;
   transactionRefId?: string;
+  installmentAmount?: number;
+  installmentOrder?: number;
 }
 
 interface DocumentRef {
