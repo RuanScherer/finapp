@@ -10,7 +10,7 @@ import {
   EditTransactionFormData,
   GetTransactionsByTransactionRefIdResult,
   Transaction,
-  UpdateTransactionsByRefIdParams,
+  UpdateTransactionsByRefIdParams
 } from "./EditTransaction.types";
 
 export function useEditTransaction() {
@@ -36,15 +36,6 @@ export function useEditTransaction() {
     const transaction = await fauna.query<Transaction>(
       q.Get(q.Ref(q.Collection("transactions"), transactionId))
     );
-
-    if (transaction.data.recurrence === TransactionRecurrence.FIXED) {
-      toast({
-        title: "Ops, calma aí!.",
-        description: "Ainda não é possível editar transações fixas.",
-        status: "error",
-      });
-      throw new Error("Ainda não é possível editar transações fixas.");
-    }
 
     if (transaction.data.userId !== user!.id) {
       toast({
@@ -163,7 +154,9 @@ export function useEditTransaction() {
             {
               data: {
                 ...newData,
-                amount: newData.amount / newData.installmentAmount!,
+                amount: transaction?.data.recurrence === TransactionRecurrence.INSTALLMENT
+                  ? newData.amount / newData.installmentAmount!
+                  : newData.amount,
               },
             }
           )
