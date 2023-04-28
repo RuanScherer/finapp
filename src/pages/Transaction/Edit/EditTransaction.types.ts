@@ -14,9 +14,7 @@ export interface EditTransactionFormData {
 }
 
 export type Transaction = {
-  ref: {
-    id: string;
-  };
+  ref: DocumentRef;
   data: {
     userId: string;
     name: string;
@@ -33,4 +31,12 @@ export interface UpdateTransactionsByRefIdParams {
   originalTransactionRefId: string;
   installmentTransactionRefIds?: Array<string>;
   newData: EditTransactionFormData;
+}
+
+interface DocumentRef {
+  id: string;
+}
+
+export interface GetTransactionsByTransactionRefIdResult {
+  data: Array<DocumentRef>;
 }

@@ -69,8 +69,13 @@ export function EditTransaction() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (transaction) {
-      reset(transaction.data);
+    if (!transaction) return;
+
+    reset(transaction.data);
+    if (transaction.data.recurrence === TransactionRecurrence.INSTALLMENT) {
+      const installmentValue =
+        transaction.data.amount / transaction.data.installmentAmount;
+      setValue("installmentValue", Number(installmentValue.toFixed(2)));
     }
   }, [transaction, reset]);
 
@@ -214,16 +219,12 @@ export function EditTransaction() {
                   type="number"
                   label="Quantidade de parcelas"
                   error={formState.errors.installmentAmount}
-                  {...register("installmentAmount", {
-                    onChange: (e) => {
-                      const installmentAmount = Number(e.target.value);
-                      const amount =
-                        (installmentValue ?? 0) * (installmentAmount ?? 1);
-                      if (amount) {
-                        setValue("amount", Number(amount.toFixed(2)));
-                      }
-                    },
-                  })}
+                  {...register("installmentAmount")}
+                  isDisabled
+                  _disabled={{
+                    opacity: 1,
+                    cursor: "not-allowed",
+                  }}
                 />
 
                 <Input

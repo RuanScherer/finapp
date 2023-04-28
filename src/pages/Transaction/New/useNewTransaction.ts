@@ -118,6 +118,7 @@ export function useNewTransaction() {
       if (transaction.recurrence === TransactionRecurrence.INSTALLMENT) {
         installment.name = `${transaction.name} (${i}/${transaction.installmentAmount})`;
         installment.installmentOrder = i;
+        installment.installmentAmount = transaction.installmentAmount;
       }
 
       installments.push(installment);

@@ -8,6 +8,7 @@ import { QueryFunctionContext, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   EditTransactionFormData,
+  GetTransactionsByTransactionRefIdResult,
   Transaction,
   UpdateTransactionsByRefIdParams,
 } from "./EditTransaction.types";
@@ -36,16 +37,13 @@ export function useEditTransaction() {
       q.Get(q.Ref(q.Collection("transactions"), transactionId))
     );
 
-    if (transaction.data.recurrence !== TransactionRecurrence.UNIQUE) {
+    if (transaction.data.recurrence === TransactionRecurrence.FIXED) {
       toast({
         title: "Ops, calma aí!.",
-        description:
-          "Ainda não é possível editar transações fixas ou parceladas.",
+        description: "Ainda não é possível editar transações fixas.",
         status: "error",
       });
-      throw new Error(
-        "Ainda não é possível editar transações fixas ou parceladas."
-      );
+      throw new Error("Ainda não é possível editar transações fixas.");
     }
 
     if (transaction.data.userId !== user!.id) {
@@ -68,6 +66,8 @@ export function useEditTransaction() {
       paymentMethod: data.paymentMethod,
       type: data.type,
       status: data.status,
+
+      // used on update of recurrent transactions, not editable on UI
       installmentAmount: data.installmentAmount,
     };
 
@@ -98,7 +98,22 @@ export function useEditTransaction() {
   async function updateRecurrentTransaction(
     formTransaction: EditTransactionFormData
   ) {
-    // TODO: implement
+    const getTransactionsByTransactionRefIdResult =
+      await fauna.query<GetTransactionsByTransactionRefIdResult>(
+        q.Paginate(
+          q.Match(
+            q.Index("transactions_by_transaction_ref_id"),
+            transaction!.ref.id
+          )
+        )
+      );
+
+    await updateTransactionsByRefId({
+      originalTransactionRefId: transaction!.ref.id,
+      installmentTransactionRefIds:
+        getTransactionsByTransactionRefIdResult.data.map((ref) => ref.id),
+      newData: formTransaction,
+    });
   }
 
   async function updateTransactionsByRefId({
@@ -109,8 +124,8 @@ export function useEditTransaction() {
     try {
       await persistTransaction(originalTransactionRefId, newData);
 
-      if (installmentTransactionRefIds) {
-        // TODO: implement update of installments
+      if (installmentTransactionRefIds?.length) {
+        await persistInstallments(installmentTransactionRefIds, newData);
       }
     } catch {
       toast({
@@ -131,6 +146,29 @@ export function useEditTransaction() {
       q.Update(q.Ref(q.Collection("transactions"), originalTransactionRefId), {
         data: newData,
       })
+    );
+  }
+
+  async function persistInstallments(
+    installmentTransactionsRefIds: Array<string>,
+    newData: EditTransactionFormData
+  ) {
+    await fauna.query(
+      q.Map(
+        installmentTransactionsRefIds,
+        q.Lambda(
+          "transactionRefId",
+          q.Update(
+            q.Ref(q.Collection("transactions"), q.Var("transactionRefId")),
+            {
+              data: {
+                ...newData,
+                amount: newData.amount / newData.installmentAmount!,
+              },
+            }
+          )
+        )
+      )
     );
   }
 

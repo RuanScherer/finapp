@@ -21,4 +21,7 @@ export interface Transaction {
   ref: {
     id: string;
   };
+  transactionRefId?: string;
+  installmentAmount?: number;
+  installmentOrder?: number;
 }

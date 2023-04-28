@@ -64,7 +64,17 @@ export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
   }
 
   function handleSelectTransaction() {
-    navigate(`/transaction/${transaction.ref.id}`);
+    const id = transaction.transactionRefId || transaction.ref.id;
+    navigate(`/transaction/${id}`);
+  }
+
+  function getTransactionName() {
+    let name = transaction.name;
+
+    if (transaction.installmentOrder && transaction.installmentAmount) {
+      name += ` (${transaction.installmentOrder}/${transaction.installmentAmount})`;
+    }
+    return name;
   }
 
   return (
@@ -74,7 +84,7 @@ export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
       _hover={{ bgColor: "gray.50" }}
       onClick={handleSelectTransaction}
     >
-      <Td>{transaction.name}</Td>
+      <Td>{getTransactionName()}</Td>
 
       <Td>
         {transaction.type === TransactionType.INCOME ? (
