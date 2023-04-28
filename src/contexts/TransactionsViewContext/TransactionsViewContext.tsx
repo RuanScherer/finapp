@@ -13,7 +13,7 @@ import {
   Transaction,
   TransactionsViewContextData,
   TransactionsViewContextProviderProps,
-  UpdateTransactionStatusByRefIdParams
+  UpdateTransactionStatusByRefIdParams,
 } from "./TransactionsViewContext.types";
 
 const TransactionsViewContext = createContext<TransactionsViewContextData>(
@@ -30,13 +30,14 @@ export function TransactionsViewContextProvider({
   const { user } = useAuth();
   const toast = useToast();
 
-  const { data: transactions, refetch: refetchTransactionsViewByMonth } = useQuery(
-    ["transactionsByMonth", transactionsQueryDates],
-    fetchTransactionsViewByMonth,
-    {
-      staleTime: 10 * 60 * 1000, // 10 minutes
-    }
-  );
+  const { data: transactions, refetch: refetchTransactionsViewByMonth } =
+    useQuery(
+      ["transactionsByMonth", transactionsQueryDates],
+      fetchTransactionsViewByMonth,
+      {
+        staleTime: 10 * 60 * 1000, // 10 minutes
+      }
+    );
 
   const updateTransactionStatusByRefIdMutation = useMutation<
     void,
@@ -64,7 +65,9 @@ export function TransactionsViewContextProvider({
         }
       );
       queryClient.invalidateQueries({
-        predicate: (query) => String(query.queryKey[0]).startsWith("dashboard"),
+        predicate: (query) =>
+          String(query.queryKey[0]).startsWith("dashboard") ||
+          String(query.queryKey).startsWith("dashboard"),
       });
     },
   });
