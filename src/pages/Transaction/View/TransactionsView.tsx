@@ -1,12 +1,6 @@
-import {
-  Box,
-  Heading,
-  HStack,
-  Input,
-  Skeleton,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Box, Heading, HStack, Input, Skeleton } from "@chakra-ui/react";
 import { Card } from "@components/Card";
+import { Tooltip } from "@components/Tooltip";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { TransactionsTable } from "@features/Transaction/View/TransactionsTable";
 import { monthsName } from "@shared/constants/monthsName";

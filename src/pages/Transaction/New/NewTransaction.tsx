@@ -6,11 +6,11 @@ import {
   HStack,
   SimpleGrid,
   Text,
-  Tooltip,
 } from "@chakra-ui/react";
 import { Container } from "@components/Container";
 import { Input } from "@components/Form/Input";
 import { Radio } from "@components/Form/Radio/Radio";
+import { Tooltip } from "@components/Tooltip";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCategorySuggestions } from "@hooks/useCategorySuggestions";
 import { usePaymentMethodSuggestions } from "@hooks/usePaymentMethodSuggestions";
