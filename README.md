@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://xshare-53fbe.web.app/">
+  <a href="https://finapp.live">
     <img src="https://firebasestorage.googleapis.com/v0/b/xshare-53fbe.appspot.com/o/assets%2Fog-image.jpg?alt=media&token=e485982c-1ad3-44f2-8c19-4c988ca194e3" style="border-radius: 8px" alt="FinApp cover" />
   </a>
 </p>
