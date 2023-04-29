@@ -1,4 +1,5 @@
-import { Tooltip as ChakraTooltip, useDisclosure } from "@chakra-ui/react";
+import { Tooltip as ChakraTooltip } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { TooltipProps } from "./Tooltip.types";
 
 export function Tooltip({
@@ -8,32 +9,30 @@ export function Tooltip({
   onMouseLeave,
   ...rest
 }: TooltipProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
 
   function handleClick(event: React.MouseEvent<HTMLDivElement>) {
     onClick?.(event);
-    onClose();
+    setIsOpen(true);
   }
 
   function handleMouseEnter(event: React.MouseEvent<HTMLDivElement>) {
     onMouseEnter?.(event);
-    onOpen();
+    setIsOpen(true);
   }
 
   function handleMouseLeave(event: React.MouseEvent<HTMLDivElement>) {
     onMouseLeave?.(event);
-    onClose();
+    setIsOpen(false);
   }
 
   return (
-    <ChakraTooltip
-      onClick={handleClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      isOpen={isOpen}
-      {...rest}
-    >
-      {children}
+    <ChakraTooltip isOpen={isOpen} {...rest}>
+      {React.cloneElement(children as any, {
+        onClick: handleClick,
+        onMouseEnter: handleMouseEnter,
+        onMouseLeave: handleMouseLeave,
+      })}
     </ChakraTooltip>
   );
 }
