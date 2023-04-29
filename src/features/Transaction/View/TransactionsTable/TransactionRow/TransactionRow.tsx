@@ -5,9 +5,9 @@ import {
   TagLabel,
   TagLeftIcon,
   Td,
-  Tooltip,
   Tr,
 } from "@chakra-ui/react";
+import { Tooltip } from "@components/Tooltip";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";

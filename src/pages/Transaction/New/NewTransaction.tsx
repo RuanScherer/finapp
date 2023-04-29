@@ -5,10 +5,12 @@ import {
   Heading,
   HStack,
   SimpleGrid,
+  Text,
 } from "@chakra-ui/react";
 import { Container } from "@components/Container";
 import { Input } from "@components/Form/Input";
 import { Radio } from "@components/Form/Radio/Radio";
+import { Tooltip } from "@components/Tooltip";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCategorySuggestions } from "@hooks/useCategorySuggestions";
 import { usePaymentMethodSuggestions } from "@hooks/usePaymentMethodSuggestions";
@@ -18,7 +20,7 @@ import { TransactionType } from "@shared/enums/transactionType";
 import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { RxArrowLeft } from "react-icons/rx";
+import { RxArrowLeft, RxInfoCircled } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { NewTransactionFormData } from "./NewTransaction.types";
@@ -200,7 +202,26 @@ export function NewTransaction() {
                     value: TransactionRecurrence.INSTALLMENT,
                     label: "Parcelado",
                   },
-                  { value: TransactionRecurrence.FIXED, label: "Fixo" },
+                  {
+                    value: TransactionRecurrence.FIXED,
+                    label: (
+                      <HStack>
+                        <Text>Fixo</Text>
+                        <Tooltip
+                          label="A transação será repetida mensalmente por 12 meses. Após esse período, ela será encerrada e você precisará cadastrá-la novamente caso queria mantê-la. Mas relaxa, vamos te avisar antes 😉"
+                          placement="top"
+                          borderRadius="md"
+                          fontSize="xs"
+                          textAlign="center"
+                          hasArrow
+                        >
+                          <Box>
+                            <RxInfoCircled size={14} />
+                          </Box>
+                        </Tooltip>
+                      </HStack>
+                    ),
+                  },
                 ]}
                 {...register("recurrence")}
               />

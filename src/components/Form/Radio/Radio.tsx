@@ -2,23 +2,11 @@ import {
   Box,
   Radio as ChakraRadio,
   RadioGroup,
-  RadioProps as ChakraRadioProps,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { forwardRef } from "react";
-
-interface RadioProps extends ChakraRadioProps {
-  label: string;
-  name: string;
-  defaultValue?: string;
-  options: Option[];
-}
-
-interface Option {
-  value: string;
-  label: string;
-}
+import { RadioProps } from "./Radio.types";
 
 export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   ({ label, name, defaultValue, options, ...rest }, ref) => {
