@@ -3,16 +3,16 @@ import { Card } from "@components/Card";
 import { EmptyState } from "@components/EmptyState";
 import { Link } from "react-router-dom";
 import { TransactionsTable } from "./TransactionsTable";
-import { usePendentTransactions } from "./usePendentTransactions";
+import { usePendingTransactions } from "./usePendingTransactions";
 
-export function PendentTransactions() {
-  const { lastPendentTransactions } = usePendentTransactions();
+export function PendingTransactions() {
+  const { lastPendingTransactions } = usePendingTransactions();
 
   return (
     <Card>
-      {lastPendentTransactions ? (
-        lastPendentTransactions.length > 0 ? (
-          <TransactionsTable transactions={lastPendentTransactions} />
+      {lastPendingTransactions ? (
+        lastPendingTransactions.length > 0 ? (
+          <TransactionsTable transactions={lastPendingTransactions} />
         ) : (
           <EmptyState>
             Não existem transações pendentes para serem mostradas.
@@ -26,7 +26,7 @@ export function PendentTransactions() {
         </>
       )}
 
-      {!!lastPendentTransactions?.length && (
+      {!!lastPendingTransactions?.length && (
         <Text
           fontSize="sm"
           color="primary.500"

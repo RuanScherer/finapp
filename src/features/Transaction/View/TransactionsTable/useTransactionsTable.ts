@@ -1,11 +1,10 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { useToast } from "@hooks/useToast";
-import { fauna } from "@services/faunadb";
 import { queryClient } from "@services/queryClient";
+import { supabase } from "@services/supabase";
 import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
-import { query as q } from "faunadb";
 import { useState } from "react";
-import { GetTransactionByRefResult, GetTransactionsByTransactionRefIdResult, Transaction } from "./TransactionsTable.types";
+import { Transaction } from "./TransactionsTable.types";
 
 export function useTransactionsTable() {
   const [warningMessage, setWarningMessage] = useState<string>();
@@ -14,7 +13,7 @@ export function useTransactionsTable() {
   const toast = useToast();
 
   function confirmTransactionRemoval(transaction: Transaction) {
-    if (transaction.transactionRefId) {
+    if (transaction.idOriginalTransaction) {
       if (transaction.recurrence === TransactionRecurrence.INSTALLMENT) {
         setWarningMessage(
           "Essa é uma parcela de uma transação. Se excluí-la, todas as parcelas da mesma transação serão excluídas também."
@@ -50,40 +49,23 @@ export function useTransactionsTable() {
       title: "Sucesso!",
       description: "A transação foi removida.",
       status: "success",
-    })
+    });
     await queryClient.invalidateQueries();
   }
 
   async function removeUniqueTransaction(transaction: Transaction) {
-    await removeTransactionsByRefId([transaction.ref.id])
+    await removeTransactionById(transaction.id);
   }
 
   async function removeRecurrentTransaction(transaction: Transaction) {
-    try {
-      const getTransactionByRefResult = await fauna.query<GetTransactionByRefResult>(
-        q.Get(
-          q.Ref(
-            q.Collection("transactions"),
-            transaction.transactionRefId!
-          )
-        )
-      )
+    const { error, data: originalTransaction } = await supabase
+      .from("transactions")
+      .select("id")
+      .eq("id", transaction.idOriginalTransaction)
+      .limit(1)
+      .single();
 
-      const getTransactionsByTransactionRefIdResult = await fauna.query<GetTransactionsByTransactionRefIdResult>(
-        q.Paginate(
-          q.Match(
-            q.Index("transactions_by_transaction_ref_id"),
-            transaction.transactionRefId!
-          )
-        )
-      )
-      
-      const transactionRefIds = [
-        getTransactionByRefResult.ref.id,
-        ...getTransactionsByTransactionRefIdResult.data.map((ref) => ref.id)
-      ]
-      await removeTransactionsByRefId(transactionRefIds)
-    } catch {
+    if (error) {
       toast({
         title: "Erro ao remover transação.",
         description:
@@ -92,25 +74,14 @@ export function useTransactionsTable() {
       });
       throw new Error("Erro ao remover transação.");
     }
+    // only needed to remove the original transaction 'cause the installments are removed by database's cascade
+    await removeTransactionById(originalTransaction.id);
   }
 
-  async function removeTransactionsByRefId(refIds: Array<string>) {
-    try {
-      await fauna.query(
-        q.Map(
-          refIds,
-          q.Lambda(
-            "refId",
-            q.Delete(
-              q.Ref(
-                q.Collection("transactions"),
-                q.Var("refId")
-              )
-            )
-          )
-        )
-      )
-    } catch {
+  async function removeTransactionById(id: number) {
+    const { error } = await supabase.from("transactions").delete().eq("id", id);
+
+    if (error) {
       toast({
         title: "Erro ao remover transação.",
         description:

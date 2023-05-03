@@ -7,7 +7,7 @@ import { MonthStatProps } from "./MonthStat.types";
 import { useMonthStat } from "./useMonthStat";
 
 export function MonthStat({ type }: MonthStatProps) {
-  const { amount, pendentAmount } = useMonthStat(type);
+  const { amount, pendingAmount } = useMonthStat(type);
 
   let cardBgColor;
   let color;
@@ -41,9 +41,9 @@ export function MonthStat({ type }: MonthStatProps) {
         </Text>
       )}
 
-      {pendentAmount !== undefined && (
+      {pendingAmount !== undefined && (
         <Text fontSize="sm">
-          {currencyFormatter.format(pendentAmount ?? 0)} em aberto
+          {currencyFormatter.format(pendingAmount ?? 0)} em aberto
         </Text>
       )}
     </Card>

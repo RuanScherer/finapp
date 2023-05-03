@@ -1,6 +1,5 @@
 import { useAuth } from "@contexts/AuthContext";
-import { fauna } from "@services/faunadb";
-import { query as q } from "faunadb";
+import { supabase } from "@services/supabase";
 import { useQuery } from "react-query";
 
 export function usePaymentMethodSuggestions() {
@@ -9,17 +8,15 @@ export function usePaymentMethodSuggestions() {
   const query = useQuery(
     "paymentMethodSuggestions",
     async () => {
-      const paymentMethods = await fauna.query<{ data: string[] }>(
-        q.Paginate(
-          q.Distinct(
-            q.Match(
-              q.Index("payment_methods_of_transactions_by_user_id"),
-              user!.id
-            )
-          )
-        )
+      const { error, data } = await supabase.rpc(
+        "get_payment_suggestions_by_user_id",
+        {
+          p_user_id: user!.id,
+        }
       );
-      return paymentMethods.data;
+
+      if (error) throw new Error("Erro ao obter sugestões de pagamento.");
+      return data;
     },
     {
       staleTime: 60 * 60 * 1000, // 1 hour

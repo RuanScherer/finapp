@@ -1,5 +1,5 @@
 import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
-import { Transaction } from "../PendentTransactions.types";
+import { Transaction } from "../PendingTransactions.types";
 import { TransactionRow } from "../TransactionRow";
 
 interface TransactionsTableProps {
@@ -21,10 +21,7 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
 
         <Tbody>
           {transactions.map((transaction) => (
-            <TransactionRow
-              transaction={transaction}
-              key={transaction.ref.id}
-            />
+            <TransactionRow transaction={transaction} key={transaction.id} />
           ))}
         </Tbody>
       </Table>

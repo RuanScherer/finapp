@@ -1,16 +1,11 @@
 import { useAuth } from "@contexts/AuthContext";
 import { useToast } from "@hooks/useToast";
-import { fauna } from "@services/faunadb";
 import { queryClient } from "@services/queryClient";
+import { supabase } from "@services/supabase";
 import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
-import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
-import { query as q } from "faunadb";
 import { useNavigate } from "react-router-dom";
-import {
-  FaunaDBTransaction,
-  NewTransactionFormData,
-} from "./NewTransaction.types";
+import { NewTransactionFormData } from "./NewTransaction.types";
 
 export function useNewTransaction() {
   const { user } = useAuth();
@@ -22,14 +17,14 @@ export function useNewTransaction() {
     delete transaction.installmentValue;
 
     if (transaction.recurrence !== TransactionRecurrence.UNIQUE) {
-      transaction.status = TransactionStatus.PENDENT;
+      transaction.status = TransactionStatus.PENDING;
     }
 
     try {
-      const transactionRefId = await persistTransaction(transaction);
+      const idOriginalTransaction = await persistTransaction(transaction);
 
       if (transaction.recurrence !== TransactionRecurrence.UNIQUE) {
-        await persistInstallments(transaction, transactionRefId);
+        await persistInstallments(transaction, idOriginalTransaction);
       }
 
       queryClient.invalidateQueries();
@@ -50,40 +45,43 @@ export function useNewTransaction() {
   }
 
   async function persistTransaction(data: NewTransactionFormData) {
-    const transaction = await fauna.query<FaunaDBTransaction>(
-      q.Create(q.Collection("transactions"), {
-        data: {
-          ...data,
-          dueDate: q.Date(formatDateForFauna(data.dueDate)),
-          userId: user!.id,
-        },
+    const { error, data: createdTransaction } = await supabase
+      .from("transactions")
+      .insert({
+        name: data.name,
+        amount: data.amount,
+        category: data.category,
+        payment_method: data.paymentMethod,
+        type: data.type,
+        status: data.status,
+        recurrence: data.recurrence,
+        due_date: data.dueDate.toISOString(),
+        installment_amount: data.installmentAmount || null,
+        user_id: user!.id,
       })
-    );
-    return transaction.ref.id;
+      .select("id")
+      .limit(1)
+      .single();
+
+    if (error) throw new Error("Erro ao cadastrar nova transação.");
+    return createdTransaction.id;
   }
 
   async function persistInstallments(
     transaction: NewTransactionFormData,
-    transactionRefId: string
+    idOriginalTransaction: number
   ) {
     const installments = createInstallmentsFromTransaction(
       transaction,
-      transactionRefId
+      idOriginalTransaction
     );
-    await fauna.query(
-      q.Map(
-        installments,
-        q.Lambda(
-          "installment",
-          q.Create(q.Collection("transactions"), { data: q.Var("installment") })
-        )
-      )
-    );
+    const { error } = await supabase.from("transactions").insert(installments);
+    if (error) throw new Error("Erro ao cadastrar parcelas.");
   }
 
   function createInstallmentsFromTransaction(
     transaction: NewTransactionFormData,
-    transactionRefId: string
+    idOriginalTransaction: number
   ) {
     const installments = [];
     let baseDueDateMonth = transaction.dueDate.getMonth();
@@ -107,18 +105,17 @@ export function useNewTransaction() {
             ? transaction.amount / transaction.installmentAmount!
             : transaction.amount,
         category: transaction.category,
-        paymentMethod: transaction.paymentMethod,
+        payment_method: transaction.paymentMethod,
         type: transaction.type,
-        status: TransactionStatus.PENDENT,
-        dueDate: q.Date(formatDateForFauna(dueDate)),
+        status: TransactionStatus.PENDING,
+        due_date: dueDate.toISOString(),
         recurrence: transaction.recurrence,
-        userId: user!.id,
-        transactionRefId,
+        user_id: user!.id,
+        id_original_transaction: idOriginalTransaction,
       } as any;
       if (transaction.recurrence === TransactionRecurrence.INSTALLMENT) {
-        installment.name = `${transaction.name} (${i}/${transaction.installmentAmount})`;
-        installment.installmentOrder = i;
-        installment.installmentAmount = transaction.installmentAmount;
+        installment.installment_number = i;
+        installment.installment_amount = transaction.installmentAmount;
       }
 
       installments.push(installment);

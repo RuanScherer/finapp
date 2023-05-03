@@ -14,12 +14,3 @@ export interface NewTransactionFormData {
   installmentAmount?: number;
   installmentValue?: number;
 }
-
-export type FaunaDBTransaction = {
-  ref: {
-    id: string;
-  };
-  data: NewTransactionFormData & {
-    userId: string;
-  };
-};

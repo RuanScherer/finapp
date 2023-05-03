@@ -1,16 +1,14 @@
 import { useAuth } from "@contexts/AuthContext";
 import { useToast } from "@hooks/useToast";
-import { fauna } from "@services/faunadb";
 import { queryClient } from "@services/queryClient";
+import { supabase } from "@services/supabase";
 import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
-import { query as q } from "faunadb";
+import { toApplicationTransaction } from "@shared/mappers/transactionMapper";
 import { QueryFunctionContext, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   EditTransactionFormData,
-  GetTransactionsByTransactionRefIdResult,
-  Transaction,
-  UpdateTransactionsByRefIdParams
+  UpdateTransactionsByIdParams,
 } from "./EditTransaction.types";
 
 export function useEditTransaction() {
@@ -33,19 +31,27 @@ export function useEditTransaction() {
   ) {
     const transactionId = context.queryKey[1];
 
-    const transaction = await fauna.query<Transaction>(
-      q.Get(q.Ref(q.Collection("transactions"), transactionId))
-    );
+    const { error, data: transaction } = await supabase
+      .from("transactions")
+      .select()
+      .eq("id", transactionId)
+      .limit(1)
+      .single();
 
-    if (transaction.data.userId !== user!.id) {
+    if (error) {
       toast({
         title: "Erro ao obter transação.",
-        description: "Você não tem permissão para editar esta transação.",
+        description:
+          "Não foi possível obter os dados da transação no momento. Por favor, tente novamente.",
         status: "error",
       });
+      throw new Error("Erro ao obter transação.");
+    }
+
+    if (transaction?.user_id !== user!.id) {
       throw new Error("Você não tem permissão para editar esta transação.");
     }
-    return transaction;
+    return toApplicationTransaction(transaction);
   }
 
   async function handleSave(data: EditTransactionFormData) {
@@ -62,62 +68,20 @@ export function useEditTransaction() {
       installmentAmount: data.installmentAmount,
     };
 
-    if (transaction?.data.recurrence === TransactionRecurrence.UNIQUE) {
-      await updateUniqueTransaction(formTransaction);
-    } else {
-      await updateRecurrentTransaction(formTransaction);
-    }
-
-    toast({
-      title: "Sucesso!",
-      description: "As alteracões foram salvas.",
-      status: "success",
-    });
-    await queryClient.invalidateQueries();
-    navigate(-1);
-  }
-
-  async function updateUniqueTransaction(
-    formTransaction: EditTransactionFormData
-  ) {
-    await updateTransactionsByRefId({
-      originalTransactionRefId: transaction!.ref.id,
-      newData: formTransaction,
-    });
-  }
-
-  async function updateRecurrentTransaction(
-    formTransaction: EditTransactionFormData
-  ) {
-    const getTransactionsByTransactionRefIdResult =
-      await fauna.query<GetTransactionsByTransactionRefIdResult>(
-        q.Paginate(
-          q.Match(
-            q.Index("transactions_by_transaction_ref_id"),
-            transaction!.ref.id
-          )
-        )
-      );
-
-    await updateTransactionsByRefId({
-      originalTransactionRefId: transaction!.ref.id,
-      installmentTransactionRefIds:
-        getTransactionsByTransactionRefIdResult.data.map((ref) => ref.id),
-      newData: formTransaction,
-    });
-  }
-
-  async function updateTransactionsByRefId({
-    originalTransactionRefId,
-    installmentTransactionRefIds,
-    newData,
-  }: UpdateTransactionsByRefIdParams) {
     try {
-      await persistTransaction(originalTransactionRefId, newData);
+      await updateTransactionsById({
+        originalTransactionId: transaction!.id,
+        newData: formTransaction,
+        isRecurrent: transaction?.recurrence !== TransactionRecurrence.UNIQUE,
+      });
 
-      if (installmentTransactionRefIds?.length) {
-        await persistInstallments(installmentTransactionRefIds, newData);
-      }
+      toast({
+        title: "Sucesso!",
+        description: "As alteracões foram salvas.",
+        status: "success",
+      });
+      await queryClient.invalidateQueries();
+      navigate(-1);
     } catch {
       toast({
         title: "Erro ao atualizar transação.",
@@ -125,44 +89,58 @@ export function useEditTransaction() {
           "Não foi possível atualizar a transação. Por favor, tente novamente.",
         status: "error",
       });
-      throw new Error("Erro ao atualizar transação.");
     }
   }
 
+  async function updateTransactionsById({
+    originalTransactionId,
+    newData,
+    isRecurrent,
+  }: UpdateTransactionsByIdParams) {
+    await persistTransaction(originalTransactionId, newData);
+
+    if (isRecurrent) await persistInstallments(originalTransactionId, newData);
+  }
+
   async function persistTransaction(
-    originalTransactionRefId: string,
+    originalTransactionId: number,
     newData: EditTransactionFormData
   ) {
-    await fauna.query(
-      q.Update(q.Ref(q.Collection("transactions"), originalTransactionRefId), {
-        data: newData,
+    const { error } = await supabase
+      .from("transactions")
+      .update({
+        name: newData.name,
+        amount: newData.amount,
+        category: newData.category,
+        payment_method: newData.paymentMethod,
+        type: newData.type,
+        status: newData.status,
       })
-    );
+      .eq("id", originalTransactionId);
+
+    if (error) throw new Error("Erro ao atualizar transação.");
   }
 
   async function persistInstallments(
-    installmentTransactionsRefIds: Array<string>,
+    idOriginalTransaction: number,
     newData: EditTransactionFormData
   ) {
-    await fauna.query(
-      q.Map(
-        installmentTransactionsRefIds,
-        q.Lambda(
-          "transactionRefId",
-          q.Update(
-            q.Ref(q.Collection("transactions"), q.Var("transactionRefId")),
-            {
-              data: {
-                ...newData,
-                amount: transaction?.data.recurrence === TransactionRecurrence.INSTALLMENT
-                  ? newData.amount / newData.installmentAmount!
-                  : newData.amount,
-              },
-            }
-          )
-        )
-      )
-    );
+    const { error } = await supabase
+      .from("transactions")
+      .update({
+        name: newData.name,
+        amount:
+          transaction?.recurrence === TransactionRecurrence.INSTALLMENT
+            ? newData.amount / newData.installmentAmount!
+            : newData.amount,
+        category: newData.category,
+        payment_method: newData.paymentMethod,
+        type: newData.type,
+        status: newData.status,
+      })
+      .eq("id_original_transaction", idOriginalTransaction);
+
+    if (error) throw new Error("Erro ao atualizar parcelas.");
   }
 
   return { transaction, handleSave };

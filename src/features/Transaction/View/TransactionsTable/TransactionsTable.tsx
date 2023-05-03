@@ -51,7 +51,7 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
               <TransactionRow
                 transaction={transaction}
                 onRemove={confirmTransactionRemoval}
-                key={transaction.ref.id}
+                key={transaction.id}
               />
             ))}
           </Tbody>

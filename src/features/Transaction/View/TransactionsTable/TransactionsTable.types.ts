@@ -7,9 +7,7 @@ export interface TransactionsTableProps {
 }
 
 export interface Transaction {
-  dueDate: {
-    date: Date;
-  };
+  dueDate: Date | string;
   recurrence: TransactionRecurrence;
   status: TransactionStatus;
   type: TransactionType;
@@ -17,22 +15,8 @@ export interface Transaction {
   category: string;
   amount: number;
   name: string;
-  ref: {
-    id: string;
-  };
-  transactionRefId?: string;
+  id: number;
+  idOriginalTransaction?: number;
   installmentAmount?: number;
-  installmentOrder?: number;
-}
-
-interface DocumentRef {
-  id: string;
-}
-
-export interface GetTransactionByRefResult {
-  ref: DocumentRef;
-}
-
-export interface GetTransactionsByTransactionRefIdResult {
-  data: Array<DocumentRef>;
+  installmentNumber?: number;
 }

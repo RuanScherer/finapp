@@ -1,6 +1,6 @@
 import { Grid, GridItem, Heading } from "@chakra-ui/react";
 import { MonthStat } from "@features/Dashboard/MonthStat";
-import { PendentTransactions } from "@features/Dashboard/PendentTransactions";
+import { PendingTransactions } from "@features/Dashboard/PendingTransactions";
 import { monthsName } from "@shared/constants/monthsName";
 import { TransactionType } from "@shared/enums/transactionType";
 
@@ -35,7 +35,7 @@ export function Dashboard() {
       </GridItem>
 
       <GridItem colSpan={24}>
-        <PendentTransactions />
+        <PendingTransactions />
       </GridItem>
     </Grid>
   );

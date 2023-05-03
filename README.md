@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://finapp.live">
-    <img src="https://firebasestorage.googleapis.com/v0/b/xshare-53fbe.appspot.com/o/assets%2Fog-image.jpg?alt=media&token=e485982c-1ad3-44f2-8c19-4c988ca194e3" style="border-radius: 8px" alt="FinApp cover" />
+    <img src="https://jyipeowzyctjevpvfeac.supabase.co/storage/v1/object/public/assets/og-image.jpg" style="border-radius: 8px" alt="FinApp cover" />
   </a>
 </p>
 
@@ -13,15 +13,15 @@ FinApp is not available for anyone to use because it uses free tiers of some too
 ## Main features
 
 - Add expenses and incomes, called _transactions_ (unique or recurring)
-- See month balance and pendent transactions on the dashboard
+- See month balance and pending transactions on the dashboard
 - See insights about your transactions (soon)
 
 ## Techs, libs and tools used
 
 - [Vite](https://vitejs.dev/)
 - [React](https://reactjs.org/)
-- [FaunaDB](https://fauna.com/)
-- [Firebase (authentication, hosting, storage)](https://firebase.google.com/)
+- [Firebase (hosting)](https://firebase.google.com/)
+- [Supabase (database, authentication, storage)](https://supabase.io/)
 - [React Query](https://tanstack.com/query/latest/)
 - [Chakra UI](https://chakra-ui.com/)
 - [React Hook Form](https://react-hook-form.com/)
@@ -33,9 +33,9 @@ I've enabled [GitHub Discussions](https://github.com/RuanScherer/finapp/discussi
 ## Gallery
 
 <p>
-  <img src="https://firebasestorage.googleapis.com/v0/b/xshare-53fbe.appspot.com/o/assets%2Fdashboard-finapp.jpeg?alt=media&token=ef0357f3-4b9f-49c5-a7e8-dcdb7e9d5ed8" style="border-radius: 8px" alt="FinApp Dashboard" />
+  <img src="https://jyipeowzyctjevpvfeac.supabase.co/storage/v1/object/public/assets/dashboard-finapp.jpeg" style="border-radius: 8px" alt="FinApp Dashboard" />
 </p>
 
 <p>
-  <img src="https://firebasestorage.googleapis.com/v0/b/xshare-53fbe.appspot.com/o/assets%2Ftransactions-finapp.jpeg?alt=media&token=31b04be0-f3d2-46e3-b541-33608387bea6" style="border-radius: 8px" alt="FinApp Dashboard" />
+  <img src="https://jyipeowzyctjevpvfeac.supabase.co/storage/v1/object/public/assets/transactions-finapp.jpeg" style="border-radius: 8px" alt="FinApp Dashboard" />
 </p>

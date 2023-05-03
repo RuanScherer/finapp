@@ -1,15 +1,8 @@
 import { useToast } from "@hooks/useToast";
-import { fauna } from "@services/faunadb";
-import { query as q } from "faunadb";
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut as firebaseSignOut,
-  User,
-} from "firebase/auth";
+import { supabase } from "@services/supabase";
+import { User } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../services/firebase";
 import {
   AuthContextProviderProps,
   AuthContextType,
@@ -20,26 +13,44 @@ const AuthContext = createContext({} as AuthContextType);
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<UserType>();
-  const navigate = useNavigate();
   const toast = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(startSession);
-    return () => unsubscribe();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "INITIAL_SESSION" || event === "USER_UPDATED") {
+        startSession(session?.user);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   async function signInWithGoogle() {
-    const provider = new GoogleAuthProvider();
-    const { user } = await signInWithPopup(auth, provider);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
+    });
 
-    startSession(user);
-    navigate("/dashboard", { replace: true });
+    if (error) {
+      toast({
+        title: "Erro ao fazer login com o Google.",
+        description:
+          "Ocorreu um erro ao fazer login com o Google. Por favor, tente novamente mais tarde.",
+        status: "error",
+      });
+      return;
+    }
   }
 
-  async function startSession(user: User | null) {
+  async function startSession(user?: User) {
     if (!user) return;
 
-    const isUserAllowed = await checkIsUserAllowed(user.email);
+    const isUserAllowed = await checkIsUserAllowed(user?.email);
     if (!isUserAllowed) {
       toast({
         title: "Usuário sem permissão para usar o FinApp.",
@@ -51,19 +62,21 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
 
     fillUserData(user);
+    navigate("/dashboard");
   }
 
-  async function checkIsUserAllowed(userEmail: string | null) {
+  async function checkIsUserAllowed(userEmail?: string) {
     if (!userEmail) return false;
 
-    try {
-      const allowedUser = await fauna.query<{ data: any[] }>(
-        q.Paginate(q.Match(q.Index("allowed_user_by_email"), userEmail), {
-          size: 1,
-        })
-      );
-      return !!allowedUser.data.length;
-    } catch (error) {
+    const { error, count: isUserAllowed } = await supabase
+      .from("allowed_users")
+      .select("id", {
+        count: "exact",
+        head: true,
+      })
+      .eq("email", userEmail);
+
+    if (error) {
       toast({
         title: "Erro ao verificar permissão do usuário.",
         description:
@@ -72,24 +85,26 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       });
       return false;
     }
+
+    return !!isUserAllowed;
   }
 
   function fillUserData(user: User) {
-    const { displayName, photoURL, uid } = user;
+    const { id, user_metadata } = user;
 
-    if (!displayName) {
-      throw new Error("Missing information from Google Account");
+    if (!user_metadata.full_name) {
+      throw new Error("Informacões faltando na conta do usuário.");
     }
 
     setUser({
-      id: uid,
-      name: displayName,
-      avatar: photoURL,
+      id,
+      name: user_metadata.full_name,
+      avatar: user_metadata.avatar_url,
     });
   }
 
   async function signOut() {
-    await firebaseSignOut(auth);
+    await supabase.auth.signOut();
     setUser(undefined);
   }
 

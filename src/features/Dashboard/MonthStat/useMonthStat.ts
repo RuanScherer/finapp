@@ -1,12 +1,9 @@
 import { useAuth } from "@contexts/AuthContext";
 import { useToast } from "@hooks/useToast";
-import { fauna } from "@services/faunadb";
+import { supabase } from "@services/supabase";
 import { TransactionType } from "@shared/enums/transactionType";
-import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
 import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDates";
-import { query as q } from "faunadb";
 import { QueryFunctionContext, useQuery } from "react-query";
-import { GetMonthPendenciesQueryReturn, GetMonthStatQueryReturn } from "./MonthStat.types";
 
 export function useMonthStat(type: TransactionType) {
   const { user } = useAuth();
@@ -20,7 +17,7 @@ export function useMonthStat(type: TransactionType) {
     }
   );
 
-  const { data: pendentAmount } = useQuery(
+  const { data: pendingAmount } = useQuery(
     ["dashboardMonthPendencies", type],
     fetchMonthPendencies,
     {
@@ -28,51 +25,40 @@ export function useMonthStat(type: TransactionType) {
     }
   );
 
-  async function fecthMonthStat() {
-    const { fromDateFormatted, toDateFormatted } = getFormattedDatesForQuery();
+  async function fecthMonthStat({ queryKey }: QueryFunctionContext<any>) {
+    const [_key, transactionType] = queryKey;
+    const { fromDate, toDate } = getRangeDatesForCurrentMonth();
 
-    try {
-      const result = await fauna.query<GetMonthStatQueryReturn>(
-        q.Call(
-          "get_month_balance",
-          type,
-          user!.id,
-          fromDateFormatted,
-          toDateFormatted
-        )
-      );
-      return result.data[0];
-    } catch {
-      showErrorMessage()
+    const { error, data } = await supabase.rpc("get_month_balance", {
+      p_user_id: user!.id,
+      p_type: transactionType,
+      p_from_date: fromDate.toISOString(),
+      p_to_date: toDate.toISOString(),
+    });
+
+    if (error) {
+      showErrorMessage();
+      throw new Error("Erro ao obter dados para o dashboard");
     }
+    return data;
   }
 
   async function fetchMonthPendencies({ queryKey }: QueryFunctionContext<any>) {
     const [_key, transactionType] = queryKey;
-    const { fromDateFormatted, toDateFormatted } = getFormattedDatesForQuery();
-
-    try {
-      const result = await fauna.query<GetMonthPendenciesQueryReturn>(
-        q.Call(
-          "get_month_pendent_balance",
-          transactionType,
-          user!.id,
-          fromDateFormatted,
-          toDateFormatted
-        )
-      );
-      return result.data[0];
-    } catch {
-      showErrorMessage()
-    }
-  }
-
-  function getFormattedDatesForQuery() {
     const { fromDate, toDate } = getRangeDatesForCurrentMonth();
-    const fromDateFormatted = q.Date(formatDateForFauna(fromDate));
-    const toDateFormatted = q.Date(formatDateForFauna(toDate));
 
-    return { fromDateFormatted, toDateFormatted };
+    const { error, data } = await supabase.rpc("get_month_pendencies", {
+      p_user_id: user!.id,
+      p_type: transactionType,
+      p_from_date: fromDate.toISOString(),
+      p_to_date: toDate.toISOString(),
+    });
+
+    if (error) {
+      showErrorMessage();
+      throw new Error("Erro ao obter dados para o dashboard");
+    }
+    return data;
   }
 
   function showErrorMessage() {
@@ -84,5 +70,5 @@ export function useMonthStat(type: TransactionType) {
     });
   }
 
-  return { amount, pendentAmount };
+  return { amount, pendingAmount };
 }

@@ -4,14 +4,12 @@ import { TransactionType } from "@shared/enums/transactionType";
 
 export interface TransactionsViewContextData {
   transactions?: Array<Transaction>;
-  getTransactionsViewByMonth: ({
-    fromDate,
-    toDate,
-  }: GetTransactionsViewByMonthParams) => void;
-  updateTransactionStatusByRefId: ({
-    refId,
-    status,
-  }: UpdateTransactionStatusByRefIdParams) => Promise<void>;
+  getTransactionsViewByMonth: (
+    params: GetTransactionsViewByMonthParams
+  ) => void;
+  updateTransactionStatusById: (
+    params: UpdateTransactionStatusByIdParams
+  ) => Promise<void>;
   refreshTransactionsViewByMonth: () => Promise<void>;
   transactionsQueryDates: {
     fromDate: Date;
@@ -32,15 +30,14 @@ export interface GetTransactionsViewByMonthReturn {
   data: Array<Transaction>;
 }
 
-export interface UpdateTransactionStatusByRefIdParams {
-  refId: string;
+export interface UpdateTransactionStatusByIdParams {
+  id: number;
   status: TransactionStatus;
 }
 
 export interface Transaction {
-  dueDate: {
-    date: Date;
-  };
+  id: number;
+  dueDate: Date | string;
   recurrence: TransactionRecurrence;
   status: TransactionStatus;
   type: TransactionType;
@@ -48,12 +45,7 @@ export interface Transaction {
   category: string;
   amount: number;
   name: string;
-  ref: DocumentRef;
-  transactionRefId?: string;
+  idOriginalTransaction?: number;
   installmentAmount?: number;
-  installmentOrder?: number;
-}
-
-interface DocumentRef {
-  id: string;
+  installmentNumber?: number;
 }
