@@ -24,14 +24,14 @@ export function toDatabaseTransaction(data: Transaction) {
 
 export function toApplicationTransaction(data: DatabaseTransaction) {
   return {
-    id: data.id, // tornar obrigatorio no Transaction
+    id: data.id,
     name: data.name,
     amount: data.amount,
     type: getTransactionType(data.type),
     category: data.category,
     paymentMethod: data.payment_method,
     recurrence: getTransactionRecurrence(data.recurrence),
-    dueDate: formatDateToUTC(new Date(data.due_date)), // testar se data fica certa
+    dueDate: formatDateToUTC(new Date(data.due_date)),
     status: getTransactionStatus(data.status),
     installmentAmount: data.installment_amount ?? undefined,
     installmentNumber: data.installment_number ?? undefined,
