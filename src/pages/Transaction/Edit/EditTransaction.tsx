@@ -1,6 +1,7 @@
 import {
   Alert,
   AlertIcon,
+  AlertStatus,
   Box,
   Button,
   Center,
@@ -63,6 +64,17 @@ const editTransactionFormSchema = yup.object().shape({
   }),
 });
 
+const alertDefaultProps = {
+  status: "info" as AlertStatus,
+  variant: "subtle",
+  w: "full",
+  maxW: "600",
+  mx: "auto",
+  p: 4,
+  mb: 4,
+  borderRadius: "md",
+};
+
 export function EditTransaction() {
   const { transaction, handleSave } = useEditTransaction();
   const { register, control, formState, handleSubmit, watch, setValue, reset } =
@@ -124,21 +136,22 @@ export function EditTransaction() {
       {!!transaction ? (
         <Container py={[4, 8]}>
           {transaction?.recurrence === TransactionRecurrence.INSTALLMENT && (
-            <Alert
-              status="info"
-              variant="subtle"
-              w="full"
-              maxW="600"
-              mx="auto"
-              p={4}
-              mb={4}
-              borderRadius="md"
-            >
+            <Alert {...alertDefaultProps}>
               <AlertIcon />
               <Text fontSize="sm">
                 Você selecionou uma parcela da transação, então trouxemos aqui a
                 transação original. As alterações feitas aqui serão refletidas
                 em todas as parcelas.
+              </Text>
+            </Alert>
+          )}
+
+          {transaction?.recurrence === TransactionRecurrence.FIXED && (
+            <Alert {...alertDefaultProps}>
+              <AlertIcon />
+              <Text fontSize="sm">
+                Você selecionou uma transação fixa. As alterações feitas aqui
+                serão refletidas em todos os outros meses também.
               </Text>
             </Alert>
           )}
