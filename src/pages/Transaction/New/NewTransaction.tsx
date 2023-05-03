@@ -17,7 +17,7 @@ import { usePaymentMethodSuggestions } from "@hooks/usePaymentMethodSuggestions"
 import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";
-import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
+import { formatDateForDatabase } from "@shared/utils/formatDateForDatabase";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { RxArrowLeft, RxInfoCircled } from "react-icons/rx";
@@ -26,7 +26,7 @@ import * as yup from "yup";
 import { NewTransactionFormData } from "./NewTransaction.types";
 import { useNewTransaction } from "./useNewTransaction";
 
-const currentDate = formatDateForFauna(new Date());
+const currentDate = formatDateForDatabase(new Date());
 
 const newTransactionFormSchema = yup.object().shape({
   name: yup.string().required("Nome é obrigatório"),
@@ -66,11 +66,11 @@ const newTransactionFormSchema = yup.object().shape({
 });
 
 export function NewTransaction() {
-  const { register, formState, handleSubmit, watch, setValue } =
+  const { register, control, formState, handleSubmit, watch, setValue } =
     useForm<NewTransactionFormData>({
       resolver: yupResolver(newTransactionFormSchema),
       defaultValues: {
-        status: TransactionStatus.PENDENT,
+        status: TransactionStatus.PENDING,
       },
     });
   const { handleSave } = useNewTransaction();
@@ -85,7 +85,7 @@ export function NewTransaction() {
 
   useEffect(() => {
     if (recurrence !== TransactionRecurrence.UNIQUE) {
-      setValue("status", TransactionStatus.PENDENT);
+      setValue("status", TransactionStatus.PENDING);
     }
 
     if (recurrence === TransactionRecurrence.FIXED) {
@@ -216,13 +216,14 @@ export function NewTransaction() {
                           hasArrow
                         >
                           <Box>
-                            <RxInfoCircled size={14} />
+                            <RxInfoCircled size={14} strokeWidth={0.2} />
                           </Box>
                         </Tooltip>
                       </HStack>
                     ),
                   },
                 ]}
+                control={control}
                 {...register("recurrence")}
               />
 
@@ -233,17 +234,19 @@ export function NewTransaction() {
                   { value: TransactionType.INCOME, label: "Receita" },
                   { value: TransactionType.OUTCOME, label: "Despesa" },
                 ]}
+                control={control}
                 {...register("type")}
               />
 
-              {(!recurrence || recurrence === "UNICO") && (
+              {(!recurrence || recurrence === TransactionRecurrence.UNIQUE) && (
                 <Radio
                   label="Situação"
-                  defaultValue={TransactionStatus.PENDENT}
+                  defaultValue={TransactionStatus.PENDING}
                   options={[
-                    { value: TransactionStatus.PENDENT, label: "Pendente" },
+                    { value: TransactionStatus.PENDING, label: "Pendente" },
                     { value: TransactionStatus.SETTLED, label: "Quitado" },
                   ]}
+                  control={control}
                   {...register("status")}
                 />
               )}

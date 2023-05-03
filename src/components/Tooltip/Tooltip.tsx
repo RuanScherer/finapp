@@ -12,16 +12,17 @@ export function Tooltip({
   const [isOpen, setIsOpen] = useState(false);
 
   function handleClick(event: React.MouseEvent<HTMLDivElement>) {
-    onClick?.(event);
+    (children as any).props?.onClick?.(event);
     setIsOpen(true);
   }
 
   function handleMouseEnter(event: React.MouseEvent<HTMLDivElement>) {
-    onMouseEnter?.(event);
+    (children as any).props?.onMouseEnter?.(event);
     setIsOpen(true);
   }
 
   function handleMouseLeave(event: React.MouseEvent<HTMLDivElement>) {
+    (children as any).props?.onMouseLeave?.(event);
     onMouseLeave?.(event);
     setIsOpen(false);
   }

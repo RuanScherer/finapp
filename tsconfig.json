@@ -25,7 +25,8 @@
       "@services/*": ["services/*"],
       "@shared/*": ["shared/*"],
       "@theme/*": ["theme/*"],
-      "@assets/*": ["./../assets/*"]
+      "@assets/*": ["./../assets/*"],
+      "@type/*": ["types/*"]
     }
   },
   "include": ["src"],

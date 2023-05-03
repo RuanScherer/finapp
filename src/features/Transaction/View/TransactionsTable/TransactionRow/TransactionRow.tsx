@@ -39,22 +39,22 @@ const defaultActionTooltipProps = {
 };
 
 export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
-  const { updateTransactionStatusByRefId } = useTransactionsView();
+  const { updateTransactionStatusById } = useTransactionsView();
   const navigate = useNavigate();
 
   function handleSettleTransaction(event: React.MouseEvent) {
     event.stopPropagation();
-    updateTransactionStatusByRefId({
-      refId: transaction.ref.id,
+    updateTransactionStatusById({
+      id: transaction.id,
       status: TransactionStatus.SETTLED,
     });
   }
 
   function handleMakeTransactionPending(event: React.MouseEvent) {
     event.stopPropagation();
-    updateTransactionStatusByRefId({
-      refId: transaction.ref.id,
-      status: TransactionStatus.PENDENT,
+    updateTransactionStatusById({
+      id: transaction.id,
+      status: TransactionStatus.PENDING,
     });
   }
 
@@ -64,15 +64,15 @@ export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
   }
 
   function handleSelectTransaction() {
-    const id = transaction.transactionRefId || transaction.ref.id;
+    const id = transaction.idOriginalTransaction || transaction.id;
     navigate(`/transaction/${id}`);
   }
 
   function getTransactionName() {
     let name = transaction.name;
 
-    if (transaction.installmentOrder && transaction.installmentAmount) {
-      name += ` (${transaction.installmentOrder}/${transaction.installmentAmount})`;
+    if (transaction.installmentNumber && transaction.installmentAmount) {
+      name += ` (${transaction.installmentNumber}/${transaction.installmentAmount})`;
     }
     return name;
   }
@@ -112,10 +112,10 @@ export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
         <Tag
           {...defaultTagProps}
           colorScheme={
-            transaction.status === TransactionStatus.PENDENT ? "red" : "green"
+            transaction.status === TransactionStatus.PENDING ? "red" : "green"
           }
         >
-          {transaction.status === TransactionStatus.PENDENT ? (
+          {transaction.status === TransactionStatus.PENDING ? (
             <>
               <TagLeftIcon as={RxClock} strokeWidth={0.5} />
               <TagLabel>Pendente</TagLabel>
@@ -131,7 +131,7 @@ export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
 
       <Td>
         <HStack gap="1">
-          {transaction.status === TransactionStatus.PENDENT ? (
+          {transaction.status === TransactionStatus.PENDING ? (
             <Tooltip {...defaultActionTooltipProps} label="Quitar transação">
               <IconButton
                 size="sm"

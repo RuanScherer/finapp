@@ -1,19 +1,17 @@
 import { useAuth } from "@contexts/AuthContext";
 import { useToast } from "@hooks/useToast";
-import { fauna } from "@services/faunadb";
 import { queryClient } from "@services/queryClient";
-import { formatDateForFauna } from "@shared/utils/formatDateForFauna";
+import { supabase } from "@services/supabase";
+import { toApplicationTransaction } from "@shared/mappers/transactionMapper";
 import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDates";
-import { query as q } from "faunadb";
 import { createContext, useContext, useState } from "react";
 import { QueryFunctionContext, useMutation, useQuery } from "react-query";
 import {
   GetTransactionsViewByMonthParams,
-  GetTransactionsViewByMonthReturn,
   Transaction,
   TransactionsViewContextData,
   TransactionsViewContextProviderProps,
-  UpdateTransactionStatusByRefIdParams,
+  UpdateTransactionStatusByIdParams,
 } from "./TransactionsViewContext.types";
 
 const TransactionsViewContext = createContext<TransactionsViewContextData>(
@@ -39,14 +37,14 @@ export function TransactionsViewContextProvider({
       }
     );
 
-  const updateTransactionStatusByRefIdMutation = useMutation<
+  const updateTransactionStatusByIdMutation = useMutation<
     void,
     unknown,
-    UpdateTransactionStatusByRefIdParams
-  >(doUpdateTransactionStatusByRefId, {
+    UpdateTransactionStatusByIdParams
+  >(doUpdateTransactionStatusById, {
     onSuccess: (_data, variables) => {
       const originalTransaction = transactions!.find(
-        (transaction) => transaction.ref.id === variables.refId
+        (transaction) => transaction.id === variables.id
       );
       const updatedTransaction: Transaction = {
         ...originalTransaction!,
@@ -56,7 +54,7 @@ export function TransactionsViewContextProvider({
         ["transactionsByMonth", transactionsQueryDates],
         (oldData?: Transaction[]) => {
           const newData = oldData?.map((transaction) => {
-            if (transaction.ref.id === variables.refId) {
+            if (transaction.id === variables.id) {
               return updatedTransaction;
             }
             return transaction;
@@ -69,6 +67,10 @@ export function TransactionsViewContextProvider({
           String(query.queryKey[0]).startsWith("dashboard") ||
           String(query.queryKey).startsWith("dashboard"),
       });
+      queryClient.invalidateQueries([
+        "transaction",
+        String(updatedTransaction.id),
+      ]);
     },
   });
 
@@ -77,27 +79,22 @@ export function TransactionsViewContextProvider({
   }: QueryFunctionContext<any>) {
     const [_key, { fromDate, toDate }] = queryKey;
 
-    const fromDateFormatted = q.Date(formatDateForFauna(fromDate));
-    const toDateFormatted = q.Date(formatDateForFauna(toDate));
+    const { error, data } = await supabase.rpc("get_transactions_by_month", {
+      p_user_id: user!.id,
+      p_from_date: fromDate,
+      p_to_date: toDate,
+    });
 
-    try {
-      const result = await fauna.query<GetTransactionsViewByMonthReturn>(
-        q.Call(
-          "get_transactions_view_by_month",
-          user!.id,
-          fromDateFormatted,
-          toDateFormatted
-        )
-      );
-      return result.data;
-    } catch {
+    if (error) {
       toast({
         title: "Erro ao buscar transações.",
         description:
           "Ocorreu um erro ao buscar as transações do mês. Por favor, tente recarregar a página.",
         status: "error",
       });
+      throw new Error("Erro ao buscar transações.");
     }
+    return data.map(toApplicationTransaction);
   }
 
   function getTransactionsViewByMonth({
@@ -107,19 +104,16 @@ export function TransactionsViewContextProvider({
     setTransactionsQueryDates({ fromDate, toDate });
   }
 
-  async function doUpdateTransactionStatusByRefId({
-    refId,
+  async function doUpdateTransactionStatusById({
+    id,
     status,
-  }: UpdateTransactionStatusByRefIdParams) {
-    try {
-      await fauna.query(
-        q.Update(q.Ref(q.Collection("transactions"), refId), {
-          data: {
-            status,
-          },
-        })
-      );
-    } catch {
+  }: UpdateTransactionStatusByIdParams) {
+    const { error } = await supabase
+      .from("transactions")
+      .update({ status })
+      .eq("id", id);
+
+    if (error) {
       toast({
         title: "Erro ao atualizar transação.",
         description:
@@ -130,11 +124,11 @@ export function TransactionsViewContextProvider({
     }
   }
 
-  async function updateTransactionStatusByRefId({
-    refId,
+  async function updateTransactionStatusById({
+    id,
     status,
-  }: UpdateTransactionStatusByRefIdParams) {
-    await updateTransactionStatusByRefIdMutation.mutateAsync({ refId, status });
+  }: UpdateTransactionStatusByIdParams) {
+    await updateTransactionStatusByIdMutation.mutateAsync({ id, status });
   }
 
   async function refreshTransactionsViewByMonth() {
@@ -146,7 +140,7 @@ export function TransactionsViewContextProvider({
       value={{
         transactions,
         getTransactionsViewByMonth,
-        updateTransactionStatusByRefId,
+        updateTransactionStatusById,
         refreshTransactionsViewByMonth,
         transactionsQueryDates,
       }}

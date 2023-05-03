@@ -1,1 +1,0 @@
-export { PendentTransactions } from './PendentTransactions';

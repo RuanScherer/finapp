@@ -14,29 +14,19 @@ export interface EditTransactionFormData {
 }
 
 export type Transaction = {
-  ref: DocumentRef;
-  data: {
-    userId: string;
-    name: string;
-    amount: number;
-    type: TransactionType;
-    category: string;
-    paymentMethod: string;
-    recurrence: TransactionRecurrence;
-    installmentAmount: number;
-  };
+  id: number;
+  userId: string;
+  name: string;
+  amount: number;
+  type: TransactionType;
+  category: string;
+  paymentMethod: string;
+  recurrence: TransactionRecurrence;
+  installmentAmount: number;
 };
 
-export interface UpdateTransactionsByRefIdParams {
-  originalTransactionRefId: string;
-  installmentTransactionRefIds?: Array<string>;
+export interface UpdateTransactionsByIdParams {
+  originalTransactionId: number;
   newData: EditTransactionFormData;
-}
-
-interface DocumentRef {
-  id: string;
-}
-
-export interface GetTransactionsByTransactionRefIdResult {
-  data: Array<DocumentRef>;
+  isRecurrent: boolean;
 }

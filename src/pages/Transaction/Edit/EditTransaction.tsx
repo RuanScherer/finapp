@@ -1,5 +1,7 @@
 import {
-  Alert, AlertIcon, Box,
+  Alert,
+  AlertIcon,
+  Box,
   Button,
   Center,
   Flex,
@@ -7,7 +9,7 @@ import {
   HStack,
   SimpleGrid,
   Spinner,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { Container } from "@components/Container";
 import { Input } from "@components/Form/Input";
@@ -63,7 +65,7 @@ const editTransactionFormSchema = yup.object().shape({
 
 export function EditTransaction() {
   const { transaction, handleSave } = useEditTransaction();
-  const { register, formState, handleSubmit, watch, setValue, reset } =
+  const { register, control, formState, handleSubmit, watch, setValue, reset } =
     useForm<EditTransactionFormData>({
       resolver: yupResolver(editTransactionFormSchema),
     });
@@ -74,18 +76,18 @@ export function EditTransaction() {
   useEffect(() => {
     if (!transaction) return;
 
-    reset(transaction.data);
-    if (transaction.data.recurrence === TransactionRecurrence.INSTALLMENT) {
+    reset(transaction);
+    if (transaction.recurrence === TransactionRecurrence.INSTALLMENT) {
       const installmentValue =
-        transaction.data.amount / transaction.data.installmentAmount;
+        transaction.amount / transaction.installmentAmount!;
       setValue("installmentValue", Number(installmentValue.toFixed(2)));
     }
   }, [transaction, reset]);
 
-  const recurrence = transaction?.data.recurrence;
+  const recurrence = transaction?.recurrence;
   const amount = watch("amount");
   const installmentAmount = watch("installmentAmount");
-  const installmentValue = watch("installmentValue");
+  watch("installmentValue");
 
   function handleBack() {
     navigate(-1);
@@ -121,7 +123,7 @@ export function EditTransaction() {
 
       {!!transaction ? (
         <Container py={[4, 8]}>
-          {transaction?.data.recurrence === TransactionRecurrence.INSTALLMENT && (
+          {transaction?.recurrence === TransactionRecurrence.INSTALLMENT && (
             <Alert
               status="info"
               variant="subtle"
@@ -134,8 +136,9 @@ export function EditTransaction() {
             >
               <AlertIcon />
               <Text fontSize="sm">
-                Você selecionou uma parcela da transação, então trouxemos aqui a transação original.
-                As alterações feitas aqui serão refletidas em todas as parcelas.
+                Você selecionou uma parcela da transação, então trouxemos aqui a
+                transação original. As alterações feitas aqui serão refletidas
+                em todas as parcelas.
               </Text>
             </Alert>
           )}
@@ -209,22 +212,22 @@ export function EditTransaction() {
               <SimpleGrid columns={2} gap={4}>
                 <Radio
                   label="Tipo"
-                  defaultValue={TransactionType.OUTCOME}
                   options={[
                     { value: TransactionType.INCOME, label: "Receita" },
                     { value: TransactionType.OUTCOME, label: "Despesa" },
                   ]}
+                  control={control}
                   {...register("type")}
                 />
 
                 {recurrence === TransactionRecurrence.UNIQUE && (
                   <Radio
                     label="Situação"
-                    defaultValue={TransactionStatus.PENDENT}
                     options={[
-                      { value: TransactionStatus.PENDENT, label: "Pendente" },
+                      { value: TransactionStatus.PENDING, label: "Pendente" },
                       { value: TransactionStatus.SETTLED, label: "Quitado" },
                     ]}
+                    control={control}
                     {...register("status")}
                   />
                 )}

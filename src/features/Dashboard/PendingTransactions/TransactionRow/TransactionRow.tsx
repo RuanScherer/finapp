@@ -2,7 +2,7 @@ import { Tag, TagLabel, Td, Text, theme, Tr } from "@chakra-ui/react";
 import { TransactionType } from "@shared/enums/transactionType";
 import { currencyFormatter } from "@shared/utils/currencyFormatter";
 import { RxArrowBottomLeft, RxArrowTopRight } from "react-icons/rx";
-import { Transaction } from "../PendentTransactions.types";
+import { Transaction } from "../PendingTransactions.types";
 
 interface TransactionRowProps {
   transaction: Transaction;
