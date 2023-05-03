@@ -20,15 +20,3 @@ export interface Transaction {
   installmentAmount?: number;
   installmentNumber?: number;
 }
-
-interface DocumentRef {
-  id: string;
-}
-
-export interface GetTransactionByRefResult {
-  ref: DocumentRef;
-}
-
-export interface GetTransactionsByTransactionRefIdResult {
-  data: Array<DocumentRef>;
-}
