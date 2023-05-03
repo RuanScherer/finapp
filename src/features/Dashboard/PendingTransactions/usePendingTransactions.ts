@@ -1,6 +1,7 @@
 import { useAuth } from "@contexts/AuthContext";
 import { useToast } from "@hooks/useToast";
 import { supabase } from "@services/supabase";
+import { getTransactionType } from "@shared/enums/transactionType";
 import { getRangeDatesForCurrentMonth } from "@shared/utils/getRangeDates";
 import { useQuery } from "react-query";
 
@@ -37,7 +38,10 @@ export function usePendingTransactions() {
       });
       throw new Error("Erro ao buscar transacões pendentes para o dashboard.");
     }
-    return data;
+    return data.map((transaction) => ({
+      ...transaction,
+      type: getTransactionType(transaction.type),
+    }));
   }
 
   return { lastPendingTransactions };
