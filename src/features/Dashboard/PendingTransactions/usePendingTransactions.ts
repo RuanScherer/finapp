@@ -9,7 +9,7 @@ export function usePendingTransactions() {
   const toast = useToast();
 
   const { data: lastPendingTransactions } = useQuery(
-    "dashboardPendentTransactions",
+    "dashboardPendingTransactions",
     fetchPendingTransactions,
     {
       staleTime: 10 * 60 * 1000, // 10 minutes
