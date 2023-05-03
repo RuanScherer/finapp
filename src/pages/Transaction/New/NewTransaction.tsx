@@ -97,6 +97,8 @@ export function NewTransaction() {
     navigate(-1);
   }
 
+  console.log(formState.errors);
+
   return (
     <>
       <Box bgColor="primary.500" shadow="md">
