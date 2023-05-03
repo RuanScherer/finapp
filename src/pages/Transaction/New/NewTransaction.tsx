@@ -70,6 +70,8 @@ export function NewTransaction() {
     useForm<NewTransactionFormData>({
       resolver: yupResolver(newTransactionFormSchema),
       defaultValues: {
+        type: TransactionType.OUTCOME,
+        recurrence: TransactionRecurrence.UNIQUE,
         status: TransactionStatus.PENDING,
       },
     });
