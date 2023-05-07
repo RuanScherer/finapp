@@ -8,7 +8,6 @@ import { createContext, useContext, useState } from "react";
 import { QueryFunctionContext, useMutation, useQuery } from "react-query";
 import {
   GetTransactionsViewByMonthParams,
-  Transaction,
   TransactionsViewContextData,
   TransactionsViewContextProviderProps,
   UpdateTransactionStatusByIdParams,
@@ -46,22 +45,6 @@ export function TransactionsViewContextProvider({
       const originalTransaction = transactions!.find(
         (transaction) => transaction.id === variables.id
       );
-      const updatedTransaction: Transaction = {
-        ...originalTransaction!,
-        status: variables.status,
-      };
-      queryClient.setQueryData(
-        ["transactionsByMonth", transactionsQueryDates],
-        (oldData?: Transaction[]) => {
-          const newData = oldData?.map((transaction) => {
-            if (transaction.id === variables.id) {
-              return updatedTransaction;
-            }
-            return transaction;
-          });
-          return newData ?? [];
-        }
-      );
       queryClient.invalidateQueries({
         predicate: (query) =>
           String(query.queryKey[0]).startsWith("dashboard") ||
@@ -69,8 +52,9 @@ export function TransactionsViewContextProvider({
       });
       queryClient.invalidateQueries([
         "transaction",
-        String(updatedTransaction.id),
+        String(originalTransaction!.id),
       ]);
+      refetchTransactionsViewByMonth();
     },
   });
 
@@ -94,6 +78,7 @@ export function TransactionsViewContextProvider({
       });
       throw new Error("Erro ao buscar transações.");
     }
+    console.log(data);
     return data.map(toApplicationTransaction);
   }
 

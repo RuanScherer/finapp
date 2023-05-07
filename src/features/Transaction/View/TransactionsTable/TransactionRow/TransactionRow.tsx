@@ -7,7 +7,6 @@ import {
   Td,
   Tr,
 } from "@chakra-ui/react";
-import { Tooltip } from "@components/Tooltip";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";
@@ -132,41 +131,32 @@ export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
       <Td>
         <HStack gap="1">
           {transaction.status === TransactionStatus.PENDING ? (
-            <Tooltip {...defaultActionTooltipProps} label="Quitar transação">
-              <IconButton
-                size="sm"
-                colorScheme="green"
-                aria-label="Quitar transação"
-                icon={<RxCheck size={20} />}
-                borderRadius="full"
-                onClick={handleSettleTransaction}
-              />
-            </Tooltip>
-          ) : (
-            <Tooltip
-              {...defaultActionTooltipProps}
-              label="Tornar transação pendente"
-            >
-              <IconButton
-                size="sm"
-                colorScheme="red"
-                aria-label="Tornar transação pendente"
-                icon={<RxCounterClockwiseClock size={18} />}
-                borderRadius="full"
-                onClick={handleMakeTransactionPending}
-              />
-            </Tooltip>
-          )}
-
-          <Tooltip {...defaultActionTooltipProps} label="Excluir transação">
             <IconButton
               size="sm"
-              aria-label="Excluir transação"
-              icon={<RxTrash size={18} />}
+              colorScheme="green"
+              aria-label="Quitar transação"
+              icon={<RxCheck size={20} />}
               borderRadius="full"
-              onClick={handleRemoveTransaction}
+              onClick={handleSettleTransaction}
             />
-          </Tooltip>
+          ) : (
+            <IconButton
+              size="sm"
+              colorScheme="red"
+              aria-label="Tornar transação pendente"
+              icon={<RxCounterClockwiseClock size={18} />}
+              borderRadius="full"
+              onClick={handleMakeTransactionPending}
+            />
+          )}
+
+          <IconButton
+            size="sm"
+            aria-label="Excluir transação"
+            icon={<RxTrash size={18} />}
+            borderRadius="full"
+            onClick={handleRemoveTransaction}
+          />
         </HStack>
       </Td>
     </Tr>
