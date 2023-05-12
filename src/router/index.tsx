@@ -3,6 +3,7 @@ import { Header } from "@components/Header";
 import { AuthContextProvider } from "@contexts/AuthContext";
 import { TransactionsViewContextProvider } from "@contexts/TransactionsViewContext";
 import { Dashboard } from "@pages/Dashboard";
+import { Insights } from "@pages/Insights";
 import { SignIn } from "@pages/SignIn";
 import { EditTransaction } from "@pages/Transaction/Edit";
 import { NewTransaction } from "@pages/Transaction/New";
@@ -56,6 +57,8 @@ export function Router() {
                   </TransactionsViewContextProvider>
                 }
               />
+
+              <Route path="/insights" element={<Insights />} />
             </Route>
 
             <Route path="/transaction/new" element={<NewTransaction />} />

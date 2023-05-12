@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { Container } from "@components/Container";
 import { useAuth } from "@contexts/AuthContext";
+import { FiTrendingUp } from "react-icons/fi";
 import { RxDashboard, RxExit, RxPlus, RxStack } from "react-icons/rx";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { ConfirmSignOutModal } from "./ConfirmSignOutModal";
@@ -111,7 +112,7 @@ export function Header() {
 
             <Link to="/transactions" icon={<RxStack />} label="Transações" />
 
-            {/* <Link to="/insights" icon={<FiTrendingUp />} label="Métricas" /> */}
+            <Link to="/insights" icon={<FiTrendingUp />} label="Métricas" />
           </HStack>
         </Container>
       </Box>
