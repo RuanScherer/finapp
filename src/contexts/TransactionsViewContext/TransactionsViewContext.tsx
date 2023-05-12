@@ -65,7 +65,9 @@ export function TransactionsViewContextProvider({
       queryClient.invalidateQueries({
         predicate: (query) =>
           String(query.queryKey[0]).startsWith("dashboard") ||
-          String(query.queryKey).startsWith("dashboard"),
+          String(query.queryKey).startsWith("dashboard") ||
+          String(query.queryKey[0]).startsWith("insights") ||
+          String(query.queryKey).startsWith("insights"),
       });
       queryClient.invalidateQueries([
         "transaction",

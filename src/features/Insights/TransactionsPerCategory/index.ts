@@ -1,1 +1,0 @@
-export { TransactionsPerCategory } from './TransactionsPerCategory';

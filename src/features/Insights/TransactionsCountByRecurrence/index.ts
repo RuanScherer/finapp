@@ -1,0 +1,1 @@
+export { TransactionsCountByRecurrence } from "./TransactionsCountByRecurrence";

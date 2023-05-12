@@ -141,6 +141,23 @@ export interface Database {
         }
         Returns: string[]
       }
+      get_pending_installments_by_transaction: {
+        Args: {
+          p_user_id: string
+          p_from_date: string
+          p_to_date: string
+          p_transaction_type: string
+        }
+        Returns: Database["public"]["CompositeTypes"]["pending_installments_by_transaction"][]
+      }
+      get_spent_amount_by_category: {
+        Args: {
+          p_user_id: string
+          p_from_date: string
+          p_to_date: string
+        }
+        Returns: Database["public"]["CompositeTypes"]["spent_amount_by_category"][]
+      }
       get_transactions_by_month: {
         Args: {
           p_user_id: string
@@ -164,17 +181,39 @@ export interface Database {
           user_id: string
         }[]
       }
+      get_transactions_count_by_recurrence: {
+        Args: {
+          p_user_id: string
+          p_from_date: string
+          p_to_date: string
+          p_transaction_type: string
+        }
+        Returns: Database["public"]["CompositeTypes"]["transaction_count_by_recurrence"][]
+      }
     }
     Enums: {
       [_ in never]: never
     }
     CompositeTypes: {
+      pending_installments_by_transaction: {
+        name: string
+        installment_amount: number
+        pending_installment_amount: number
+      }
       pending_transaction: {
         id: number
         name: string
         amount: number
         category: string
         type: string
+      }
+      spent_amount_by_category: {
+        category: string
+        amount: number
+      }
+      transaction_count_by_recurrence: {
+        recurrence: string
+        count: number
       }
     }
   }

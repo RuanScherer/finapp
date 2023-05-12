@@ -18,3 +18,18 @@ export function getTransactionRecurrence(
       throw new Error("Invalid transaction recurrence");
   }
 }
+
+export function getTransactionRecurrenceLabel(
+  recurrence: TransactionRecurrence
+): string {
+  switch (recurrence) {
+    case TransactionRecurrence.UNIQUE:
+      return "Única";
+    case TransactionRecurrence.INSTALLMENT:
+      return "Parcelada";
+    case TransactionRecurrence.FIXED:
+      return "Fixa";
+    default:
+      return "";
+  }
+}

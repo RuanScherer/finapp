@@ -29,7 +29,7 @@ export function Dashboard() {
 
       {/* === Pendências === */}
       <GridItem colSpan={24} mt={2}>
-        <Heading fontSize="xl" fontWeight="semibold" w="full">
+        <Heading fontSize="xl" fontWeight="medium" w="full">
           Pendências
         </Heading>
       </GridItem>
