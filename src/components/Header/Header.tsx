@@ -10,10 +10,11 @@ import {
   Image,
   Text,
   useDisclosure,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import { Container } from "@components/Container";
 import { useAuth } from "@contexts/AuthContext";
+import { NotificationsCentre } from "@features/NotificationsCentre/NotificationsCentre";
 import { FiTrendingUp } from "react-icons/fi";
 import { RxDashboard, RxExit, RxPlus, RxStack } from "react-icons/rx";
 import { Link as ReactRouterLink } from "react-router-dom";
@@ -64,6 +65,8 @@ export function Header() {
                   }}
                 />
               </ReactRouterLink>
+
+              <NotificationsCentre />
 
               <IconButton
                 bgColor="whiteAlpha.200"

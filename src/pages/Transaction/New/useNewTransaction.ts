@@ -113,7 +113,7 @@ export function useNewTransaction() {
         user_id: user!.id,
         id_original_transaction: idOriginalTransaction,
       } as any;
-      if (transaction.recurrence === TransactionRecurrence.INSTALLMENT) {
+      if (transaction.recurrence !== TransactionRecurrence.UNIQUE) {
         installment.installment_number = i;
         installment.installment_amount = transaction.installmentAmount;
       }

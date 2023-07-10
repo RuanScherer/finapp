@@ -4,6 +4,7 @@ import { AuthContextProvider } from "@contexts/AuthContext";
 import { TransactionsViewContextProvider } from "@contexts/TransactionsViewContext";
 import { Dashboard } from "@pages/Dashboard";
 import { Insights } from "@pages/Insights";
+import { Notifications } from "@pages/Notifications";
 import { SignIn } from "@pages/SignIn";
 import { EditTransaction } from "@pages/Transaction/Edit";
 import { NewTransaction } from "@pages/Transaction/New";
@@ -66,6 +67,7 @@ export function Router() {
               path="/transaction/:transactionId"
               element={<EditTransaction />}
             />
+            <Route path="/notifications" element={<Notifications />} />
           </Route>
         </Routes>
       </AuthContextProvider>
