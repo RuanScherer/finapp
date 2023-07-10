@@ -48,6 +48,38 @@ export interface Database {
           id?: never
         }
       }
+      notifications: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          id: number
+          read: boolean | null
+          title: string
+          transaction_id: number | null
+          user_id: string | null
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string
+          id?: never
+          read?: boolean | null
+          title: string
+          transaction_id?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: never
+          read?: boolean | null
+          title?: string
+          transaction_id?: number | null
+          user_id?: string | null
+        }
+      }
       transactions: {
         Row: {
           amount: number

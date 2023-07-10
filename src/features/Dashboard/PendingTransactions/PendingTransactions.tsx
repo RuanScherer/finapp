@@ -1,7 +1,8 @@
-import { Skeleton, Text } from "@chakra-ui/react";
+import { Skeleton } from "@chakra-ui/react";
 import { Card } from "@components/Card";
 import { EmptyState } from "@components/EmptyState";
-import { Link } from "react-router-dom";
+import { Link } from "@components/Link";
+import { Link as ReactRouterLink } from "react-router-dom";
 import { TransactionsTable } from "./TransactionsTable";
 import { usePendingTransactions } from "./usePendingTransactions";
 
@@ -27,20 +28,9 @@ export function PendingTransactions() {
       )}
 
       {!!lastPendingTransactions?.length && (
-        <Text
-          fontSize="sm"
-          color="primary.500"
-          cursor="pointer"
-          textAlign="center"
-          w="fit-content"
-          mx="auto"
-          mt="4"
-          _hover={{
-            filter: "brightness(0.8)",
-          }}
-        >
-          <Link to="/transactions">Ver tudo</Link>
-        </Text>
+        <Link mt={4}>
+          <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
+        </Link>
       )}
     </Card>
   );
