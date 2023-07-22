@@ -1,7 +1,14 @@
-import { Box, Heading, HStack, Input, Skeleton } from "@chakra-ui/react";
+import {
+  Box, Center, Heading,
+  HStack,
+  Input,
+  List, Skeleton,
+  Spinner
+} from "@chakra-ui/react";
 import { Card } from "@components/Card";
 import { Tooltip } from "@components/Tooltip";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
+import { TransactionsList } from "@features/Transaction/View/TransactionsList";
 import { TransactionsTable } from "@features/Transaction/View/TransactionsTable";
 import { monthsName } from "@shared/constants/monthsName";
 import { formatDateToUTC } from "@shared/utils/formatDateToUTC";
@@ -71,7 +78,7 @@ export function TransactionsView() {
         </HStack>
       </HStack>
 
-      <Card>
+      <Card display={["none", "none", "block"]}>
         {transactions ? (
           <TransactionsTable transactions={transactions} />
         ) : (
@@ -89,6 +96,18 @@ export function TransactionsView() {
               ))}
           </>
         )}
+      </Card>
+
+      <Card p={0}>
+        <List display={["flex", "flex", "none"]} flexDirection="column">
+          {transactions ? (
+            <TransactionsList transactions={transactions} />
+          ) : (
+            <Center p={4}>
+              <Spinner color="primary.500" speed="1s" />
+            </Center>
+          )}
+        </List>
       </Card>
     </>
   );

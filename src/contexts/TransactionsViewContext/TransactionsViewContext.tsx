@@ -10,7 +10,7 @@ import {
   GetTransactionsViewByMonthParams,
   TransactionsViewContextData,
   TransactionsViewContextProviderProps,
-  UpdateTransactionStatusByIdParams,
+  UpdateTransactionStatusByIdParams
 } from "./TransactionsViewContext.types";
 
 const TransactionsViewContext = createContext<TransactionsViewContextData>(
@@ -80,7 +80,6 @@ export function TransactionsViewContextProvider({
       });
       throw new Error("Erro ao buscar transações.");
     }
-    console.log(data);
     return data.map(toApplicationTransaction);
   }
 
