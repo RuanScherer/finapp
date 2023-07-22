@@ -11,6 +11,7 @@ import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";
 import { currencyFormatter } from "@shared/utils/currencyFormatter";
+import { getTransactionIdToNavigate, getTransactionName } from "@shared/utils/transactionUtils";
 import { theme } from "@theme/index";
 import {
   RxArrowBottomLeft,
@@ -22,7 +23,6 @@ import {
   RxTrash
 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
-import { getTransactionIdToNavigate, getTransactionName } from "../../TransactionsViewUtils";
 import { TransactionRowProps } from "./TransactionRow.types";
 
 const defaultTagProps = {

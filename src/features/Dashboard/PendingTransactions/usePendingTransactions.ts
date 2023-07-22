@@ -39,8 +39,14 @@ export function usePendingTransactions() {
       throw new Error("Erro ao buscar transacões pendentes para o dashboard.");
     }
     return data.map((transaction) => ({
-      ...transaction,
+      id: transaction.id,
+      name: transaction.name,
+      amount: transaction.amount,
+      category: transaction.category,
       type: getTransactionType(transaction.type),
+      idOriginalTransaction: transaction.id_original_transaction,
+      installmentNumber: transaction.installment_number,
+      installmentAmount: transaction.installment_amount,
     }));
   }
 

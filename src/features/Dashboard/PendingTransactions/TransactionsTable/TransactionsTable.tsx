@@ -1,6 +1,6 @@
 import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
 import { Transaction } from "../PendingTransactions.types";
-import { TransactionRow } from "../TransactionRow";
+import { TransactionRow } from "./TransactionRow";
 
 interface TransactionsTableProps {
   transactions: Transaction[];

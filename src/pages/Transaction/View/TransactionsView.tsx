@@ -1,11 +1,10 @@
 import {
   Box, Center, Heading,
   HStack,
-  Input,
-  List, Skeleton,
-  Spinner
+  Input, Spinner
 } from "@chakra-ui/react";
 import { Card } from "@components/Card";
+import { EmptyState } from "@components/EmptyState";
 import { Tooltip } from "@components/Tooltip";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { TransactionsList } from "@features/Transaction/View/TransactionsList";
@@ -30,6 +29,26 @@ export function TransactionsView() {
       formatDateToUTC(new Date(baseDate))
     );
     getTransactionsViewByMonth(rangeDates);
+  }
+
+  if (!transactions) {
+    return (
+      <Card>
+        <Center>
+          <Spinner color="primary.500" speed="1s" />
+        </Center>
+      </Card>
+    );
+  }
+
+  if (transactions.length === 0) {
+    return (
+      <Card>
+        <EmptyState>
+          Não existem transações para serem mostradas.
+        </EmptyState>
+      </Card>
+    );
   }
 
   return (
@@ -79,35 +98,11 @@ export function TransactionsView() {
       </HStack>
 
       <Card display={["none", "none", "block"]}>
-        {transactions ? (
-          <TransactionsTable transactions={transactions} />
-        ) : (
-          <>
-            {Array(10)
-              .fill(undefined)
-              .map((_, index) => (
-                <Skeleton
-                  h="40px"
-                  startColor="gray.100"
-                  endColor="gray.300"
-                  mt={index === 0 ? 0 : 2}
-                  key={index}
-                />
-              ))}
-          </>
-        )}
+        <TransactionsTable transactions={transactions} />
       </Card>
 
-      <Card p={0}>
-        <List display={["flex", "flex", "none"]} flexDirection="column">
-          {transactions ? (
-            <TransactionsList transactions={transactions} />
-          ) : (
-            <Center p={4}>
-              <Spinner color="primary.500" speed="1s" />
-            </Center>
-          )}
-        </List>
+      <Card display={["flex", "flex", "none"]} p={0}>
+        <TransactionsList transactions={transactions} />
       </Card>
     </>
   );

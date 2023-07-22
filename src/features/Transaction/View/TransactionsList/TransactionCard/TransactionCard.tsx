@@ -7,13 +7,13 @@ import {
 import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";
 import { currencyFormatter } from "@shared/utils/currencyFormatter";
+import { getTransactionName } from "@shared/utils/transactionUtils";
 import {
   RxArrowBottomLeft,
   RxArrowTopRight,
   RxCheckCircled,
   RxClock
 } from "react-icons/rx";
-import { getTransactionName } from "../../TransactionsViewUtils";
 import { TransactionCardProps } from "./TransactionCard.types";
 
 export function TransactionCard(props: TransactionCardProps) {

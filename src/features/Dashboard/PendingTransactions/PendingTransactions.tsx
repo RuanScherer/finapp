@@ -1,37 +1,62 @@
-import { Skeleton } from "@chakra-ui/react";
+import { Center, Spinner } from "@chakra-ui/react";
 import { Card } from "@components/Card";
 import { EmptyState } from "@components/EmptyState";
 import { Link } from "@components/Link";
 import { Link as ReactRouterLink } from "react-router-dom";
+import { TransactionsList } from "./TransactionsList";
 import { TransactionsTable } from "./TransactionsTable";
 import { usePendingTransactions } from "./usePendingTransactions";
 
 export function PendingTransactions() {
   const { lastPendingTransactions } = usePendingTransactions();
 
-  return (
-    <Card>
-      {lastPendingTransactions ? (
-        lastPendingTransactions.length > 0 ? (
-          <TransactionsTable transactions={lastPendingTransactions} />
-        ) : (
-          <EmptyState>
-            Não existem transações pendentes para serem mostradas.
-          </EmptyState>
-        )
-      ) : (
-        <>
-          <Skeleton h="20px" />
-          <Skeleton h="20px" mt="2" />
-          <Skeleton h="20px" mt="2" />
-        </>
-      )}
+  if (!lastPendingTransactions) {
+    return (
+      <Card>
+        <Center>
+          <Spinner color="primary.500" speed="1s" />
+        </Center>
+      </Card>
+    );
+  }
 
-      {!!lastPendingTransactions?.length && (
-        <Link mt={4}>
-          <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
-        </Link>
-      )}
-    </Card>
+  if (!lastPendingTransactions?.length) {
+    return (
+      <Card>
+        <EmptyState>
+          Não existem transações pendentes para serem mostradas.
+        </EmptyState>
+      </Card>
+    );
+  }
+
+  return (
+    <>
+      <Card display={["none", "none", "block"]}>
+        <TransactionsTable transactions={lastPendingTransactions} />
+
+        {!!lastPendingTransactions?.length && (
+          <Link mt={4}>
+            <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
+          </Link>
+        )}
+      </Card>
+
+      <Card display={["block", "block", "none"]} p={0}>
+        <TransactionsList transactions={lastPendingTransactions} />
+
+        {!!lastPendingTransactions?.length && (
+          <Link
+            w="full"
+            p={4}
+            borderBottomRadius="xl"
+            _hover={{ bgColor: "gray.50" }}
+            transition=".3s"
+          >
+            <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
+          </Link>
+        )}
+      </Card>
+    </>
   );
 }

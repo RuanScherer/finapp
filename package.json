@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview --port 3000"
+    "preview": "vite preview --port 3000",
+    "supabase:new-migration": "supabase migration new",
+    "supabase:migrate": "supabase db push",
+    "supabase:gen-types": "supabase gen types typescript --local > src/types/supabase/database.types.ts"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.4.9",

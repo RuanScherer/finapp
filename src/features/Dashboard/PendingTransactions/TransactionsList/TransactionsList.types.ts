@@ -1,12 +1,15 @@
 import { TransactionType } from "@shared/enums/transactionType";
 
+export interface TransactionsListProps {
+  transactions: Transaction[];
+}
+
 export interface Transaction {
-  id: number;
-  name: string;
-  amount: number;
-  category: string;
   type: TransactionType;
+  amount: number;
+  name: string;
+  id: number;
   idOriginalTransaction?: number;
-  installmentNumber?: number;
   installmentAmount?: number;
+  installmentNumber?: number;
 }
