@@ -4,7 +4,7 @@ import {
   IconButton,
   ListItem,
   Text,
-  theme,
+  theme
 } from "@chakra-ui/react";
 import { Card } from "@components/Card";
 import { RxCheck, RxClock } from "react-icons/rx";
@@ -55,21 +55,23 @@ export function Notification(props: NotificationProps) {
                 )}
               </Text>
 
-              <IconButton
-                size="xs"
-                variant="ghost"
-                colorScheme="primary"
-                aria-label="Marcar como lida"
-                title="Marcar como lida"
-                icon={
-                  <RxCheck
-                    size={18}
-                    stroke={theme.colors.gray[400]}
-                    strokeWidth={0.5}
-                  />
-                }
-                onClick={() => props.onRead?.(props.notification)}
-              />
+              {!props.notification.read && (
+                <IconButton
+                  size="xs"
+                  variant="ghost"
+                  colorScheme="primary"
+                  aria-label="Marcar como lida"
+                  title="Marcar como lida"
+                  icon={
+                    <RxCheck
+                      size={18}
+                      stroke={theme.colors.gray[400]}
+                      strokeWidth={0.5}
+                    />
+                  }
+                  onClick={() => props.onRead?.(props.notification)}
+                />
+              )}
             </HStack>
           </Box>
         </HStack>
