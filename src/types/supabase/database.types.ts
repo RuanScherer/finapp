@@ -132,7 +132,15 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      v_pending_installments_by_transaction: {
+        Row: {
+          installment_amount: number | null
+          name: string | null
+          pending_installment_amount: number | null
+          type: string | null
+          user_id: string | null
+        }
+      }
     }
     Functions: {
       get_category_suggestions_by_user_id: {
@@ -173,15 +181,23 @@ export interface Database {
         }
         Returns: string[]
       }
-      get_pending_installments_by_transaction: {
-        Args: {
-          p_user_id: string
-          p_from_date: string
-          p_to_date: string
-          p_transaction_type: string
-        }
-        Returns: Database["public"]["CompositeTypes"]["pending_installments_by_transaction"][]
-      }
+      get_pending_installments_by_transaction:
+        | {
+            Args: {
+              p_user_id: string
+              p_from_date: string
+              p_to_date: string
+              p_transaction_type: string
+            }
+            Returns: Database["public"]["CompositeTypes"]["pending_installments_by_transaction"][]
+          }
+        | {
+            Args: {
+              p_user_id: string
+              p_transaction_type: string
+            }
+            Returns: Database["public"]["CompositeTypes"]["pending_installments_by_transaction"][]
+          }
       get_spent_amount_by_category: {
         Args: {
           p_user_id: string

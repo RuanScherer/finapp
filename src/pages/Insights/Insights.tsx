@@ -30,6 +30,12 @@ export function Insights() {
       </GridItem>
 
       <GridItem colSpan={24}>
+        <Heading fontSize="xl" fontWeight="semibold" w="full" mt={4}>
+          Métricas gerais
+        </Heading>
+      </GridItem>
+
+      <GridItem colSpan={24}>
         <PendingInstallmentsByTransaction
           transactionType={TransactionType.OUTCOME}
         />
