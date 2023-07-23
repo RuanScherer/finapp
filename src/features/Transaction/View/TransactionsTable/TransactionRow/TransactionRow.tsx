@@ -5,12 +5,13 @@ import {
   TagLabel,
   TagLeftIcon,
   Td,
-  Tr,
+  Tr
 } from "@chakra-ui/react";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { TransactionStatus } from "@shared/enums/transactionStatus";
 import { TransactionType } from "@shared/enums/transactionType";
 import { currencyFormatter } from "@shared/utils/currencyFormatter";
+import { getTransactionIdToNavigate, getTransactionName } from "@shared/utils/transactionUtils";
 import { theme } from "@theme/index";
 import {
   RxArrowBottomLeft,
@@ -19,7 +20,7 @@ import {
   RxCheckCircled,
   RxClock,
   RxCounterClockwiseClock,
-  RxTrash,
+  RxTrash
 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import { TransactionRowProps } from "./TransactionRow.types";
@@ -28,13 +29,6 @@ const defaultTagProps = {
   variant: "subtle",
   fontSize: "smaller",
   borderRadius: "full",
-};
-
-const defaultActionTooltipProps = {
-  hasArrow: true,
-  placement: "top" as any,
-  borderRadius: "md",
-  fontSize: "xs",
 };
 
 export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
@@ -63,17 +57,8 @@ export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
   }
 
   function handleSelectTransaction() {
-    const id = transaction.idOriginalTransaction || transaction.id;
+    const id = getTransactionIdToNavigate(transaction);
     navigate(`/transaction/${id}`);
-  }
-
-  function getTransactionName() {
-    let name = transaction.name;
-
-    if (transaction.installmentNumber && transaction.installmentAmount) {
-      name += ` (${transaction.installmentNumber}/${transaction.installmentAmount})`;
-    }
-    return name;
   }
 
   return (
@@ -83,7 +68,7 @@ export function TransactionRow({ transaction, onRemove }: TransactionRowProps) {
       _hover={{ bgColor: "gray.50" }}
       onClick={handleSelectTransaction}
     >
-      <Td>{getTransactionName()}</Td>
+      <Td>{getTransactionName(transaction)}</Td>
 
       <Td>
         {transaction.type === TransactionType.INCOME ? (

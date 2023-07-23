@@ -1,5 +1,4 @@
 import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
-import { EmptyState } from "@components/EmptyState";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
 import { ConfirmTransactionRemovalModal } from "./ConfirmTransactionRemovalModal";
 import { TransactionRow } from "./TransactionRow";
@@ -21,14 +20,6 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
     await removeTransaction(transaction);
     await refreshTransactionsViewByMonth();
     handleCloseConfirmTransactionRemovalModal();
-  }
-
-  if (transactions.length === 0) {
-    return (
-      <EmptyState>
-        Não existem transações pendentes para serem mostradas.
-      </EmptyState>
-    );
   }
 
   return (

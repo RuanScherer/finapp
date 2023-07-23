@@ -1,18 +1,32 @@
 import { Tag, TagLabel, Td, Text, theme, Tr } from "@chakra-ui/react";
 import { TransactionType } from "@shared/enums/transactionType";
 import { currencyFormatter } from "@shared/utils/currencyFormatter";
+import { getTransactionIdToNavigate, getTransactionName } from "@shared/utils/transactionUtils";
 import { RxArrowBottomLeft, RxArrowTopRight } from "react-icons/rx";
-import { Transaction } from "../PendingTransactions.types";
+import { useNavigate } from "react-router-dom";
+import { Transaction } from "../../PendingTransactions.types";
 
 interface TransactionRowProps {
   transaction: Transaction;
 }
 
 export function TransactionRow({ transaction }: TransactionRowProps) {
+  const navigate = useNavigate();
+
+  function handleSelectTransaction() {
+    const id = getTransactionIdToNavigate(transaction);
+    navigate(`/transaction/${id}`);
+  }
+
   return (
-    <Tr>
+    <Tr
+      transition=".3s"
+      cursor="pointer"
+      _hover={{ bgColor: "gray.50" }}
+      onClick={handleSelectTransaction}
+    >
       <Td>
-        <Text color="text.700">{transaction.name}</Text>
+        <Text color="text.700">{getTransactionName(transaction)}</Text>
       </Td>
       <Td>
         <Tag

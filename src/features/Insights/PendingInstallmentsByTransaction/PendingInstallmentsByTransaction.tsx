@@ -1,20 +1,13 @@
 import {
   Box,
-  Center,
-  Heading,
-  Spinner,
-  Table,
-  TableContainer,
-  Tbody,
-  Th,
-  Thead,
-  Tr,
+  Center, Heading, Spinner
 } from "@chakra-ui/react";
 import { Card } from "@components/Card";
 import { EmptyState } from "@components/EmptyState";
 import { getTransactionTypeLabel } from "@shared/enums/transactionType";
-import { PendingInstallmentRow } from "./PendingInstallmentRow";
 import { PendingInstallmentsByTransactionProps } from "./PendingInstallmentsByTransaction.types";
+import { PendingInstallmentsList } from "./PendingInstallmentsList";
+import { PendingInstallmentsTable } from "./PendingInstallmentsTable";
 import { usePendingInstallmentsByTransaction } from "./usePendingInstallmentsByTransaction";
 
 export function PendingInstallmentsByTransaction(
@@ -25,47 +18,37 @@ export function PendingInstallmentsByTransaction(
 
   return (
     <Box mt={2}>
-      <Heading fontSize="lg" fontWeight="medium">
+      <Heading fontSize="lg" fontWeight="medium" mb={4}>
         {getTransactionTypeLabel(props.transactionType)}s parceladas
       </Heading>
 
-      <Card mt={4}>
-        <Box w="full">
-          {pendingInstallmentsByTransaction ? (
-            pendingInstallmentsByTransaction.length > 0 ? (
-              <TableContainer>
-                <Table colorScheme="gray" size={["sm", "sm", "md"]}>
-                  <Thead>
-                    <Tr>
-                      <Th>Nome</Th>
-                      <Th>Parcelas pendentes</Th>
-                      <Th>Total de parcelas</Th>
-                      <Th>Progresso</Th>
-                    </Tr>
-                  </Thead>
+      {!pendingInstallmentsByTransaction && (
+        <Card>
+          <Center>
+            <Spinner color="primary.500" speed="1s" />
+          </Center>
+        </Card>
+      )}
 
-                  <Tbody>
-                    {pendingInstallmentsByTransaction.map((item) => (
-                      <PendingInstallmentRow
-                        key={item.name}
-                        installment={item}
-                      />
-                    ))}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            ) : (
-              <EmptyState>
-                Não existem transações neste mês para base de cálculo.
-              </EmptyState>
-            )
-          ) : (
-            <Center>
-              <Spinner color="primary.400" size="xl" mt="2" speed="1s" />
-            </Center>
-          )}
-        </Box>
-      </Card>
+      {(pendingInstallmentsByTransaction && pendingInstallmentsByTransaction.length === 0) && (
+        <Card>
+          <EmptyState>
+            Não existem transações neste mês para base de cálculo.
+          </EmptyState>
+        </Card>
+      )}
+
+      {(pendingInstallmentsByTransaction && pendingInstallmentsByTransaction.length > 0) && (
+        <>
+          <Card display={["none", "none", "block"]}>
+            <PendingInstallmentsTable pendingInstallments={pendingInstallmentsByTransaction} />
+          </Card>
+
+          <Card display={["block", "block", "none"]} p={0}>
+            <PendingInstallmentsList pendingInstallments={pendingInstallmentsByTransaction} />
+          </Card>
+        </>
+      )}
     </Box>
   );
 }

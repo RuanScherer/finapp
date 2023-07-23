@@ -1,7 +1,13 @@
-import { Box, Heading, HStack, Input, Skeleton } from "@chakra-ui/react";
+import {
+  Box, Center, Heading,
+  HStack,
+  Input, Spinner
+} from "@chakra-ui/react";
 import { Card } from "@components/Card";
+import { EmptyState } from "@components/EmptyState";
 import { Tooltip } from "@components/Tooltip";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
+import { TransactionsList } from "@features/Transaction/View/TransactionsList";
 import { TransactionsTable } from "@features/Transaction/View/TransactionsTable";
 import { monthsName } from "@shared/constants/monthsName";
 import { formatDateToUTC } from "@shared/utils/formatDateToUTC";
@@ -23,6 +29,26 @@ export function TransactionsView() {
       formatDateToUTC(new Date(baseDate))
     );
     getTransactionsViewByMonth(rangeDates);
+  }
+
+  if (!transactions) {
+    return (
+      <Card>
+        <Center>
+          <Spinner color="primary.500" speed="1s" />
+        </Center>
+      </Card>
+    );
+  }
+
+  if (transactions.length === 0) {
+    return (
+      <Card>
+        <EmptyState>
+          Não existem transações para serem mostradas.
+        </EmptyState>
+      </Card>
+    );
   }
 
   return (
@@ -71,24 +97,12 @@ export function TransactionsView() {
         </HStack>
       </HStack>
 
-      <Card>
-        {transactions ? (
-          <TransactionsTable transactions={transactions} />
-        ) : (
-          <>
-            {Array(10)
-              .fill(undefined)
-              .map((_, index) => (
-                <Skeleton
-                  h="40px"
-                  startColor="gray.100"
-                  endColor="gray.300"
-                  mt={index === 0 ? 0 : 2}
-                  key={index}
-                />
-              ))}
-          </>
-        )}
+      <Card display={["none", "none", "block"]}>
+        <TransactionsTable transactions={transactions} />
+      </Card>
+
+      <Card display={["flex", "flex", "none"]} p={0}>
+        <TransactionsList transactions={transactions} />
       </Card>
     </>
   );

@@ -6,7 +6,7 @@ export function PendingInstallmentRow(props: PendingInstallmentRowProps) {
     100 -
     (props.installment.pending_installment_amount /
       props.installment.installment_amount) *
-      100;
+    100;
 
   return (
     <Tr>

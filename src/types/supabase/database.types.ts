@@ -238,6 +238,9 @@ export interface Database {
         amount: number
         category: string
         type: string
+        id_original_transaction: number
+        installment_number: number
+        installment_amount: number
       }
       spent_amount_by_category: {
         category: string
