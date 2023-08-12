@@ -66,7 +66,9 @@ export function PlanCard(props: PlanCardProps) {
             trackColor="gray.200"
             capIsRound
           >
-            <CircularProgressLabel>{Math.floor(progress)}%</CircularProgressLabel>
+            <CircularProgressLabel>
+              {progress >= 100 ? "100%" : `${Math.floor(progress)}%`}
+            </CircularProgressLabel>
           </CircularProgress>
         </HStack>
 

@@ -14,6 +14,17 @@ export function usePlanDetails() {
     staleTime: 1000 * 60 * 5
   })
 
+  const {
+    data: depositHistory,
+    isLoading: isDepositHistoryLoading,
+    isError: isDepositHistoryError,
+    refetch: refetchDepositHistory
+  } = useQuery(["plan", planId, "deposits"], fetchDepositHistory, {
+    staleTime: 1000 * 60 * 5
+  })
+
+  const hasDeposits = depositHistory && Object.keys(depositHistory).length > 0
+
   async function fetchPlan() {
     const { data, error } = await supabase
       .from("plans")
@@ -29,11 +40,35 @@ export function usePlanDetails() {
     }
   }
 
+  async function fetchDepositHistory() {
+    const { data, error } = await supabase
+      .from("plan_deposits")
+      .select("id, value, description, createdAt:created_at, planId:plan_id")
+      .eq("plan_id", planId)
+      .order("created_at", { ascending: false })
+
+    if (error) throw new Error("Não foi possível carregar os depositos do plano.")
+
+    const depositHistory = data.reduce((acc, deposit) => {
+      const date: string = new Date(deposit.createdAt).toISOString().split("T")[0]
+      const depositHistory = acc[date] || []
+      return {
+        ...acc,
+        [date]: [...depositHistory, deposit]
+      }
+    }, {} as { [date: string]: typeof data })
+    return depositHistory
+  }
+
   return {
     plan,
     isPlanLoading,
     isPlanError,
-    refetchPlan
-    // depositHistory
+    refetchPlan,
+    depositHistory,
+    hasDeposits,
+    isDepositHistoryLoading,
+    isDepositHistoryError,
+    refetchDepositHistory
   }
 }

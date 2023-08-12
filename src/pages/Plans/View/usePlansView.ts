@@ -15,10 +15,16 @@ export function usePlansView() {
     staleTime: 1000 * 60 * 10, // 10 minutes
   })
 
+  const pendingPlans = plans?.filter((plan) => !plan.finished);
+  const finishedPlans = plans?.filter((plan) => plan.finished);
+  const hasPlans = !!plans?.length;
+  const hasPendingPlans = !!pendingPlans?.length;
+  const hasFinishedPlans = !!finishedPlans?.length;
+
   async function fetchPlans() {
     const { data, error } = await supabase
       .from("plans")
-      .select("id, name, plannedValue:planned_value, currentValue:current_value, dueDate:due_date")
+      .select("id, name, plannedValue:planned_value, currentValue:current_value, dueDate:due_date, finished")
       .eq("user_id", user!.id)
       .order("due_date", {
         ascending: true,
@@ -34,7 +40,11 @@ export function usePlansView() {
   }
 
   return {
-    plans,
+    hasPlans,
+    pendingPlans,
+    hasPendingPlans,
+    finishedPlans,
+    hasFinishedPlans,
     isErrorLoadingPlans,
     isLoadingPlans,
     retryLoadPlans: refetchPlans,

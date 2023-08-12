@@ -1,36 +1,22 @@
-import { Divider, Heading, HStack, IconButton, List, ListItem, SimpleGrid, Spacer, Text, VStack } from "@chakra-ui/react";
+import { Heading, SimpleGrid, VStack } from "@chakra-ui/react";
 import { Card } from "@components/Card";
+import { EmptyState } from "@components/EmptyState";
+import { Link } from "@components/Link";
 import { PlanCard } from "@features/Plans/Details/PlanCard";
-import { currencyFormatter } from "@shared/utils/currencyFormatter";
-import { RxTrash } from "react-icons/rx";
+import { PlanDepositsList } from "@features/Plans/Details/PlanDepositsList";
 import { usePlanDetails } from "./usePlanDetails";
-
-const mock = [{
-  id: 1,
-  description: 'Primeiro depósito',
-  value: 1000,
-  createdAt: new Date(),
-}, {
-  id: 2,
-  value: 1000,
-  createdAt: new Date(),
-}, {
-  id: 3,
-  value: 1000,
-  createdAt: new Date(),
-}, {
-  id: 4,
-  description: 'Alguma coisa',
-  value: 1000,
-  createdAt: new Date(),
-}]
 
 export function PlanDetails() {
   const {
     plan,
     isPlanError,
     isPlanLoading,
-    refetchPlan
+    refetchPlan,
+    depositHistory,
+    hasDeposits,
+    isDepositHistoryError,
+    isDepositHistoryLoading,
+    refetchDepositHistory
   } = usePlanDetails()
 
   return (
@@ -39,63 +25,47 @@ export function PlanDetails() {
       templateColumns={["1fr", "1fr", "1fr", "10fr 14fr"]}
       gap={4}
     >
-      <PlanCard
-        position={["unset", "unset", "unset", "sticky"]}
-        top={4}
-        h="fit-content"
-        plan={plan}
-      />
+      {isPlanError ? (
+        <EmptyState h="fit-content">
+          Não foi possível obter os detalhes do plano.
+          <Link fontSize="inherit" onClick={() => refetchPlan()}>
+            Tente novamente
+          </Link>
+        </EmptyState>
+      ) : (
+        <PlanCard
+          position={["unset", "unset", "unset", "sticky"]}
+          top={4}
+          h="fit-content"
+          plan={isPlanLoading ? undefined : plan}
+        />
+      )}
 
       <VStack alignItems="stretch" h="fit-content">
-        <Card>
-          <Heading fontSize="xl" fontWeight="semibold">
-            Histórico
-          </Heading>
+        {isDepositHistoryError ? (
+          <EmptyState h="fit-content">
+            Não foi possível obter o histórico de registros do plano.
+            <Link fontSize="inherit" onClick={() => refetchDepositHistory()}>
+              Tente novamente
+            </Link>
+          </EmptyState>
+        ) : (
+          <Card>
+            <Heading fontSize="xl" fontWeight="semibold" mb={2}>
+              Histórico
+            </Heading>
 
-          <List flexDirection="column" mt={2}>
-            <ListItem
-              w="full"
-              mt={2}
-            >
-              <Text fontSize="sm" color="gray.500">
-                11/07/2023
-              </Text>
-            </ListItem>
-
-            {mock.map((deposit, index) => (
-              <ListItem
-                w="full"
-                borderBottomWidth={index < mock.length - 1 ? 1 : 0}
-                borderBottomColor="gray.200"
-                py={2}
-                key={deposit.id}
-              >
-                <HStack>
-                  <Text fontWeight="medium" color="green.400">
-                    + {currencyFormatter.format(deposit.value)}
-                  </Text>
-
-                  {deposit.description && (
-                    <>
-                      <Divider orientation="vertical" h={4} mx={2} borderColor="gray.500" />
-                      <Text color="blackAlpha.800">{deposit.description}</Text>
-                    </>
-                  )}
-
-                  <Spacer />
-
-                  <IconButton
-                    aria-label="Remover registro"
-                    icon={<RxTrash strokeWidth={0.4} size={18} />}
-                    variant="ghost"
-                    size="sm"
-                    colorScheme="red"
-                  />
-                </HStack>
-              </ListItem>
-            ))}
-          </List>
-        </Card>
+            {!isDepositHistoryLoading && !hasDeposits ? (
+              <EmptyState>
+                Não há registros neste plano ainda.
+              </EmptyState>
+            ) : (
+              <PlanDepositsList
+                deposits={isDepositHistoryLoading ? undefined : depositHistory}
+              />
+            )}
+          </Card>
+        )}
       </VStack>
     </SimpleGrid>
   )

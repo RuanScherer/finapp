@@ -1,4 +1,4 @@
-import { Button, Heading, HStack, Spinner, useDisclosure } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, Heading, HStack, Spinner, useDisclosure } from "@chakra-ui/react";
 import { EmptyState } from "@components/EmptyState";
 import { Link } from "@components/Link";
 import { PlanForm } from "@features/Plans/PlanForm";
@@ -8,7 +8,16 @@ import { usePlansView } from "./usePlansView";
 
 export function PlansView() {
   const planFormDisclosure = useDisclosure()
-  const { plans, isErrorLoadingPlans, isLoadingPlans, retryLoadPlans } = usePlansView()
+  const {
+    hasPlans,
+    pendingPlans,
+    hasPendingPlans,
+    finishedPlans,
+    hasFinishedPlans,
+    isErrorLoadingPlans,
+    isLoadingPlans,
+    retryLoadPlans
+  } = usePlansView()
 
   return (
     <>
@@ -47,7 +56,54 @@ export function PlansView() {
       )}
 
       {!isLoadingPlans && !isErrorLoadingPlans && (
-        plans!.length === 0 ? (
+        hasPlans ? (
+          <Accordion
+            display="flex"
+            flexDirection="column"
+            gap={2}
+            defaultIndex={[0, 1]}
+            allowToggle
+            allowMultiple
+          >
+            <AccordionItem border={0}>
+              <AccordionButton rounded="md" p={1}>
+                <AccordionIcon />
+                <Heading fontSize="xl" fontWeight="medium" ml={1}>
+                  Pendentes
+                </Heading>
+              </AccordionButton>
+
+              <AccordionPanel px={0} py={2.5}>
+                {hasPendingPlans ? (
+                  <PlansGrid plans={pendingPlans!} />
+                ) : (
+                  <EmptyState>
+                    Você não tem nenhum plano pendente.
+                  </EmptyState>
+                )}
+              </AccordionPanel>
+            </AccordionItem>
+
+            <AccordionItem border={0}>
+              <AccordionButton rounded="md" p={1}>
+                <AccordionIcon />
+                <Heading fontSize="xl" fontWeight="medium" ml={1}>
+                  Concluídos
+                </Heading>
+              </AccordionButton>
+
+              <AccordionPanel px={0} py={2.5}>
+                {hasFinishedPlans ? (
+                  <PlansGrid plans={finishedPlans!} />
+                ) : (
+                  <EmptyState>
+                    Você ainda não concluiu nenhum plano. Tenha paciência, você vai conseguir!
+                  </EmptyState>
+                )}
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        ) : (
           <EmptyState>
             Você ainda não possui planos,
             {' '}
@@ -61,8 +117,6 @@ export function PlansView() {
             {' '}
             e dê um up na sua organização!
           </EmptyState>
-        ) : (
-          <PlansGrid plans={plans!} />
         )
       )}
     </>

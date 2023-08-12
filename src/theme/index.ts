@@ -1,4 +1,4 @@
-import { createMultiStyleConfigHelpers, extendTheme } from "@chakra-ui/react";
+import { ComponentStyleConfig, createMultiStyleConfigHelpers, extendTheme } from "@chakra-ui/react";
 
 export const boxShadow = {
   100: "#959da533 0px 8px 24px",
@@ -58,7 +58,7 @@ const fonts = {
   heading: `'Poppins', sans-serif`,
 };
 
-const Button = {
+const Button: ComponentStyleConfig = {
   baseStyle: {
     fontWeight: "medium",
   },

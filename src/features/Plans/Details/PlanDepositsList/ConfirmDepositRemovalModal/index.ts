@@ -1,0 +1,1 @@
+export { ConfirmDepositRemovalModal } from "./ConfirmDepositRemovalModal";
