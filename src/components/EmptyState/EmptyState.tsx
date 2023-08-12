@@ -1,7 +1,8 @@
 import { ChakraProps, HStack, Text } from "@chakra-ui/react";
+import { ReactNode } from "react";
 
 interface EmptyStateProps extends ChakraProps {
-  children: string;
+  children: ReactNode | ReactNode[];
 }
 
 export function EmptyState({ children, ...rest }: EmptyStateProps) {

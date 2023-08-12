@@ -23,19 +23,15 @@ export function PendingInstallmentsByTransaction(
       </Heading>
 
       {!pendingInstallmentsByTransaction && (
-        <Card>
-          <Center>
-            <Spinner color="primary.500" speed="1s" />
-          </Center>
-        </Card>
+        <Center>
+          <Spinner color="primary.500" speed="1s" />
+        </Center>
       )}
 
       {(pendingInstallmentsByTransaction && pendingInstallmentsByTransaction.length === 0) && (
-        <Card>
-          <EmptyState>
-            Não existem transações neste mês para base de cálculo.
-          </EmptyState>
-        </Card>
+        <EmptyState>
+          Não existem transações parceladas para exibir.
+        </EmptyState>
       )}
 
       {(pendingInstallmentsByTransaction && pendingInstallmentsByTransaction.length > 0) && (

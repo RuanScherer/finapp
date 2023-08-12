@@ -3,7 +3,7 @@ import { Card } from "@components/Card";
 import { EmptyState } from "@components/EmptyState";
 import {
   getTransactionRecurrence,
-  getTransactionRecurrenceLabel,
+  getTransactionRecurrenceLabel
 } from "@shared/enums/transactionRecurrence";
 import { getTransactionTypeLabel } from "@shared/enums/transactionType";
 import { Doughnut } from "react-chartjs-2";
@@ -21,13 +21,13 @@ export function TransactionsCountByRecurrence(
 
   return (
     <Box mt={2}>
-      <Heading fontSize="lg" fontWeight="medium">
+      <Heading fontSize="lg" fontWeight="medium" mb={4}>
         {getTransactionTypeLabel(props.transactionType)}s por recorrência
       </Heading>
 
-      <Card mt={4}>
-        {transactionsCountByRecurrence ? (
-          transactionsCountByRecurrence.length > 0 ? (
+      {transactionsCountByRecurrence ? (
+        transactionsCountByRecurrence.length > 0 ? (
+          <Card>
             <Box mx="auto" w="fit-content">
               <Doughnut
                 options={{
@@ -66,17 +66,17 @@ export function TransactionsCountByRecurrence(
                 }}
               />
             </Box>
-          ) : (
-            <EmptyState>
-              Não existem transações neste mês para base de cálculo.
-            </EmptyState>
-          )
+          </Card>
         ) : (
-          <Center>
-            <Spinner color="primary.400" size="xl" mt="2" speed="1s" />
-          </Center>
-        )}
-      </Card>
+          <EmptyState>
+            Não existem transações neste mês para base de cálculo.
+          </EmptyState>
+        )
+      ) : (
+        <Center>
+          <Spinner color="primary.400" size="xl" mt="2" speed="1s" />
+        </Center>
+      )}
     </Box>
   );
 }

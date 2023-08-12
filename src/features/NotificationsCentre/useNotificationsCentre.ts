@@ -2,7 +2,7 @@ import { useToast } from "@hooks/useToast";
 import { supabase } from "@services/supabase";
 import { formatDateToUTC } from "@shared/utils/formatDateToUTC";
 import { useMutation, useQuery } from "react-query";
-import { Notification } from "./";
+import { Notification } from "./NotificationsCentre.types";
 
 export function useNotificationsCentre() {
   const toast = useToast();

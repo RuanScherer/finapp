@@ -16,7 +16,7 @@ import { Container } from "@components/Container";
 import { useAuth } from "@contexts/AuthContext";
 import { NotificationsCentre } from "@features/NotificationsCentre/NotificationsCentre";
 import { FiTrendingUp } from "react-icons/fi";
-import { RxDashboard, RxExit, RxPlus, RxStack } from "react-icons/rx";
+import { RxDashboard, RxExit, RxGrid, RxPlus, RxStack } from "react-icons/rx";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { ConfirmSignOutModal } from "./ConfirmSignOutModal";
 import { Link } from "./Link";
@@ -116,6 +116,8 @@ export function Header() {
             <Link to="/transactions" icon={<RxStack />} label="Transações" />
 
             <Link to="/insights" icon={<FiTrendingUp />} label="Métricas" />
+
+            <Link to="/plans" icon={<RxGrid />} label="Planejamento" />
           </HStack>
         </Container>
       </Box>

@@ -22,11 +22,9 @@ export function PendingTransactions() {
 
   if (!lastPendingTransactions?.length) {
     return (
-      <Card>
-        <EmptyState>
-          Não existem transações pendentes para serem mostradas.
-        </EmptyState>
-      </Card>
+      <EmptyState>
+        Não existem transações pendentes para serem mostradas.
+      </EmptyState>
     );
   }
 

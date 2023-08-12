@@ -33,21 +33,17 @@ export function TransactionsView() {
 
   if (!transactions) {
     return (
-      <Card>
-        <Center>
-          <Spinner color="primary.500" speed="1s" />
-        </Center>
-      </Card>
+      <Center>
+        <Spinner color="primary.500" speed="1s" />
+      </Center>
     );
   }
 
   if (transactions.length === 0) {
     return (
-      <Card>
-        <EmptyState>
-          Não existem transações para serem mostradas.
-        </EmptyState>
-      </Card>
+      <EmptyState>
+        Não existem transações para serem mostradas.
+      </EmptyState>
     );
   }
 

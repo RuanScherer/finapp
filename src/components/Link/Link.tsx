@@ -1,5 +1,5 @@
 import { Text } from "@chakra-ui/react";
-import { LinkProps } from "./";
+import { LinkProps } from "./Link.types";
 
 export function Link({ children, ...rest }: LinkProps) {
   return (

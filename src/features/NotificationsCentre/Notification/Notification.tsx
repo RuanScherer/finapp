@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { Card } from "@components/Card";
 import { RxCheck, RxClock } from "react-icons/rx";
-import { NotificationProps } from "./";
+import { NotificationProps } from "./Notification.types";
 
 function getIconByCategory(category: string) {
   const iconByCategory = {

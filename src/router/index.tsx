@@ -5,6 +5,8 @@ import { TransactionsViewContextProvider } from "@contexts/TransactionsViewConte
 import { Dashboard } from "@pages/Dashboard";
 import { Insights } from "@pages/Insights";
 import { Notifications } from "@pages/Notifications";
+import { PlanDetails } from "@pages/Plans/Details";
+import { PlansView } from "@pages/Plans/View";
 import { SignIn } from "@pages/SignIn";
 import { EditTransaction } from "@pages/Transaction/Edit";
 import { NewTransaction } from "@pages/Transaction/New";
@@ -60,6 +62,9 @@ export function Router() {
               />
 
               <Route path="/insights" element={<Insights />} />
+
+              <Route path="/plans" element={<PlansView />} />
+              <Route path="/plans/:planId" element={<PlanDetails />} />
             </Route>
 
             <Route path="/transaction/new" element={<NewTransaction />} />
