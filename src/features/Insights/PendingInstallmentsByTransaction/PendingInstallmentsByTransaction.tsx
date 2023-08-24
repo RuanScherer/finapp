@@ -17,8 +17,8 @@ export function PendingInstallmentsByTransaction(
     usePendingInstallmentsByTransaction(props.transactionType);
 
   return (
-    <Box mt={2}>
-      <Heading fontSize="lg" fontWeight="medium" mb={4}>
+    <Box mt={[1, 2]}>
+      <Heading fontSize={["md", "lg"]} fontWeight="medium" mb={[2.5, 4]}>
         {getTransactionTypeLabel(props.transactionType)}s parceladas
       </Heading>
 

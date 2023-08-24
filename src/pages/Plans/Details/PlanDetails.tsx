@@ -50,7 +50,7 @@ export function PlanDetails() {
             </Link>
           </EmptyState>
         ) : (
-          <Card>
+          <Card p={[3, 4]}>
             <Heading fontSize="xl" fontWeight="semibold" mb={2}>
               Histórico
             </Heading>

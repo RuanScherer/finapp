@@ -22,7 +22,7 @@ export function PlansView() {
   return (
     <>
       <HStack gap={2} justifyContent='space-between' mb={4}>
-        <Heading fontSize="xl" fontWeight="semibold">
+        <Heading fontSize={["lg", "xl"]} fontWeight="semibold">
           Seus planos
           {isLoadingPlans && (
             <Spinner
@@ -68,8 +68,8 @@ export function PlansView() {
             <AccordionItem border={0}>
               <AccordionButton rounded="md" p={1}>
                 <AccordionIcon />
-                <Heading fontSize="xl" fontWeight="medium" ml={1}>
-                  Pendentes
+                <Heading fontSize={["lg", "xl"]} fontWeight="medium" ml={1}>
+                  Em andamento
                 </Heading>
               </AccordionButton>
 
@@ -77,9 +77,7 @@ export function PlansView() {
                 {hasPendingPlans ? (
                   <PlansGrid plans={pendingPlans!} />
                 ) : (
-                  <EmptyState>
-                    Você não tem nenhum plano pendente.
-                  </EmptyState>
+                  <EmptyState>Você não tem nenhum plano em andamento.</EmptyState>
                 )}
               </AccordionPanel>
             </AccordionItem>
@@ -87,7 +85,7 @@ export function PlansView() {
             <AccordionItem border={0}>
               <AccordionButton rounded="md" p={1}>
                 <AccordionIcon />
-                <Heading fontSize="xl" fontWeight="medium" ml={1}>
+                <Heading fontSize={["lg", "xl"]} fontWeight="medium" ml={1}>
                   Concluídos
                 </Heading>
               </AccordionButton>

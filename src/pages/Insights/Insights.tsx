@@ -9,12 +9,12 @@ export function Insights() {
   return (
     <Grid
       templateColumns="repeat(24, 1fr)"
-      rowGap={4}
+      rowGap={[2.5, 4]}
       columnGap={[0, 4, 4]}
-      my={2}
+      my={[1, 2]}
     >
       <GridItem colSpan={24}>
-        <Heading fontSize="xl" fontWeight="semibold" w="full">
+        <Heading fontSize={["lg", "xl"]} fontWeight="semibold" w="full">
           Métricas de {monthsName[new Date().getMonth()]}
         </Heading>
       </GridItem>
@@ -30,7 +30,7 @@ export function Insights() {
       </GridItem>
 
       <GridItem colSpan={24}>
-        <Heading fontSize="xl" fontWeight="semibold" w="full" mt={4}>
+        <Heading fontSize={["lg", "xl"]} fontWeight="semibold" w="full" mt={[2.5, 4]}>
           Métricas gerais
         </Heading>
       </GridItem>

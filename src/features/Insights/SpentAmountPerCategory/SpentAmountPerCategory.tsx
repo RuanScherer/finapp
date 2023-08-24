@@ -22,15 +22,15 @@ export function SpentAmountPerCategory() {
 
   return (
     <Box mt={2}>
-      <Heading fontSize="lg" fontWeight="medium">
+      <Heading fontSize={["md", "lg"]} fontWeight="medium">
         Valor gasto por categoria
       </Heading>
 
       <Text
-        fontSize="sm"
+        fontSize={["xs", "sm"]}
         color="text.700"
         mt={0.5}
-        mb={4}
+        mb={[2.5, 4]}
       >
         Essas são as top 5 categorias com mais gastos registrados no mês.
       </Text>

@@ -11,7 +11,7 @@ export function PendingInstallmentCard(props: PendingInstallmentCardProps) {
   return (
     <ListItem
       w="full"
-      p={4}
+      p={3}
       borderBottomWidth={props.hasBottomBorder ? 1 : 0}
       borderBottomColor="gray.200"
       cursor="pointer"

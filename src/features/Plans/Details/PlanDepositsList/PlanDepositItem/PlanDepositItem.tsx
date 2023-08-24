@@ -23,17 +23,18 @@ export function PlanDepositItem(props: PlanDepositItemProps) {
         w="full"
         borderBottomWidth={props.hasBottomBorder ? 1 : 0}
         borderBottomColor="gray.200"
-        py={2}
+        py={[1.5, 2]}
       >
         <HStack justifyContent="space-between">
           <VStack alignItems="stretch" flex={1}>
             {props.deposit.description && (
-              <Text color="blackAlpha.800" lineHeight="short">
+              <Text fontSize={["sm", "md"]} color="blackAlpha.800" lineHeight="short">
                 {props.deposit.description}
               </Text>
             )}
 
             <Text
+              fontSize={["sm", "md"]}
               fontWeight="medium"
               color="green.400"
               whiteSpace="nowrap"

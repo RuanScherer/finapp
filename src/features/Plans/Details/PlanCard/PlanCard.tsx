@@ -7,7 +7,7 @@ import { PlanCardProps } from "./PlanCard.types";
 export function PlanCard({ plan, ...rest }: PlanCardProps) {
   if (!plan) {
     return (
-      <Card {...rest}>
+      <Card {...rest} p={[3, 4]}>
         <HStack alignItems="start" justifyContent="space-between" gap={1}>
           <VStack flex={1} alignItems="stretch" gap={1}>
             <Skeleton w="50%" h={6} mb={3} />
@@ -28,7 +28,7 @@ export function PlanCard({ plan, ...rest }: PlanCardProps) {
   const progress = getProgressValue(plan.currentValue, plan.plannedValue)
 
   return (
-    <Card {...rest}>
+    <Card {...rest} p={[3, 4]}>
       <Flex
         flexDirection={["column-reverse", "row"]}
         alignItems="start"
@@ -36,7 +36,7 @@ export function PlanCard({ plan, ...rest }: PlanCardProps) {
         gap={[2.5, 1]}
       >
         <VStack alignItems="stretch" gap={1}>
-          <Heading fontSize="xl" fontWeight="semibold" mb={3}>
+          <Heading fontSize={["lg", "xl"]} fontWeight="semibold" mb={[1.5, 3]}>
             {plan.name}
           </Heading>
 
@@ -70,7 +70,9 @@ export function PlanCard({ plan, ...rest }: PlanCardProps) {
           trackColor="gray.200"
           capIsRound
         >
-          <CircularProgressLabel fontSize="md">{Math.floor(progress)}%</CircularProgressLabel>
+          <CircularProgressLabel fontSize="md">
+            {progress >= 100 ? "100%" : `${Math.floor(progress)}%`}
+          </CircularProgressLabel>
         </CircularProgress>
       </Flex>
     </Card>

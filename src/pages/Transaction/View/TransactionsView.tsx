@@ -54,11 +54,11 @@ export function TransactionsView() {
         justifyContent={["center", "center", "space-between"]}
         wrap="wrap"
         gap={2}
-        mt={2}
+        mt={[1, 2]}
         mb={4}
       >
         <Heading
-          fontSize="xl"
+          fontSize={["lg", "xl"]}
           fontWeight="semibold"
           textAlign={["center", "center", "start"]}
           w={["full", "full", "fit-content"]}
@@ -87,6 +87,7 @@ export function TransactionsView() {
             _focus={{
               borderColor: "primary.300",
             }}
+            size={["sm", "md"]}
             value={transactionsQueryDates.fromDate.toISOString().split("T")[0]}
             onChange={handleChangeBaseDate}
           />

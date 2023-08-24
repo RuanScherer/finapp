@@ -24,9 +24,9 @@ export function MonthStat({ type }: MonthStatProps) {
   }
 
   return (
-    <Card bgColor={cardBgColor}>
+    <Card bgColor={cardBgColor} p={[4, 5]}>
       <HStack alignItems="center" spacing={1} justifyContent="space-between">
-        <Text fontWeight="medium" color="gray.700">
+        <Text fontSize={["sm", "md"]} fontWeight="medium" color="gray.700">
           {type === TransactionType.OUTCOME ? "Despesas" : "Receitas"}
         </Text>
 
@@ -36,13 +36,13 @@ export function MonthStat({ type }: MonthStatProps) {
       {amount === undefined ? (
         <Spinner color="primary.500" my={2} speed="1s" />
       ) : (
-        <Text fontSize="2xl" fontWeight="medium">
+        <Text fontSize={["lg", "2xl"]} fontWeight="medium">
           {currencyFormatter.format(amount ?? 0)}
         </Text>
       )}
 
       {pendingAmount !== undefined && (
-        <Text fontSize="sm">
+        <Text fontSize={["xs", "sm"]}>
           {currencyFormatter.format(pendingAmount ?? 0)} em aberto
         </Text>
       )}

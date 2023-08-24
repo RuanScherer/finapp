@@ -43,7 +43,7 @@ export function PlanCard(props: PlanCardProps) {
   return (
     <>
       <Card
-        p={4}
+        p={[3, 4]}
         cursor="pointer"
         transition=".3s"
         _hover={{ shadow: "md" }}
@@ -51,11 +51,11 @@ export function PlanCard(props: PlanCardProps) {
       >
         <HStack justifyContent="space-between" gap={1}>
           <VStack alignItems="stretch">
-            <Heading fontSize="lg" fontWeight="medium" mb={1}>
+            <Heading fontSize={["md", "lg"]} fontWeight="medium" mb={1}>
               {props.plan.name}
             </Heading>
 
-            <Text fontSize="sm" color="gray.500" style={{ marginTop: 0 }}>
+            <Text fontSize={["xs", "sm"]} color="gray.500" style={{ marginTop: 0 }}>
               {currencyFormatter.format(props.plan.currentValue)} de {currencyFormatter.format(props.plan.plannedValue)}
             </Text>
           </VStack>

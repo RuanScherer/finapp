@@ -1,4 +1,4 @@
-import { Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, Text, theme, VStack } from "@chakra-ui/react";
+import { Box, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, Text, theme, VStack } from "@chakra-ui/react";
 import { FiTrendingUp } from "react-icons/fi";
 import { RxDashboard, RxExit, RxGrid, RxStack } from "react-icons/rx";
 import { Link } from "react-router-dom";
@@ -47,7 +47,7 @@ export function DrawerMenu(props: DrawerMenuProps) {
             textAlign="center"
           >
             {menus.map((menu) => (
-              <>
+              <Box w="full" key={menu.to}>
                 <Link
                   to={menu.to}
                   onClick={props.onClose}
@@ -61,7 +61,6 @@ export function DrawerMenu(props: DrawerMenuProps) {
                     _hover={{
                       bgColor: "primaryAlpha.200",
                     }}
-                    key={menu.to}
                   >
                     {menu.icon}
                     <Text>{menu.label}</Text>
@@ -69,7 +68,7 @@ export function DrawerMenu(props: DrawerMenuProps) {
                 </Link>
 
                 <Divider />
-              </>
+              </Box>
             ))}
 
             <HStack

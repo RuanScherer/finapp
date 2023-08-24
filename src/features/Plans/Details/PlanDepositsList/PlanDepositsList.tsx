@@ -24,7 +24,7 @@ export function PlanDepositsList(props: PlanDepositsListProps) {
             mt={2}
             key={historyDay}
           >
-            <Text fontSize="sm" color="gray.500">
+            <Text fontSize={["xs", "sm"]} color="gray.500">
               {new Intl.DateTimeFormat("pt-BR").format(new Date(historyDay))}
             </Text>
           </ListItem>

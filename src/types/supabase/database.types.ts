@@ -3,7 +3,7 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json | undefined }
+  | { [key: string]: Json }
   | Json[]
 
 export interface Database {
@@ -47,7 +47,6 @@ export interface Database {
           email?: string
           id?: never
         }
-        Relationships: []
       }
       notifications: {
         Row: {
@@ -80,14 +79,6 @@ export interface Database {
           transaction_id?: number | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "notifications_transaction_id_fkey"
-            columns: ["transaction_id"]
-            referencedRelation: "transactions"
-            referencedColumns: ["id"]
-          }
-        ]
       }
       plan_deposits: {
         Row: {
@@ -111,14 +102,6 @@ export interface Database {
           plan_id?: number
           value?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "plan_deposits_plan_id_fkey"
-            columns: ["plan_id"]
-            referencedRelation: "plans"
-            referencedColumns: ["id"]
-          }
-        ]
       }
       plans: {
         Row: {
@@ -148,7 +131,6 @@ export interface Database {
           planned_value?: number
           user_id?: string
         }
-        Relationships: []
       }
       transactions: {
         Row: {
@@ -199,14 +181,6 @@ export interface Database {
           type?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "transactions_id_original_transaction_fkey"
-            columns: ["id_original_transaction"]
-            referencedRelation: "transactions"
-            referencedColumns: ["id"]
-          }
-        ]
       }
     }
     Views: {
@@ -218,7 +192,6 @@ export interface Database {
           type: string | null
           user_id: string | null
         }
-        Relationships: []
       }
     }
     Functions: {
@@ -383,14 +356,6 @@ export interface Database {
           public?: boolean | null
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "buckets_owner_fkey"
-            columns: ["owner"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
       }
       migrations: {
         Row: {
@@ -411,7 +376,6 @@ export interface Database {
           id?: number
           name?: string
         }
-        Relationships: []
       }
       objects: {
         Row: {
@@ -450,14 +414,6 @@ export interface Database {
           updated_at?: string | null
           version?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "objects_bucketId_fkey"
-            columns: ["bucket_id"]
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
-          }
-        ]
       }
     }
     Views: {
@@ -489,7 +445,7 @@ export interface Database {
         Args: {
           name: string
         }
-        Returns: unknown
+        Returns: string[]
       }
       get_size_by_bucket: {
         Args: Record<PropertyKey, never>

@@ -1,5 +1,4 @@
-import { Center, Spinner } from "@chakra-ui/react";
-import { Card } from "@components/Card";
+import { Box, Center, Spinner } from "@chakra-ui/react";
 import { EmptyState } from "@components/EmptyState";
 import { Link } from "@components/Link";
 import { Link as ReactRouterLink } from "react-router-dom";
@@ -12,11 +11,9 @@ export function PendingTransactions() {
 
   if (!lastPendingTransactions) {
     return (
-      <Card>
-        <Center>
-          <Spinner color="primary.500" speed="1s" />
-        </Center>
-      </Card>
+      <Center>
+        <Spinner color="primary.500" speed="1s" />
+      </Center>
     );
   }
 
@@ -30,7 +27,7 @@ export function PendingTransactions() {
 
   return (
     <>
-      <Card display={["none", "none", "block"]}>
+      <Box display={["none", "none", "block"]}>
         <TransactionsTable transactions={lastPendingTransactions} />
 
         {!!lastPendingTransactions?.length && (
@@ -38,15 +35,15 @@ export function PendingTransactions() {
             <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
           </Link>
         )}
-      </Card>
+      </Box>
 
-      <Card display={["block", "block", "none"]} p={0}>
+      <Box display={["block", "block", "none"]} p={0}>
         <TransactionsList transactions={lastPendingTransactions} />
 
         {!!lastPendingTransactions?.length && (
           <Link
             w="full"
-            p={4}
+            p={3}
             borderBottomRadius="xl"
             _hover={{ bgColor: "gray.50" }}
             transition=".3s"
@@ -54,7 +51,7 @@ export function PendingTransactions() {
             <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
           </Link>
         )}
-      </Card>
+      </Box>
     </>
   );
 }

@@ -21,7 +21,7 @@ export function TransactionsCountByRecurrence(
 
   return (
     <Box mt={2}>
-      <Heading fontSize="lg" fontWeight="medium" mb={4}>
+      <Heading fontSize={["md", "lg"]} fontWeight="medium" mb={[2.5, 4]}>
         {getTransactionTypeLabel(props.transactionType)}s por recorrência
       </Heading>
 

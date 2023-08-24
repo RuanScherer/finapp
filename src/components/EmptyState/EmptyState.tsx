@@ -15,7 +15,7 @@ export function EmptyState({ children, ...rest }: EmptyStateProps) {
       py="6"
       {...rest}
     >
-      <Text textAlign="center" lineHeight="short" flex={1}>
+      <Text fontSize={["sm", "md"]} textAlign="center" lineHeight="short" flex={1}>
         {children}
       </Text>
     </HStack>
