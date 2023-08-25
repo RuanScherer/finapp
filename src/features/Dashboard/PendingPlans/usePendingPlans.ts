@@ -16,6 +16,10 @@ export function usePendingPlans() {
       .from("plans")
       .select("id, name, currentValue:current_value, plannedValue:planned_value")
       .is("finished", false)
+      .order("due_date", {
+        ascending: true,
+        nullsFirst: false
+      })
       .limit(3)
 
     if (error) {
