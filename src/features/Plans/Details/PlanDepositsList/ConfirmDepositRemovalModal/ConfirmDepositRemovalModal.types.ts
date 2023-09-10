@@ -3,7 +3,7 @@ export interface ConfirmDepositRemovalModalProps {
   onClose: () => void;
   onConfirm: () => void;
   deposit: {
-    description?: string;
+    description: string | null;
     value: number;
   }
 }
