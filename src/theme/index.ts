@@ -1,4 +1,4 @@
-import { createMultiStyleConfigHelpers, extendTheme } from "@chakra-ui/react";
+import { ComponentStyleConfig, createMultiStyleConfigHelpers, extendTheme } from "@chakra-ui/react";
 
 export const boxShadow = {
   100: "#959da533 0px 8px 24px",
@@ -22,6 +22,7 @@ export const colors = {
     900: "#3B0BA4",
   },
   primaryAlpha: {
+    50: "#CBD2FF0D",
     100: "#CBD2FF33",
     200: "#A5B4FF33",
     300: "#7F9BFF33",
@@ -58,7 +59,7 @@ const fonts = {
   heading: `'Poppins', sans-serif`,
 };
 
-const Button = {
+const Button: ComponentStyleConfig = {
   baseStyle: {
     fontWeight: "medium",
   },

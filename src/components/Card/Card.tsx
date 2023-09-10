@@ -1,7 +1,7 @@
-import { ChakraProps, Flex } from "@chakra-ui/react";
+import { Flex, FlexProps } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
-interface CardProps extends ChakraProps {
+export interface CardProps extends FlexProps {
   children: ReactNode;
 }
 

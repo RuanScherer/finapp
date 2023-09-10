@@ -1,7 +1,8 @@
 import { ChakraProps, HStack, Text } from "@chakra-ui/react";
+import { ReactNode } from "react";
 
 interface EmptyStateProps extends ChakraProps {
-  children: string;
+  children: ReactNode | ReactNode[];
 }
 
 export function EmptyState({ children, ...rest }: EmptyStateProps) {
@@ -14,7 +15,7 @@ export function EmptyState({ children, ...rest }: EmptyStateProps) {
       py="6"
       {...rest}
     >
-      <Text textAlign="center" lineHeight="short" flex={1}>
+      <Text fontSize={["sm", "md"]} textAlign="center" lineHeight="short" flex={1}>
         {children}
       </Text>
     </HStack>

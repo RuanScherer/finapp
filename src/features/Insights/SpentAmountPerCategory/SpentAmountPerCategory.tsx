@@ -10,7 +10,7 @@ import {
   Text,
   Th,
   Thead,
-  Tr,
+  Tr
 } from "@chakra-ui/react";
 import { Card } from "@components/Card";
 import { EmptyState } from "@components/EmptyState";
@@ -22,18 +22,23 @@ export function SpentAmountPerCategory() {
 
   return (
     <Box mt={2}>
-      <Heading fontSize="lg" fontWeight="medium">
+      <Heading fontSize={["md", "lg"]} fontWeight="medium">
         Valor gasto por categoria
       </Heading>
 
-      <Text fontSize="sm" color="text.700" mt={0.5}>
+      <Text
+        fontSize={["xs", "sm"]}
+        color="text.700"
+        mt={0.5}
+        mb={[2.5, 4]}
+      >
         Essas são as top 5 categorias com mais gastos registrados no mês.
       </Text>
 
-      <Card mt={4}>
-        <Box w="full">
-          {spentAmountPerCategory ? (
-            spentAmountPerCategory.length > 0 ? (
+      {spentAmountPerCategory ? (
+        spentAmountPerCategory.length > 0 ? (
+          <Card>
+            <Box w="full">
               <TableContainer>
                 <Table colorScheme="gray" size={["sm", "sm", "md"]}>
                   <Thead>
@@ -55,18 +60,18 @@ export function SpentAmountPerCategory() {
                   </Tbody>
                 </Table>
               </TableContainer>
-            ) : (
-              <EmptyState>
-                Não existem transações neste mês para base de cálculo.
-              </EmptyState>
-            )
-          ) : (
-            <Center>
-              <Spinner color="primary.400" size="xl" mt="2" speed="1s" />
-            </Center>
-          )}
-        </Box>
-      </Card>
+            </Box>
+          </Card>
+        ) : (
+          <EmptyState>
+            Não existem transações neste mês para base de cálculo.
+          </EmptyState>
+        )
+      ) : (
+        <Center>
+          <Spinner color="primary.400" size="xl" mt="2" speed="1s" />
+        </Center>
+      )}
     </Box>
   );
 }

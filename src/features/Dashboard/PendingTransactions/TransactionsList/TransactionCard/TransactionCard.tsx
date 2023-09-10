@@ -25,7 +25,7 @@ export function TransactionCard(props: TransactionCardProps) {
   return (
     <ListItem
       w="full"
-      p={4}
+      p={3}
       borderBottomWidth={1}
       borderBottomColor="gray.200"
       cursor="pointer"
@@ -49,7 +49,7 @@ export function TransactionCard(props: TransactionCardProps) {
             alignItems="center"
             gap={1}
             fontSize="sm"
-            fontWeight="semibold"
+            fontWeight="medium"
             lineHeight="none"
             color={props.transaction.type === TransactionType.INCOME ? "green.400" : "red.400"}
             style={{ marginTop: 0 }}

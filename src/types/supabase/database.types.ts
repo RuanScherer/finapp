@@ -80,6 +80,58 @@ export interface Database {
           user_id?: string | null
         }
       }
+      plan_deposits: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: number
+          plan_id: number
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: never
+          plan_id: number
+          value: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: never
+          plan_id?: number
+          value?: number
+        }
+      }
+      plans: {
+        Row: {
+          current_value: number
+          due_date: string | null
+          finished: boolean
+          id: number
+          name: string
+          planned_value: number
+          user_id: string
+        }
+        Insert: {
+          current_value?: number
+          due_date?: string | null
+          finished?: boolean
+          id?: never
+          name: string
+          planned_value: number
+          user_id: string
+        }
+        Update: {
+          current_value?: number
+          due_date?: string | null
+          finished?: boolean
+          id?: never
+          name?: string
+          planned_value?: number
+          user_id?: string
+        }
+      }
       transactions: {
         Row: {
           amount: number

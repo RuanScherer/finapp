@@ -33,21 +33,17 @@ export function TransactionsView() {
 
   if (!transactions) {
     return (
-      <Card>
-        <Center>
-          <Spinner color="primary.500" speed="1s" />
-        </Center>
-      </Card>
+      <Center>
+        <Spinner color="primary.500" speed="1s" />
+      </Center>
     );
   }
 
   if (transactions.length === 0) {
     return (
-      <Card>
-        <EmptyState>
-          Não existem transações para serem mostradas.
-        </EmptyState>
-      </Card>
+      <EmptyState>
+        Não existem transações para serem mostradas.
+      </EmptyState>
     );
   }
 
@@ -58,11 +54,11 @@ export function TransactionsView() {
         justifyContent={["center", "center", "space-between"]}
         wrap="wrap"
         gap={2}
-        mt={2}
+        mt={[1, 2]}
         mb={4}
       >
         <Heading
-          fontSize="xl"
+          fontSize={["lg", "xl"]}
           fontWeight="semibold"
           textAlign={["center", "center", "start"]}
           w={["full", "full", "fit-content"]}
@@ -91,6 +87,7 @@ export function TransactionsView() {
             _focus={{
               borderColor: "primary.300",
             }}
+            size={["sm", "md"]}
             value={transactionsQueryDates.fromDate.toISOString().split("T")[0]}
             onChange={handleChangeBaseDate}
           />

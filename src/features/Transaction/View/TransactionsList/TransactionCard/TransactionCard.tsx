@@ -33,7 +33,7 @@ export function TransactionCard(props: TransactionCardProps) {
           alignItems="center"
           gap={1}
           fontSize="sm"
-          fontWeight="semibold"
+          fontWeight="medium"
           lineHeight="none"
           color={props.transaction.type === TransactionType.INCOME ? "green.400" : "red.400"}
           style={{ marginTop: 0 }}

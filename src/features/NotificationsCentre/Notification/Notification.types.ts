@@ -1,4 +1,4 @@
-import { Notification } from "../";
+import { Notification } from "../NotificationsCentre.types";
 
 export interface NotificationProps {
   notification: Notification;

@@ -19,7 +19,7 @@ export function TransactionsList(props: TransactionsListProps) {
           w="full"
           borderBottomWidth={index < props.transactions.length - 1 ? 1 : 0}
           borderBottomColor="gray.200"
-          p={4}
+          p={3}
           cursor="pointer"
           onClick={() => handleSelectTransaction(transaction)}
           key={transaction.id}
