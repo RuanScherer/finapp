@@ -13,6 +13,7 @@ export function usePlanForm() {
 
   const createPlanMutation = useMutation(createPlan, {
     onSuccess: () => {
+      queryClient.invalidateQueries("pendingPlans")
       queryClient.invalidateQueries("plans");
       toast({
         title: "Uhul! Seu plano foi criado com sucesso!",
@@ -28,8 +29,10 @@ export function usePlanForm() {
   })
 
   const editPlanMutation = useMutation(editPlan, {
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("pendingPlans")
       queryClient.invalidateQueries("plans");
+      queryClient.invalidateQueries(["plan", String(data.id)]);
       toast({
         title: "Uhul! Seu plano foi alterado com sucesso!",
         status: "success",
@@ -55,7 +58,7 @@ export function usePlanForm() {
     if (error) throw new Error("Erro ao criar plano.");
   }
 
-  async function editPlan(data: CreatePlanFormData & { id: number }): Promise<void> {
+  async function editPlan(data: CreatePlanFormData & { id: number }): Promise<typeof data> {
     const formattedDueDate = formatDueDateForSaving(data.dueDate);
 
     const { error } = await supabase.from("plans").update({
@@ -65,6 +68,7 @@ export function usePlanForm() {
       user_id: user!.id,
     }).eq("id", data.id)
     if (error) throw new Error("Erro ao alterar plano.");
+    return data;
   }
 
   function formatDueDateForSaving(dueDate: string | Date | undefined) {

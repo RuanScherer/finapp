@@ -1,12 +1,11 @@
-import { Button, ButtonProps, CircularProgress, CircularProgressLabel, Divider, Heading, HStack, Text, theme, useDisclosure, VStack } from "@chakra-ui/react";
+import { Button, ButtonProps, CircularProgress, CircularProgressLabel, Divider, Heading, HStack, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { Card } from "@components/Card";
-import { PlanForm } from "@features/Plans/PlanForm";
 import { currencyFormatter } from "@shared/utils/currencyFormatter";
 import { getProgressColor, getProgressValue } from "@shared/utils/planUtils";
-import { MouseEvent, useState } from "react";
-import { RxPencil1, RxPlus } from "react-icons/rx";
+import { MouseEvent } from "react";
+import { RxPlus } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
-import { DepositForm } from "../DepositForm";
+import { DepositForm } from "../../DepositForm";
 import { PlanCardProps } from "./PlanCard.types";
 
 const actionButtonCommonProps: ButtonProps = {
@@ -17,8 +16,6 @@ const actionButtonCommonProps: ButtonProps = {
 }
 
 export function PlanCard(props: PlanCardProps) {
-  const [isEditing, setIsEditing] = useState(false)
-  const planFormDisclosure = useDisclosure()
   const depositFormDisclosure = useDisclosure()
   const navigate = useNavigate()
 
@@ -27,17 +24,6 @@ export function PlanCard(props: PlanCardProps) {
   function handleDeposit(event: MouseEvent) {
     event.stopPropagation()
     depositFormDisclosure.onOpen()
-  }
-
-  function handleEditPlan(event: MouseEvent) {
-    event.stopPropagation()
-    setIsEditing(true)
-    planFormDisclosure.onOpen()
-  }
-
-  function onClosePlanForm() {
-    if (isEditing) setIsEditing(false)
-    planFormDisclosure.onClose()
   }
 
   return (
@@ -92,29 +78,8 @@ export function PlanCard(props: PlanCardProps) {
           >
             Registrar
           </Button>
-
-          <Button
-            {...actionButtonCommonProps}
-            leftIcon={
-              <RxPencil1
-                strokeWidth={0.4}
-                stroke={theme.colors.blackAlpha[800]}
-                fill={theme.colors.blackAlpha[800]}
-              />
-            }
-            onClick={handleEditPlan}
-          >
-            Editar
-          </Button>
         </HStack>
       </Card>
-
-      <PlanForm
-        isOpen={planFormDisclosure.isOpen}
-        onClose={onClosePlanForm}
-        isEditing={isEditing}
-        plan={props.plan}
-      />
 
       <DepositForm
         isOpen={depositFormDisclosure.isOpen}

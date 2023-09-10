@@ -35,6 +35,14 @@ export function PendingPlans() {
 
   return (
     <List spacing={2.5}>
+      {!pendingPlans?.length && (
+        <ListItem>
+          <EmptyState>
+            Não existem planos em andamento no momento.
+          </EmptyState>
+        </ListItem>
+      )}
+
       {pendingPlans!.map(plan => {
         const progress = getProgressValue(plan.currentValue, plan.plannedValue)
         return (

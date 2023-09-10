@@ -8,8 +8,10 @@ export function useDepositForm(planId: number) {
   const toast = useToast()
 
   const createDepositMutation = useMutation(createDeposit, {
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("pendingPlans")
       queryClient.invalidateQueries("plans")
+      queryClient.invalidateQueries(["plan", String(data.planId)])
       toast({
         title: "Oba! Você adicionou um novo registro em seu plano.",
         status: "success",
@@ -23,7 +25,7 @@ export function useDepositForm(planId: number) {
     }
   })
 
-  async function createDeposit(data: CreateDepositFormData): Promise<void> {
+  async function createDeposit(data: CreateDepositFormData) {
     const { error } = await supabase.from("plan_deposits").insert({
       value: data.value,
       description: data.description,
@@ -31,6 +33,7 @@ export function useDepositForm(planId: number) {
     })
 
     if (error) throw new Error("Erro ao criar registro.")
+    return { ...data, planId }
   }
 
   return {

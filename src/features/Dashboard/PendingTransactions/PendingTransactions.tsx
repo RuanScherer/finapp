@@ -19,9 +19,15 @@ export function PendingTransactions() {
 
   if (!lastPendingTransactions?.length) {
     return (
-      <EmptyState>
-        Não existem transações pendentes para serem mostradas.
-      </EmptyState>
+      <>
+        <EmptyState>
+          Não existem transações pendentes para serem mostradas.
+        </EmptyState>
+
+        <Link mt={2.5}>
+          <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
+        </Link>
+      </>
     );
   }
 
@@ -30,27 +36,23 @@ export function PendingTransactions() {
       <Box display={["none", "none", "block"]}>
         <TransactionsTable transactions={lastPendingTransactions} />
 
-        {!!lastPendingTransactions?.length && (
-          <Link mt={4}>
-            <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
-          </Link>
-        )}
+        <Link mt={4}>
+          <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
+        </Link>
       </Box>
 
       <Box display={["block", "block", "none"]} p={0}>
         <TransactionsList transactions={lastPendingTransactions} />
 
-        {!!lastPendingTransactions?.length && (
-          <Link
-            w="full"
-            p={3}
-            borderBottomRadius="xl"
-            _hover={{ bgColor: "gray.50" }}
-            transition=".3s"
-          >
-            <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
-          </Link>
-        )}
+        <Link
+          w="full"
+          p={3}
+          borderBottomRadius="xl"
+          _hover={{ bgColor: "gray.50" }}
+          transition=".3s"
+        >
+          <ReactRouterLink to="/transactions">Ver tudo</ReactRouterLink>
+        </Link>
       </Box>
     </>
   );

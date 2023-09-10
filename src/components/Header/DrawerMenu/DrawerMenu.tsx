@@ -45,6 +45,7 @@ export function DrawerMenu(props: DrawerMenuProps) {
             justifyContent="center"
             h="full"
             textAlign="center"
+            spacing={0}
           >
             {menus.map((menu) => (
               <Box w="full" key={menu.to}>
@@ -54,7 +55,7 @@ export function DrawerMenu(props: DrawerMenuProps) {
                   style={{ width: "100%" }}
                 >
                   <HStack
-                    gap={1}
+                    columnGap={1}
                     p={3}
                     rounded="md"
                     cursor="pointer"
@@ -67,7 +68,7 @@ export function DrawerMenu(props: DrawerMenuProps) {
                   </HStack>
                 </Link>
 
-                <Divider />
+                <Divider my={1.5} />
               </Box>
             ))}
 

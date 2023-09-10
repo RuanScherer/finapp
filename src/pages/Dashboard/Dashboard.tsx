@@ -13,37 +13,33 @@ export function Dashboard() {
       gap={5}
       my={1}
     >
-      <GridItem colSpan={[24, 24, 15]} h="fit-content">
-        <Grid templateColumns="repeat(24, 1fr)" gap={5}>
+      <GridItem colSpan={[24, 24, 15]} maxW="100%" h="fit-content">
+        <SimpleGrid columns={1} gap={5}>
           {/* === Visão geral === */}
-          <GridItem colSpan={24}>
-            <Card p={[3, 4]}>
-              <Heading fontSize={["lg", "xl"]} fontWeight="medium" w="full">
-                Visão geral de {monthsName[new Date().getMonth()]}
-              </Heading>
+          <Card p={[3, 4]}>
+            <Heading fontSize={["lg", "xl"]} fontWeight="medium" w="full">
+              Visão geral de {monthsName[new Date().getMonth()]}
+            </Heading>
 
-              <SimpleGrid columns={2} gap={4} mt={3}>
-                <MonthStat type={TransactionType.INCOME} />
-                <MonthStat type={TransactionType.OUTCOME} />
-              </SimpleGrid>
-            </Card>
-          </GridItem>
+            <SimpleGrid columns={[1, 1, 2]} gap={4} mt={3}>
+              <MonthStat type={TransactionType.INCOME} />
+              <MonthStat type={TransactionType.OUTCOME} />
+            </SimpleGrid>
+          </Card>
 
           {/* === Pendências === */}
-          <GridItem colSpan={24}>
-            <Card p={[3, 4]}>
-              <Heading fontSize={["lg", "xl"]} fontWeight="medium" w="full" mb={3}>
-                Pendências
-              </Heading>
+          <Card p={[3, 4]}>
+            <Heading fontSize={["lg", "xl"]} fontWeight="medium" w="full" mb={3}>
+              Pendências
+            </Heading>
 
-              <PendingTransactions />
-            </Card>
-          </GridItem>
-        </Grid>
+            <PendingTransactions />
+          </Card>
+        </SimpleGrid>
       </GridItem>
 
       {/* === Seus planos === */}
-      <GridItem colSpan={[24, 24, 9]} h="fit-content">
+      <GridItem colSpan={[24, 24, 9]} maxW="100%" h="fit-content">
         <Card p={[3, 4]}>
           <Heading fontSize={["lg", "xl"]} fontWeight="medium" w="full" mb={3}>
             Planos em andamento
