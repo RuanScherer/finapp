@@ -1,42 +1,16 @@
-import { useDisclosure } from "@chakra-ui/react";
 import { useToast } from "@hooks/useToast";
 import { queryClient } from "@services/queryClient";
 import { supabase } from "@services/supabase";
 import { TransactionRecurrence } from "@shared/enums/transactionRecurrence";
-import { useState } from "react";
-import { Transaction } from "./TransactionsTable.types";
 
-export function useTransactionsTable() {
-  const [warningMessage, setWarningMessage] = useState<string>();
-  const [transactionToRemove, setTransactionToRemove] = useState<Transaction>();
-  const confirmTransactionRemovalDisclosure = useDisclosure();
+interface Transaction {
+  id?: number;
+  idOriginalTransaction?: number;
+  recurrence?: TransactionRecurrence;
+}
+
+export function useTransactionRemoval() {
   const toast = useToast();
-
-  function confirmTransactionRemoval(transaction: Transaction) {
-    if (transaction.idOriginalTransaction) {
-      if (transaction.recurrence === TransactionRecurrence.INSTALLMENT) {
-        setWarningMessage(
-          "Essa é uma parcela de uma transação. Se excluí-la, todas as parcelas da mesma transação serão excluídas também."
-        );
-      }
-
-      if (transaction.recurrence === TransactionRecurrence.FIXED) {
-        setWarningMessage(
-          "Essa é uma transação fixa. Se excluí-la, ela será removida dos outros meses também."
-        );
-      }
-    } else {
-      setWarningMessage(undefined);
-    }
-
-    setTransactionToRemove(transaction);
-    confirmTransactionRemovalDisclosure.onOpen();
-  }
-
-  function handleCloseConfirmTransactionRemovalModal() {
-    confirmTransactionRemovalDisclosure.onClose();
-    setWarningMessage(undefined);
-  }
 
   async function removeTransaction(transaction: Transaction) {
     if (transaction.recurrence === TransactionRecurrence.UNIQUE) {
@@ -54,7 +28,7 @@ export function useTransactionsTable() {
   }
 
   async function removeUniqueTransaction(transaction: Transaction) {
-    await removeTransactionById(transaction.id);
+    await removeTransactionById(transaction.id!);
   }
 
   async function removeRecurrentTransaction(transaction: Transaction) {
@@ -93,11 +67,6 @@ export function useTransactionsTable() {
   }
 
   return {
-    confirmTransactionRemovalDisclosure,
-    warningMessage,
-    transactionToRemove,
-    confirmTransactionRemoval,
-    handleCloseConfirmTransactionRemovalModal,
     removeTransaction,
   };
 }
