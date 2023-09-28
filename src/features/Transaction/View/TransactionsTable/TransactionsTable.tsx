@@ -1,19 +1,20 @@
 import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
 import { useTransactionsView } from "@contexts/TransactionsViewContext";
-import { ConfirmTransactionRemovalModal } from "./ConfirmTransactionRemovalModal";
+import { ConfirmTransactionRemovalModal } from "../ConfirmTransactionRemovalModal";
+import { useConfirmTransactionRemoval } from "../ConfirmTransactionRemovalModal/useConfirmTransactionRemoval";
+import { useTransactionRemoval } from "../hooks/useTransactionRemoval";
 import { TransactionRow } from "./TransactionRow";
 import { Transaction, TransactionsTableProps } from "./TransactionsTable.types";
-import { useTransactionsTable } from "./useTransactionsTable";
 
 export function TransactionsTable({ transactions }: TransactionsTableProps) {
   const {
     confirmTransactionRemovalDisclosure,
-    confirmTransactionRemoval,
     handleCloseConfirmTransactionRemovalModal,
     warningMessage,
     transactionToRemove,
-    removeTransaction,
-  } = useTransactionsTable();
+    confirmTransactionRemoval
+  } = useConfirmTransactionRemoval<Transaction>();
+  const { removeTransaction } = useTransactionRemoval();
   const { refreshTransactionsViewByMonth } = useTransactionsView();
 
   async function handleRemoveTransaction(transaction: Transaction) {

@@ -17,7 +17,7 @@ export function ConfirmTransactionRemovalModal({
     >
       <ModalOverlay />
 
-      <ModalContent>
+      <ModalContent m={2}>
         <ModalCloseButton />
 
         <ModalHeader>Ei, calma aí...</ModalHeader>
