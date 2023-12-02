@@ -31,22 +31,6 @@ export function TransactionsView() {
     getTransactionsViewByMonth(rangeDates);
   }
 
-  if (!transactions) {
-    return (
-      <Center>
-        <Spinner color="primary.500" speed="1s" />
-      </Center>
-    );
-  }
-
-  if (transactions.length === 0) {
-    return (
-      <EmptyState>
-        Não existem transações para serem mostradas.
-      </EmptyState>
-    );
-  }
-
   return (
     <>
       <HStack
@@ -94,13 +78,30 @@ export function TransactionsView() {
         </HStack>
       </HStack>
 
-      <Card display={["none", "none", "block"]}>
-        <TransactionsTable transactions={transactions} />
-      </Card>
+      {!transactions
+        ? (
+          <Center>
+            <Spinner color="primary.500" speed="1s" />
+          </Center>
+        )
+        : transactions.length === 0
+          ? (
+            <EmptyState>
+              Não existem transações para serem mostradas.
+            </EmptyState>
+          )
+          : (
+            <>
+              <Card display={["none", "none", "block"]}>
+                <TransactionsTable transactions={transactions} />
+              </Card>
 
-      <Card display={["flex", "flex", "none"]} p={0}>
-        <TransactionsList transactions={transactions} />
-      </Card>
+              <Card display={["flex", "flex", "none"]} p={0}>
+                <TransactionsList transactions={transactions} />
+              </Card>
+            </>
+          )
+      }
     </>
   );
 }
